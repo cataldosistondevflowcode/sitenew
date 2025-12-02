@@ -1,0 +1,451 @@
+# Inventário de Conteúdo - Página por Página
+
+## PÁGINA 1: Index (Página Inicial) - `/`
+
+### Seção: Hero Section
+**Headings:**
+- H1: "Imóveis em Leilão no Rio de Janeiro"
+- H2: "OPORTUNIDADES DE IMÓVEIS EM LEILÃO"
+- H3: "Imóveis até 50% abaixo da sua avaliação"
+
+**Parágrafos:**
+- "Receba oportunidades de leilões personalizadas, de acordo com o seu perfil."
+- "Os imóveis em leilão abaixo não foram objeto de análise jurídica prévia. Entenda como funciona o nosso estudo de viabilidade jurídica clicando aqui ou entre em contato conosco"
+
+**Links de Imagens:**
+- `/visao-panoramica-rio-janeiro.jpg` (imagem de fundo do hero)
+- `/fundo-marmore-1-webp.png` (imagem de fundo da segunda seção)
+
+**Links de Vídeos:**
+- `https://www.youtube.com/embed/G8Wp2ju3CaU` (vídeo embed: "Como funciona nossa assessoria em leilões de imóveis")
+
+### Seção: Oportunidades de Imóveis (Grid de Imóveis)
+**Headings:**
+- Contagem dinâmica: "{totalCount} oportunidades encontradas"
+
+**Parágrafos:**
+- Mensagens de estado: "Nenhum imóvel encontrado com os filtros selecionados."
+- Descrições dos imóveis (dinâmicas do banco de dados)
+
+**Links de Imagens:**
+- Imagens dos imóveis (dinâmicas do banco de dados)
+- Imagem padrão: `https://kmiblhbe.manus.space/imovel_sao_goncalo.jpeg`
+
+### Seção: VideoPlayerContainer
+**Headings:**
+- H2: "Confira a entrevista do advogado Raphael Cataldo Siston sobre leilões de imóveis"
+
+**Links de Imagens:**
+- Thumbnail do vídeo (via Builder.io CDN)
+- Ícones do YouTube (via Builder.io CDN)
+- Imagem de fundo (via Builder.io CDN)
+
+**Links de Vídeos:**
+- Link para vídeo completo: `https://www.youtube.com/watch?v=IssSNAzj4ag&t=1s`
+
+### Seção: Featured Videos (Vídeos em Destaque)
+**Headings:**
+- H2: "Vídeos em destaque"
+
+**Parágrafos:**
+- "Quais as vantagens de comprar imóveis em leilão?" - "Existem muitas vantagens nos leilões de imóveis em relação a uma compra e venda comum. Veja alguns motivos que têm levado cada vez mais pessoas a optarem por essa modalidade."
+- "É possível parcelar o valor da arrematação em leilões de imóveis?" - "Tem dúvidas sobre como deve ser feito o pagamento do valor da arrematação em leilões de imóveis? Quer saber em quais casos é possível realizar o parcelamento? Veja o vídeo que nós preparamos sobre esse assunto."
+- "Quem deve arcar com as dívidas de um imóvel arrematado em leilão?" - "Imóveis vão a leilão para saldar alguma dívida do antigo proprietário. No entanto, e se houver mais dívidas registradas no imóvel, que não possam ser quitadas apenas com o valor da arrematação? Quem precisa arcar o restante? O arrematante ou o executado?"
+- "Arrematar um imóvel ocupado dá mais dor de cabeça?" - "Muita gente pensa que comprar imóveis em leilão que estejam ocupados dá mais dor de cabeça do que arrematar um imóvel desocupado. No entanto, será que isso faz mesmo diferença? Descubra agora!"
+- "Como é calculado o ITBI em leilões de imóveis?" - "Como é calculado o ITBI em leilões de imóveis e mais baixo?"
+- "Tudo que você precisa saber sobre leilões extrajudiciais" - "Tudo que você deve saber sobre leilões de bancos"
+- "Imissão na posse em leilões de imóveis" - "Basta ler o edital? O arrematante sempre precisa lidar com as dívidas do imóvel? É sempre possível parcelar o valor da arrematação? Neste vídeo, vamos desmentir alguns mitos comuns sobre leilões de imóveis!"
+- "3 mitos sobre leilões de imóveis" - "Basta ler o edital? O arrematante sempre precisa lidar com as dívidas do imóvel? É sempre possível parcelar o valor da arrematação? Neste vídeo, vamos desmentir alguns mitos comuns sobre leilões de imóveis!"
+- "5 fatores que podem levar à anulação da arrematação" - "Ao participar de leilões de imóveis, é importante estar sempre atento se todos os trâmites legais foram devidamente respeitados."
+- "Carta de arrematação e auto de arrematação" - "O auto de arrematação e a carta de arrematação são dois importantes documentos dos leilões de imóveis judiciais, que devem ser obtidos após a arrematação. O que eles são? Qual a importância deles para os processos burocráticos pós-leilão? Qual a diferença entre eles? Descubra agora!"
+
+**Links de Vídeos:**
+- `https://www.youtube.com/watch?v=hbt-4kFMD4Q` (Vantagens de comprar imóveis em leilão)
+- `https://www.youtube.com/watch?v=yvQrGmdXDiU` (Parcelamento da arrematação)
+- `https://www.youtube.com/watch?v=1keAvaimI5k` (Dívidas do imóvel arrematado)
+- `https://www.youtube.com/watch?v=9ZnMzYQJNck` (Imóvel ocupado)
+- `https://www.youtube.com/watch?v=FQAUWbkwjT8` (Cálculo do ITBI)
+- `https://www.youtube.com/watch?v=VVxUQtMC-xg` (Leilões extrajudiciais)
+- `https://www.youtube.com/watch?v=Bps7pphdE_g` (Imissão na posse)
+- `https://www.youtube.com/watch?v=a4yQKEDt7hc` (3 mitos sobre leilões)
+- `https://www.youtube.com/watch?v=xGUunlbUAx0` (Carta de arrematação)
+
+**Links de Imagens:**
+- Thumbnails dos vídeos do YouTube (geradas automaticamente via `https://img.youtube.com/vi/{youtubeId}/hqdefault.jpg`)
+
+### Seção: Success Cases (Casos de Sucesso)
+**Headings:**
+- H2: "Casos de Sucesso"
+- H3: "Leilão de imóvel | Ipanema/RJ"
+- H3: "Leilão de imóvel | Botafogo/RJ"
+- H3: "Leilão de imóvel | Fonte da Saudade/RJ"
+
+**Parágrafos:**
+- "Caso real de imóvel em leilão em Ipanema, assessorado pela equipe jurídica do escritório Cataldo Siston Advogados."
+- "Caso real de imóvel em leilão em Botafogo, assessorado pela equipe jurídica do escritório Cataldo Siston Advogados."
+- "Caso real de imóvel em leilão na Fonte da Saudade assessorado pela equipe jurídica do escritório Cataldo Siston Advogados."
+
+**Links de Vídeos:**
+- `https://www.youtube.com/embed/nXMiKXmjEOs` (Ipanema)
+- `https://www.youtube.com/embed/AH_sNBsqIMg` (Botafogo)
+- `https://www.youtube.com/embed/9vziuX_9kxA` (Fonte da Saudade)
+
+### Seção: Articles Section (Artigos e Entrevistas)
+**Headings:**
+- H2: "Confira entrevistas e artigos do advogado Raphael"
+- Subtítulo: "Cataldo Siston sobre leilão de imóveis"
+- H3: "Saiba como ocorre a imissão na posse em leilões de imóveis"
+- H3: "Impugnação à arrematação do imóvel: quando pode ocorrer?"
+- H3: "Leilão de imóveis: como funciona e dicas para participar"
+- H3: "Imóveis em leilão costumam estar em péssimo estado de conservação?"
+- H3: "O que você deve pagar, após arrematar um imóvel em leilão?"
+
+**Parágrafos:**
+- "A imissão na posse em leilões de imóveis, seja extrajudiciais ou judiciais, é algo que suscita muitos questionamentos por parte dos licitantes ou interessados em participar desta modalidade de…"
+- "Um dos maiores receios de quem participa de leilões de imóveis, ou daqueles que têm interesse em participar, é chegar ao final de todo o processo e ocorrer algo…"
+- "O Raphael Siston, sócio do escritório Cataldo Siston, deu uma entrevista para a Casa & Jardim falando como funcionam os leilões de imóveis e de que forma é possível…"
+- "Muitos investidores e compradores em potencial se preocupam com o estado de conservação dos imóveis em leilão. A ideia de que essas propriedades estão completamente deterioradas, exigindo reformas onerosas,…"
+- "Quando você decide adquirir um imóvel em leilão, seja judicial ou extrajudicial, a arrematação é apenas o primeiro passo para garantir a sua propriedade. O valor do lance é…"
+
+**Links de Imagens:**
+- `https://leilaodeimoveis-cataldosiston.com/wp-content/uploads/2024/08/como-ocorre-a-imissao-na-posse-leiloes-de-imoveis-blog-escritorio-cataldo-siston.webp`
+- `https://leilaodeimoveis-cataldosiston.com/wp-content/uploads/2024/08/impugnacao-a-arrematacao-quando-pode-ocorrer-blog-escritorio-cataldo-siston.webp`
+- `https://leilaodeimoveis-cataldosiston.com/wp-content/uploads/2024/03/entrevista-casa-jardim-como-funcionam-leiloes-de-imoveis.png`
+- `https://leilaodeimoveis-cataldosiston.com/wp-content/uploads/2025/02/imoveis-em-leilao-costumam-estar-em-pessimo-estado-de-conservacao-blog-cataldo-siston-advogados.jpg`
+- `https://leilaodeimoveis-cataldosiston.com/wp-content/uploads/2024/11/custos-apos-a-arrematacao-blog-cataldo-siston-advogados.jpg`
+
+**Links de Artigos:**
+- `https://leilaodeimoveis-cataldosiston.com/como-ocorre-a-imissao-na-posse-em-leiloes-de-imoveis/`
+- `https://leilaodeimoveis-cataldosiston.com/impugnacao-a-arrematacao-em-leiloes-de-imoveis/`
+- `https://leilaodeimoveis-cataldosiston.com/leilao-de-imoveis-como-funciona-e-dicas-para-participar/`
+- `https://leilaodeimoveis-cataldosiston.com/imoveis-em-leilao-costumam-estar-em-pessimo-estado-de-conservacao/`
+- `https://leilaodeimoveis-cataldosiston.com/o-que-voce-deve-pagar-apos-arrematar-um-imovel-em-leilao/`
+
+### Seção: Testimonials Section (Depoimentos)
+**Headings:**
+- H1: "Depoimentos"
+
+**Parágrafos:**
+- Depoimento de Felipe Bueno (Presidente da BX Capital)
+- Depoimento de Denise de Castilho Provenzano (Arquiteta)
+- Depoimento de Frederico Brandão (Investidor)
+- Depoimento de Ana Maria Mendes (Investidora)
+- Depoimento de Rodrigo Portella (Leiloeiro Público)
+- Depoimento de Paulo André Marques (Investidor)
+- Depoimento de Anderson Carneiro Pereira (Leiloeiro Público)
+
+**Links de Imagens:**
+- `/assets/bg/fundo-marmore.png` (imagem de fundo)
+
+### Seção: Newsletter Bottom Section
+**Headings:**
+- H2: "Receba nossa newsletter"
+- H3: "Podemos ajudar a solucionar o seu caso!"
+
+**Parágrafos:**
+- Mensagens de sucesso/erro do formulário
+
+**Links de Imagens:**
+- `/bg-newsletter.jpg.webp` (imagem de fundo)
+- `/foto-recortada-cataldo.png` (foto do advogado)
+
+---
+
+## PÁGINA 2: LeilaoCaixaRJ - `/leilao-caixa-rj`
+
+### Seção: Hero Section Caixa RJ
+**Headings:**
+- H1: "Leilão Caixa RJ | Cataldo Siston - Imóveis da Caixa Econômica em Leilão no Rio de Janeiro"
+- H2: "OPORTUNIDADES DE IMÓVEIS EM LEILÃO"
+- H3: "Imóveis até 50% abaixo da sua avaliação"
+
+**Parágrafos:**
+- "Receba oportunidades de leilões personalizadas, de acordo com o seu perfil."
+- "Os imóveis em leilão abaixo não foram objeto de análise jurídica prévia. Entenda como funciona o nosso estudo de viabilidade jurídica clicando aqui ou entre em contato conosco"
+
+**Links de Imagens:**
+- `/edificio-caixa-economica-federal-800x479.webp` (imagem de fundo do hero)
+- `/fundo-marmore-1-webp.png` (imagem de fundo da segunda seção)
+
+**Links de Vídeos:**
+- `https://www.youtube.com/embed/G8Wp2ju3CaU` (vídeo embed: "Como funciona nossa assessoria em leilões de imóveis")
+
+### Seção: Oportunidades de Imóveis (Grid de Imóveis)
+**Headings:**
+- Contagem dinâmica: "{totalCount} oportunidades encontradas"
+
+**Parágrafos:**
+- Mensagens de estado: "Nenhum imóvel encontrado com os filtros selecionados."
+- Descrições dos imóveis (dinâmicas do banco de dados - filtrados por Caixa Econômica Federal)
+
+**Links de Imagens:**
+- Imagens dos imóveis (dinâmicas do banco de dados)
+- Imagem padrão: `https://kmiblhbe.manus.space/imovel_sao_goncalo.jpeg`
+
+### Seção: VideoPlayerContainer
+**Headings:**
+- H2: "Confira a entrevista do advogado Raphael Cataldo Siston sobre leilões de imóveis"
+
+**Links de Vídeos:**
+- Link para vídeo completo: `https://www.youtube.com/watch?v=IssSNAzj4ag&t=1s`
+
+### Seção: Featured Videos
+**Headings:**
+- H2: "Vídeos em destaque"
+
+**Parágrafos e Vídeos:** (Mesmos da página Index)
+
+### Seção: Success Cases
+**Headings:**
+- H2: "Casos de Sucesso"
+
+**Parágrafos e Vídeos:** (Mesmos da página Index)
+
+### Seção: Articles Section
+**Headings e Conteúdo:** (Mesmos da página Index)
+
+### Seção: Testimonials Section
+**Headings e Conteúdo:** (Mesmos da página Index)
+
+### Seção: Newsletter Bottom Section
+**Headings e Conteúdo:** (Mesmos da página Index)
+
+---
+
+## PÁGINA 3: LeilaoRJ - `/leilao-rj`
+
+### Seção: Hero Section
+**Headings:**
+- H1: "Imóveis em Leilão no Rio de Janeiro"
+- H2: "OPORTUNIDADES DE IMÓVEIS EM LEILÃO"
+- H3: "Imóveis até 50% abaixo da sua avaliação"
+
+**Parágrafos:**
+- "Receba oportunidades de leilões personalizadas, de acordo com o seu perfil."
+- "Os imóveis em leilão abaixo não foram objeto de análise jurídica prévia. Entenda como funciona o nosso estudo de viabilidade jurídica clicando aqui ou entre em contato conosco"
+
+**Links de Imagens:**
+- `/visao-panoramica-rio-janeiro.jpg` (imagem de fundo do hero)
+- `/fundo-marmore-1-webp.png` (imagem de fundo da segunda seção)
+
+**Links de Vídeos:**
+- `https://www.youtube.com/embed/G8Wp2ju3CaU` (vídeo embed: "Como funciona nossa assessoria em leilões de imóveis")
+
+### Seção: Oportunidades de Imóveis (Grid de Imóveis)
+**Headings:**
+- Contagem dinâmica: "{totalCount} oportunidades encontradas"
+
+**Parágrafos:**
+- Mensagens de estado: "Nenhum imóvel encontrado com os filtros selecionados."
+- Descrições dos imóveis (dinâmicas do banco de dados - filtrados por estado RJ)
+
+**Links de Imagens:**
+- Imagens dos imóveis (dinâmicas do banco de dados)
+- Imagem padrão: `https://kmiblhbe.manus.space/imovel_sao_goncalo.jpeg`
+
+### Seção: VideoPlayerContainer
+**Headings e Conteúdo:** (Mesmos da página Index)
+
+### Seção: Featured Videos
+**Headings e Conteúdo:** (Mesmos da página Index)
+
+### Seção: Success Cases
+**Headings e Conteúdo:** (Mesmos da página Index)
+
+### Seção: Articles Section
+**Headings e Conteúdo:** (Mesmos da página Index)
+
+### Seção: Testimonials Section
+**Headings e Conteúdo:** (Mesmos da página Index)
+
+### Seção: Newsletter Bottom Section
+**Headings e Conteúdo:** (Mesmos da página Index)
+
+---
+
+## PÁGINA 4: LeilaoSP - `/leilao-sp`
+
+### Seção: Hero Section SP
+**Headings:**
+- H1: "Imóveis em Leilão em São Paulo"
+- H2: "OPORTUNIDADES DE IMÓVEIS EM LEILÃO"
+- H3: "Imóveis até 50% abaixo da sua avaliação"
+
+**Parágrafos:**
+- "Receba oportunidades de leilões personalizadas, de acordo com o seu perfil."
+- "Os imóveis em leilão abaixo não foram objeto de análise jurídica prévia. Entenda como funciona o nosso estudo de viabilidade jurídica clicando aqui ou entre em contato conosco"
+
+**Links de Imagens:**
+- `/assets/ponte-estaiada-octavio-frias-sao-paulo.jpg` (imagem de fundo do hero)
+- `/fundo-marmore-1-webp.png` (imagem de fundo da segunda seção)
+
+**Links de Vídeos:**
+- `https://www.youtube.com/embed/G8Wp2ju3CaU` (vídeo embed: "Como funciona nossa assessoria em leilões de imóveis")
+
+### Seção: Oportunidades de Imóveis (Grid de Imóveis)
+**Headings:**
+- Contagem dinâmica: "{totalCount} oportunidades encontradas"
+
+**Parágrafos:**
+- Mensagens de estado: "Nenhum imóvel encontrado com os filtros selecionados."
+- Descrições dos imóveis (dinâmicas do banco de dados - filtrados por estado SP)
+
+**Links de Imagens:**
+- Imagens dos imóveis (dinâmicas do banco de dados)
+- Imagem padrão: `https://kmiblhbe.manus.space/imovel_sao_goncalo.jpeg`
+
+### Seção: VideoPlayerContainer
+**Headings e Conteúdo:** (Mesmos da página Index)
+
+### Seção: Featured Videos
+**Headings e Conteúdo:** (Mesmos da página Index)
+
+### Seção: Success Cases
+**Headings e Conteúdo:** (Mesmos da página Index)
+
+### Seção: Articles Section
+**Headings e Conteúdo:** (Mesmos da página Index)
+
+### Seção: Testimonials Section
+**Headings e Conteúdo:** (Mesmos da página Index)
+
+### Seção: Newsletter Bottom Section
+**Headings e Conteúdo:** (Mesmos da página Index)
+
+---
+
+## PÁGINA 5: PropertyDetail - `/imovel/:id` ou `/imovel/:id/:slug`
+
+### Seção: Breadcrumb
+**Headings:**
+- Navegação: "Home > Imóveis em Leilão RJ > [Título do Imóvel]"
+
+### Seção: Property Header
+**Headings:**
+- H1: Título dinâmico do imóvel (ex: "Leilão [Tipo] - [Bairro], [Cidade], [Estado]")
+
+**Parágrafos:**
+- Endereço completo do imóvel
+- Descrição do imóvel (se disponível)
+
+**Links de Imagens:**
+- Imagem principal do imóvel (dinâmica do banco de dados)
+- Mapa do imóvel (via Mapbox/Google Maps)
+
+### Seção: Auction Info
+**Headings:**
+- "Primeiro Leilão"
+- "Segundo leilão"
+- "Valor mínimo" (para ambos os leilões)
+
+**Parágrafos:**
+- Datas dos leilões formatadas
+- Valores formatados em R$
+
+### Seção: Property Specs
+**Headings:**
+- Especificações: Tipo, Área Edificada, Vagas, Quartos
+
+**Parágrafos:**
+- Valores das especificações
+
+### Seção: Property Description
+**Parágrafos:**
+- Descrição completa do imóvel
+- Informações sobre localização
+- Detalhes adicionais
+
+### Seção: Contact Sidebar
+**Headings:**
+- Informações de contato
+
+**Parágrafos:**
+- Telefone: "+55 (21) 3173-3795"
+- Email: "contato@cataldosiston-adv.com.br"
+
+### Seção: Similar Properties Section
+**Headings:**
+- H2: "Imóveis Similares"
+
+**Parágrafos:**
+- Descrições de imóveis similares (dinâmicas)
+
+**Links de Imagens:**
+- Imagens de imóveis similares (dinâmicas)
+
+### Seção: Testimonials Section
+**Headings e Conteúdo:** (Mesmos da página Index)
+
+### Seção: Newsletter Bottom Section
+**Headings e Conteúdo:** (Mesmos da página Index)
+
+---
+
+## PÁGINA 6: NotFound - `/404` ou rotas não encontradas
+
+### Seção: Erro 404
+**Headings:**
+- H1: "404"
+
+**Parágrafos:**
+- "Oops! Page not found"
+- Link: "Return to Home"
+
+---
+
+## PÁGINA 7: StaticCatalog - `/catalogo/:pageId`
+
+### Seção: Header do Catálogo
+**Headings:**
+- H1: Título dinâmico do catálogo (do banco de dados)
+- Subtítulo: Descrição do catálogo (se disponível)
+
+**Parágrafos:**
+- Informações sobre visualizações e data de criação
+- Badge indicando se é RJ ou SP
+
+### Seção: Properties Grid
+**Headings:**
+- H3: Título de cada imóvel no catálogo
+
+**Parágrafos:**
+- Endereço de cada imóvel
+- Data do leilão
+- Valor do leilão
+
+**Links de Imagens:**
+- Imagem de cada imóvel (ou mapa se não houver imagem)
+- Thumbnails dos vídeos (se aplicável)
+
+**Links de Vídeos:**
+- Nenhum vídeo específico nesta página
+
+---
+
+## RESUMO GERAL
+
+### Imagens Reutilizadas em Múltiplas Páginas:
+- `/visao-panoramica-rio-janeiro.jpg` (Hero Index e LeilaoRJ)
+
+- `/fundo-marmore-1-webp.png` (Fundo de várias seções)
+- `/bg-newsletter.jpg.webp` (Newsletter section)
+- `/foto-recortada-cataldo.png` (Newsletter section)
+- `/assets/bg/fundo-marmore.png` (Testimonials section)
+
+### Vídeos Reutilizados em Múltiplas Páginas:
+- `https://www.youtube.com/embed/G8Wp2ju3CaU` (Hero vídeo principal)
+- `https://www.youtube.com/watch?v=IssSNAzj4ag&t=1s` (Link para entrevista completa)
+- Todos os vídeos da seção Featured Videos
+- Todos os vídeos da seção Success Cases
+
+### Componentes Compartilhados:
+- **Header**: Presente em todas as páginas públicas
+- **Footer**: Presente em todas as páginas públicas
+- **SocialBar**: Presente em todas as páginas públicas
+- **CookieBar**: Presente em todas as páginas públicas
+- **FeaturedVideos**: Presente em Index, LeilaoCaixaRJ, LeilaoRJ, LeilaoSP
+- **SuccessCases**: Presente em Index, LeilaoCaixaRJ, LeilaoRJ, LeilaoSP
+- **ArticlesSection**: Presente em Index, LeilaoCaixaRJ, LeilaoRJ, LeilaoSP
+- **TestimonialsSection**: Presente em Index, LeilaoCaixaRJ, LeilaoRJ, LeilaoSP, PropertyDetail
+- **NewsletterBottomSection**: Presente em Index, LeilaoCaixaRJ, LeilaoRJ, LeilaoSP, PropertyDetail
+- **VideoPlayerContainer**: Presente em Index, LeilaoCaixaRJ, LeilaoRJ, LeilaoSP
