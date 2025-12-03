@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cataldo Siston Advogados | Especialistas em Leilão</title>
+  <link rel="icon" type="image/png" href="https://cdn.prod.website-files.com/69023853a6b8fa97b90fd72d/6911dd6a49f6f0dabff0a498_logotipo_cataldo_siston.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        h1, h2, h3, h4, h5, .font-serif { font-family: 'Playfair Display', serif; }
+        
+        /* Custom Marble/Texture Background for Light Sections */
+        .bg-marble {
+            background-color: #f8f8f8;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(0,0,0,0.02) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(0,0,0,0.02) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(0,0,0,0.02) 0px, transparent 50%);
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #18181b; }
+        ::-webkit-scrollbar-thumb { background: #4a4a4e; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #b45309; }
+    </style>
+</head>
+<body class="bg-zinc-50 text-zinc-800 antialiased selection:bg-amber-500 selection:text-white flex flex-col min-h-screen">
+
+    <!-- Topbar -->
+    <div class="bg-[#1a1a1a] text-zinc-400 py-2 text-[11px] border-b border-zinc-800/50 relative z-50">
+        <div class="container mx-auto px-4 lg:px-12 flex justify-between items-center max-w-[1400px]">
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-2 hover:text-white transition-colors cursor-pointer">
+                    <i data-lucide="mail" class="w-3.5 h-3.5 text-amber-500"></i>
+                    <span>contato@cataldosiston-adv.com.br</span>
+                </div>
+                <div class="hidden sm:flex items-center gap-2 hover:text-white transition-colors cursor-pointer">
+                    <i data-lucide="phone" class="w-3.5 h-3.5 text-amber-500"></i>
+                    <span>+55 (21) 3173-3795</span>
+                </div>
+                <a href="#" class="hidden md:flex items-center gap-1 bg-[#25D366] hover:bg-[#20bd5a] text-white px-2 py-0.5 rounded transition-colors font-semibold">
+                    <i data-lucide="message-circle" class="w-3 h-3"></i> Fale Conosco
+                </a>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="flex gap-3">
+                    <a href="#" class="hover:text-amber-500 transition-colors"><i data-lucide="facebook" class="w-3.5 h-3.5"></i></a>
+                    <a href="#" class="hover:text-amber-500 transition-colors"><i data-lucide="instagram" class="w-3.5 h-3.5"></i></a>
+                    <a href="#" class="hover:text-amber-500 transition-colors"><i data-lucide="youtube" class="w-3.5 h-3.5"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-40 mx-4 lg:mx-8">
+        <div class="bg-white rounded-xl border border-zinc-200/50 backdrop-blur-md bg-white/90 shadow-lg shadow-zinc-900/5 mt-4">
+            <div class="container mx-auto px-4 lg:px-12 flex justify-between items-center max-w-[1400px] py-6">
+                <a href="index.html" class="flex flex-col items-start group">
+                    <div class="flex items-center gap-2 px-3 py-2 rounded-lg">
+                        <img src="https://cdn.prod.website-files.com/69023853a6b8fa97b90fd72d/6911dd6a49f6f0dabff0a498_logotipo_cataldo_siston.png" alt="Cataldo Siston Advogados" class="h-8 w-auto">
+                </div>
+            </a>
+
+                <div class="hidden lg:flex items-center gap-8">
+                    <a href="index.html" class="text-xs font-medium text-zinc-900 border-b border-amber-500 pb-1 transition-colors uppercase tracking-wider">Quem somos</a>
+
+                    <!-- Dropdown Imóveis em Leilão -->
+                    <div class="relative group">
+                        <button class="text-xs font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider flex items-center gap-1">
+                            Imóveis em Leilão
+                            <i data-lucide="chevron-down" class="w-3 h-3 group-hover:rotate-180 transition-transform"></i>
+            </button>
+                        <div class="absolute top-full left-0 mt-2 bg-white border border-zinc-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 min-w-[150px] z-50">
+                            <a href="imoveis-rj.html" class="block px-4 py-3 text-xs font-medium text-zinc-700 hover:text-amber-600 hover:bg-amber-50 transition-colors uppercase tracking-wider">Imóveis RJ</a>
+                            <a href="imoveis-sp.html" class="block px-4 py-3 text-xs font-medium text-zinc-700 hover:text-amber-600 hover:bg-amber-50 transition-colors uppercase tracking-wider">Imóveis SP</a>
+        </div>
+                    </div>
+
+                    <a href="assessoria.html" class="text-xs font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider">Assessoria</a>
+                    
+                    <!-- Dropdown Direito Imobiliário -->
+                    <div class="relative group">
+                        <button class="text-xs font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider flex items-center gap-1">
+                            Direito Imobiliário
+                            <i data-lucide="chevron-down" class="w-3 h-3 group-hover:rotate-180 transition-transform"></i>
+                        </button>
+                        <div class="absolute top-full left-0 mt-2 bg-white border border-zinc-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 min-w-[180px] z-50">
+                            <a href="direito-imobiliario.html" class="block px-4 py-3 text-xs font-medium text-zinc-700 hover:text-amber-600 hover:bg-amber-50 transition-colors uppercase tracking-wider">Direito Imobiliário</a>
+                            <a href="distrato-imobiliario.html" class="block px-4 py-3 text-xs font-medium text-zinc-700 hover:text-amber-600 hover:bg-amber-50 transition-colors uppercase tracking-wider">Distrato Imobiliário</a>
+                        </div>
+        </div>
+
+                    <a href="#" class="text-xs font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider">Casos Reais</a>
+                    <a href="#" class="text-xs font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider">Blog</a>
+                    <a href="#" class="text-xs font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider">Contato</a>
+                </div>
+
+                <button id="mobileMenuToggle" class="lg:hidden text-zinc-900 relative z-50">
+                    <i data-lucide="menu" class="w-6 h-6 mobile-menu-icon"></i>
+                    <i data-lucide="x" class="w-6 h-6 mobile-menu-close hidden"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="lg:hidden absolute top-full left-0 right-0 bg-white border-t border-zinc-200 rounded-b-xl shadow-2xl opacity-0 invisible transform -translate-y-4 transition-all duration-300 z-40">
+                <div class="p-6 space-y-4">
+                    <a href="index.html" class="block text-sm font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider py-2">Quem somos</a>
+
+                    <!-- Mobile Dropdown for Imóveis em Leilão -->
+                    <div class="space-y-2">
+                        <div class="text-sm font-medium text-zinc-900 uppercase tracking-wider py-2">Imóveis em Leilão</div>
+                        <div class="pl-4 space-y-2">
+                            <a href="imoveis-rj.html" class="block text-sm text-zinc-600 hover:text-amber-600 transition-colors py-1">Imóveis RJ</a>
+                            <a href="imoveis-sp.html" class="block text-sm text-zinc-600 hover:text-amber-600 transition-colors py-1">Imóveis SP</a>
+                        </div>
+                    </div>
+
+                    <a href="assessoria.html" class="block text-sm font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider py-2">Assessoria</a>
+                    
+                    <!-- Mobile Dropdown for Direito Imobiliário -->
+                    <div class="space-y-2">
+                        <div class="text-sm font-medium text-zinc-900 uppercase tracking-wider py-2">Direito Imobiliário</div>
+                        <div class="pl-4 space-y-2">
+                            <a href="direito-imobiliario.html" class="block text-sm text-zinc-600 hover:text-amber-600 transition-colors py-1">Direito Imobiliário</a>
+                            <a href="distrato-imobiliario.html" class="block text-sm text-zinc-600 hover:text-amber-600 transition-colors py-1">Distrato Imobiliário</a>
+                        </div>
+                    </div>
+
+                    <a href="#" class="block text-sm font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider py-2">Casos Reais</a>
+                    <a href="#" class="block text-sm font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider py-2">Blog</a>
+                    <a href="#" class="block text-sm font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider py-2">Contato</a>
+
+                    <div class="pt-4 border-t border-zinc-200">
+                        <a href="https://wa.me/5521977294848?text=Olá!%20Tenho%20interesse%20em%20saber%20mais%20sobre%20leilões%20de%20imóveis." target="_blank" class="block w-full text-center bg-amber-600 hover:bg-amber-700 text-white text-sm font-bold py-3 px-4 rounded transition-colors">
+                            Fale Conosco no WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <script>
+        // Mobile Menu Toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (!mobileMenuToggle || !mobileMenu) return;
+            
+            const menuIcon = mobileMenuToggle.querySelector('.mobile-menu-icon');
+            const closeIcon = mobileMenuToggle.querySelector('.mobile-menu-close');
+
+            mobileMenuToggle.addEventListener('click', function() {
+                const isOpen = mobileMenu.classList.contains('opacity-100');
+                
+                if (isOpen) {
+                    // Close menu
+                    mobileMenu.classList.remove('opacity-100', 'visible', 'translate-y-0');
+                    mobileMenu.classList.add('opacity-0', 'invisible', '-translate-y-4');
+                    menuIcon.classList.remove('hidden');
+                    closeIcon.classList.add('hidden');
+                } else {
+                    // Open menu
+                    mobileMenu.classList.remove('opacity-0', 'invisible', '-translate-y-4');
+                    mobileMenu.classList.add('opacity-100', 'visible', 'translate-y-0');
+                    menuIcon.classList.add('hidden');
+                    closeIcon.classList.remove('hidden');
+                }
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!mobileMenuToggle.contains(e.target) && !mobileMenu.contains(e.target)) {
+                    mobileMenu.classList.remove('opacity-100', 'visible', 'translate-y-0');
+                    mobileMenu.classList.add('opacity-0', 'invisible', '-translate-y-4');
+                    menuIcon.classList.remove('hidden');
+                    closeIcon.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+
+    <!-- Header / Hero -->
+    <header class="relative w-full h-[650px] sm:h-[750px] lg:h-[850px] bg-zinc-900 flex flex-col -mt-[120px] z-0 overflow-visible">
+        <!-- Hero Background -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://cdn.prod.website-files.com/69023853a6b8fa97b90fd72d/69122a90a660f6e2466a9cb5_banner-site-equipe.webp" alt="Advogados Cataldo Siston" class="w-full h-full object-cover object-center opacity-40 mix-blend-overlay">
+            <div class="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/40 to-black/60"></div>
+        </div>
+    
+        <!-- Hero Content -->
+        <div class="relative z-10 container mx-auto px-6 sm:px-8 lg:px-12 flex-grow flex flex-col justify-center items-center text-center max-w-4xl mt-16 sm:mt-20">
+            <h1 class="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-serif text-white mb-6 sm:mb-8 tracking-tight leading-tight drop-shadow-lg">
+                Advogados especialistas em leilão<br>
+                <span class="text-zinc-300">de imóveis e direito imobiliário</span>
+            </h1>
+            <button class="group bg-amber-600 hover:bg-amber-500 text-white text-sm font-medium px-8 py-3.5 rounded-full transition-all flex items-center gap-2 border border-amber-500 hover:shadow-[0_0_20px_rgba(217,119,6,0.4)] uppercase tracking-wide">
+                Entre em contato
+                <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Floating Cards Section -->
+    <section class="relative -mt-24 z-50 mb-12">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                <!-- Card 1 -->
+                <div class="bg-white p-6 lg:p-8 relative overflow-hidden shadow-xl rounded-sm border-t-4 border-amber-600 group hover:-translate-y-2 transition-transform duration-300">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-amber-50 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+                    <div class="relative z-10 flex flex-col h-full">
+                        <div class="w-12 h-12 bg-zinc-900 text-white flex items-center justify-center rounded mb-6 shadow-lg shadow-amber-900/10">
+                            <i data-lucide="gavel" class="w-6 h-6 stroke-[1.5]"></i>
+                    </div>
+                        <h3 class="text-xl font-serif text-zinc-900 mb-3 font-medium">Excelência acadêmica</h3>
+                        <div class="w-10 h-0.5 bg-amber-500 mb-4"></div>
+                        <p class="text-sm text-zinc-600 leading-relaxed">
+                            Aliada à experiência de <strong class="text-zinc-900">20 anos de intensa prática</strong> em leilões de imóveis e direito imobiliário.
+                        </p>
+                    </div>
+                    </div>
+                <!-- Card 2 -->
+                <div class="bg-white p-6 lg:p-8 relative overflow-hidden shadow-xl rounded-sm border-t-4 border-amber-600 group hover:-translate-y-2 transition-transform duration-300 md:-mt-6">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-amber-50 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+                     <div class="relative z-10 flex flex-col h-full">
+                        <div class="w-12 h-12 bg-amber-600 text-white flex items-center justify-center rounded mb-6 shadow-lg shadow-amber-600/30">
+                            <i data-lucide="target" class="w-6 h-6 stroke-[1.5]"></i>
+                        </div>
+                        <h3 class="text-xl font-serif text-zinc-900 mb-3 font-medium">Resultados Comprovados</h3>
+                        <div class="w-10 h-0.5 bg-amber-500 mb-4"></div>
+                        <p class="text-sm text-zinc-600 leading-relaxed">
+                            Busca incansável por <strong class="text-zinc-900">resultados seguros e economicamente positivos</strong> para nossos clientes.
+                        </p>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="bg-white p-6 lg:p-8 relative overflow-hidden shadow-xl rounded-sm border-t-4 border-amber-600 group hover:-translate-y-2 transition-transform duration-300">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-amber-50 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+                     <div class="relative z-10 flex flex-col h-full">
+                        <div class="w-12 h-12 bg-zinc-900 text-white flex items-center justify-center rounded mb-6 shadow-lg shadow-amber-900/10">
+                            <i data-lucide="heart" class="w-6 h-6 stroke-[1.5]"></i>
+                        </div>
+                        <h3 class="text-xl font-serif text-zinc-900 mb-3 font-medium">Atendimento Personalizado</h3>
+                        <div class="w-10 h-0.5 bg-amber-500 mb-4"></div>
+                        <p class="text-sm text-zinc-600 leading-relaxed">
+                            Relacionamento <strong class="text-zinc-900">atencioso, transparente e próximo</strong> aos nossos clientes.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quem Somos Section -->
+    <section id="quem-somos" class="relative z-10 py-32 bg-white text-zinc-600 pt-24">
+        <div class="container mx-auto px-6 max-w-6xl">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl lg:text-5xl font-serif text-zinc-900 tracking-tight mb-4 relative inline-block">
+                    <span class="relative z-10 px-6">Quem somos e<br>como trabalhamos</span>
+                    <span class="absolute top-8 left-0 w-full h-px bg-amber-300 -z-0"></span>
+                </h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-16 text-lg font-light leading-relaxed text-justify">
+                <div class="space-y-6">
+                    <p>Somos um escritório formado por advogados altamente especializados e experientes nas seguintes áreas de atuação: <strong class="text-amber-700 font-medium">leilão de imóveis</strong> e <strong class="text-amber-700 font-medium">direito imobiliário</strong>, que são alicerçadas pelo profundo conhecimento técnico dos institutos de direito processual civil, pilar estratégico para a prestação de serviços jurídicos de alto desempenho.</p>
+                    <p>Nosso propósito é a <strong class="text-zinc-900 font-medium">busca incessante por resultados eficazes e economicamente positivos.</strong></p>
+                </div>
+                <div class="space-y-6">
+                    <p>Assim, oferecemos soluções pautadas pela alta especialização técnica e intensa dedicação, onde os sócios do escritório atuam diretamente em todos as atividades, provendo atenção personalizada e ágil na defesa dos direitos daqueles que depositaram em nós sua confiança.</p>
+                    <p>Alinhado ao nosso propósito, realizamos um estudo prévio do custo-benefício de cada caso, acompanhado de informações acerca dos benefícios e dos eventuais riscos das medidas pretendidas, a fim de <strong class="text-zinc-900 font-medium">prover a necessária segurança jurídica aos nossos clientes.</strong></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- History Section -->
+    <section class="py-24 bg-zinc-50 border-t border-zinc-200/50">
+        <div class="container mx-auto px-6 max-w-4xl text-center">
+            <h2 class="text-3xl lg:text-4xl font-serif text-zinc-900 tracking-tight mb-12">Nossa história</h2>
+            
+            <div class="space-y-8 text-lg font-light text-zinc-600 leading-relaxed text-justify">
+                <p>
+                    Tudo começou quando, ainda com 15 anos de idade, <strong class="font-medium text-zinc-900">Raphael Cataldo Siston</strong> resolveu prestar concurso para a Aeronáutica, pois tinha o sonho de se tornar aviador da Força Aérea Brasileira. Passou no concurso e iniciou seus estudos na Escola Preparatória de Cadetes do Ar e, em seguida, na Academia da Força Aérea. Após anos "realizando o seu sonho", teve que alçar outros voos em virtude de problemas de saúde.
+                </p>
+                <p>
+                    Resolveu fazer faculdade de Direito com o único propósito de ser aprovado em concurso público. Certo dia, na biblioteca da faculdade, ao ler uma matéria no jornal sobre <strong class="font-medium text-zinc-900">leilões judiciais de imóveis</strong>, ficou interessado pelo tema, passando a estudá-lo exaustivamente, até o momento em que realizou a sua primeira arrematação judicial.
+                </p>
+                <p>
+                    Diante da arrematação realizada, atuou ativamente no processo e, por obra do destino, ficou apaixonado pela advocacia, não restando dúvidas de que o seu norte seria a <strong class="font-medium text-zinc-900">advocacia imobiliária</strong> e os <strong class="font-medium text-zinc-900">leilões de imóveis</strong>.
+                </p>
+                <p>
+                    Assim, com o propósito de prestar soluções jurídicas de excelência, imprimiu profunda energia nas suas especializações e na formação de uma equipe de profissionais igualmente capacitados e comprometidos, resultando no sucesso do escritório <strong class="font-medium text-zinc-900">Cataldo Siston Advogados</strong>, que se tornou referência quando se fala em <strong class="font-medium text-zinc-900">advogado especialista em leilões de imóveis</strong> e <strong class="font-medium text-zinc-900">advogado especialista em direito imobiliário</strong>.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Highlight / VideoPlayerContainer -->
+    <section class="py-24 bg-white">
+        <div class="container mx-auto px-4 lg:px-12 max-w-6xl flex flex-col md:flex-row items-center gap-12">
+            <div class="w-full md:w-1/2">
+                <div class="relative aspect-video bg-black rounded-lg overflow-hidden shadow-2xl group cursor-pointer">
+                    <img src="https://img.youtube.com/vi/IssSNAzj4ag/hqdefault.jpg" class="w-full h-full object-cover opacity-80 group-hover:opacity-60 transition-opacity duration-300">
+                    <a href="https://www.youtube.com/watch?v=IssSNAzj4ag&t=1s" target="_blank" class="absolute inset-0 flex items-center justify-center">
+                        <div class="w-16 h-16 bg-[#ff0000] rounded-lg flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                            <i data-lucide="play" class="w-6 h-6 text-white fill-white ml-1"></i>
+                        </div>
+                    </a>
+                    <div class="absolute bottom-4 left-4 text-white text-xs font-bold flex items-center gap-2">
+                        <i data-lucide="youtube" class="w-4 h-4"></i> Watch on YouTube
+                    </div>
+                </div>
+            </div>
+            <div class="w-full md:w-1/2">
+                <div class="inline-block p-3 rounded-full bg-red-50 text-red-600 mb-4">
+                     <i data-lucide="youtube" class="w-6 h-6"></i>
+                </div>
+                <h2 class="text-2xl font-serif text-zinc-900 mb-4">Confira a entrevista do advogado Raphael Cataldo Siston sobre leilões de imóveis</h2>
+                <p class="text-sm text-zinc-500 leading-relaxed mb-8">
+                        A equipe de advogados do Escritório Cataldo Siston Advogados realizou uma entrevista para o Empresários de Sucesso, maior programa de TV de empreendedorismo do Brasil.
+                    </p>
+                <a href="https://www.youtube.com/watch?v=IssSNAzj4ag&t=1s" target="_blank" class="inline-block px-8 py-2.5 border border-amber-500 text-amber-600 rounded-full text-xs font-semibold uppercase tracking-wider hover:bg-amber-50 hover:text-amber-700 transition-colors">
+                    Assistir na íntegra
+                    </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Specialists Section (Dark Background with Floating Card) -->
+    <section id="leiloes" class="py-32 bg-zinc-900 relative">
+        <div class="absolute inset-0 z-0">
+             <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=2000" alt="Building" class="w-full h-full object-cover opacity-10">
+        </div>
+        
+        <div class="container mx-auto px-4 lg:px-12 max-w-5xl relative z-10">
+            <h2 class="text-4xl lg:text-5xl font-serif text-white text-center mb-16 tracking-tight">
+                Advogados especialistas<br>em leilões de imóveis
+            </h2>
+
+            <div class="bg-white/95 backdrop-blur rounded p-12 md:p-16 shadow-2xl text-zinc-600 text-lg font-light leading-loose text-justify space-y-6">
+                <p>
+                    A aquisição de <strong class="font-medium text-zinc-900">imóveis em leilão</strong> conﬁgura-se como a forma mais lucrativa de investimento imobiliário, pois os imóveis são vendidos por <strong class="font-medium text-zinc-900">valor até 50% abaixo da sua avaliação</strong>, proporcionando, assim, grande rentabilidade na revenda ou locação, sendo também extremamente vantajoso para quem pretende comprar sua moradia por preço substancialmente menor.
+                </p>
+                <p>
+                    Todavia, a compra de imóveis em leilão não é simples. Para que haja segurança jurídica e financeira na arrematação, é imprescindível a realização de uma análise profunda dos processos e procedimentos que envolvem o devedor e o imóvel a ser arrematado. Através do estudo prévio (due diligence) feito pelo <strong class="font-medium text-zinc-900">advogado especialista em leilões de imóveis</strong>, são avaliadas todas as possibilidades e perspectivas para o futuro do investimento, objetivando a mitigação de riscos e a definição da estratégia econômica do negócio imobiliário.
+                </p>
+                <p>
+                    Portanto, seja qual for o objetivo do investidor, aumentar seus ativos ou até mesmo adquirir um imóvel para uso próprio, o investimento em leilões de imóveis assegura um <strong class="font-medium text-zinc-900">enorme potencial de lucratividade</strong>, sendo certo que o sucesso do investimento está intrinsecamente ligado à qualidade da atuação do advogado especialista em leilão de imóveis, que é o responsável pelo estudo prévio de viabilidade jurídica e pela efetiva adoção das medidas judiciais e extrajudiciais necessárias à transferência da posse e da propriedade do imóvel ao arrematante.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Real Cases Section -->
+    <section id="casos" class="py-32 bg-white">
+        <div class="container mx-auto px-6 max-w-7xl">
+            <div class="text-center mb-20">
+                <h2 class="text-4xl lg:text-5xl font-serif text-zinc-900 tracking-tight mb-4">
+                    Casos reais de imóveis arrematados<br>em leilão pelos nossos advogados
+                </h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Case 1 -->
+                <div class="group bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&q=80&w=800" alt="Apartamento Laranjeiras" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute bottom-4 left-4 bg-amber-600 text-white text-xs font-bold px-3 py-1 rounded uppercase tracking-wider">Laranjeiras</div>
+                    </div>
+                    <div class="p-8 bg-zinc-900 text-white">
+                        <h3 class="font-serif text-lg text-amber-500 mb-4 h-14">Rua Prof. Ortiz Monteiro 72, Apt: 102</h3>
+                        <div class="space-y-3 text-sm border-t border-zinc-800 pt-4">
+                            <div class="flex justify-between">
+                                <span class="text-zinc-500">N.Processo:</span>
+                                <span class="text-zinc-300 font-mono text-xs">0019219-31.1999.8.19.0001</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-zinc-500">Data de aquisição:</span>
+                                <span class="text-zinc-300">05/05/2008</span>
+                            </div>
+                            <div class="flex justify-between items-end pt-2">
+                                <span class="text-zinc-500 text-xs uppercase tracking-wider">Valor da arrematação</span>
+                                <span class="text-2xl font-serif text-amber-500">R$ 248.000,00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case 2 -->
+                <div class="group bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1512918760532-3ed465901861?auto=format&fit=crop&q=80&w=800" alt="Apartamento Tijuca" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute bottom-4 left-4 bg-amber-600 text-white text-xs font-bold px-3 py-1 rounded uppercase tracking-wider">Tijuca</div>
+                    </div>
+                    <div class="p-8 bg-zinc-900 text-white">
+                        <h3 class="font-serif text-lg text-amber-500 mb-4 h-14">Rua São Francisco Xavier 40, Apt: 801</h3>
+                        <div class="space-y-3 text-sm border-t border-zinc-800 pt-4">
+                            <div class="flex justify-between">
+                                <span class="text-zinc-500">N.Processo:</span>
+                                <span class="text-zinc-300 font-mono text-xs">0071294-42.2002.8.19.0001</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-zinc-500">Data de aquisição:</span>
+                                <span class="text-zinc-300">18/06/2009</span>
+                            </div>
+                            <div class="flex justify-between items-end pt-2">
+                                <span class="text-zinc-500 text-xs uppercase tracking-wider">Valor da arrematação</span>
+                                <span class="text-2xl font-serif text-amber-500">R$ 165.998,00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case 3 -->
+                <div class="group bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&q=80&w=800" alt="Apartamento Tijuca" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute bottom-4 left-4 bg-amber-600 text-white text-xs font-bold px-3 py-1 rounded uppercase tracking-wider">Tijuca</div>
+                    </div>
+                    <div class="p-8 bg-zinc-900 text-white">
+                        <h3 class="font-serif text-lg text-amber-500 mb-4 h-14">Rua General Espírito Santo Cardoso 139</h3>
+                        <div class="space-y-3 text-sm border-t border-zinc-800 pt-4">
+                            <div class="flex justify-between">
+                                <span class="text-zinc-500">N.Processo:</span>
+                                <span class="text-zinc-300 font-mono text-xs">0111506-37.2004.8.19.0001</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-zinc-500">Data de aquisição:</span>
+                                <span class="text-zinc-300">29/07/2009</span>
+                            </div>
+                            <div class="flex justify-between items-end pt-2">
+                                <span class="text-zinc-500 text-xs uppercase tracking-wider">Valor da arrematação</span>
+                                <span class="text-2xl font-serif text-amber-500">R$ 225.000,00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-16">
+                <a href="#" class="inline-flex items-center gap-2 bg-amber-600 hover:bg-amber-500 text-white px-8 py-3 rounded text-sm font-semibold uppercase tracking-wide transition-colors shadow-lg">
+                    Veja os nossos resultados
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Real Estate Law Section -->
+    <section id="direito-imobiliario" class="py-32 bg-zinc-900 relative">
+         <div class="absolute inset-0 z-0">
+             <img src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=2000" alt="Gavel" class="w-full h-full object-cover opacity-20">
+             <div class="absolute inset-0 bg-zinc-900/80"></div>
+        </div>
+
+        <div class="container mx-auto px-4 lg:px-12 max-w-5xl relative z-10">
+            <h2 class="text-4xl lg:text-5xl font-serif text-white text-center mb-16 tracking-tight">
+                Advogado especialista<br>em direito imobiliário
+            </h2>
+
+            <div class="bg-white/95 backdrop-blur rounded p-12 md:p-16 shadow-2xl text-zinc-600 text-lg font-light leading-loose text-justify space-y-6 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-2 h-full bg-amber-600"></div>
+                <p>
+                    O <strong class="font-medium text-zinc-900">Cataldo Siston Advogados</strong> possui sólida experiência na advocacia imobiliária, em virtude de ter acumulado um histórico de extremo sucesso, <strong class="font-medium text-zinc-900">com êxito em mais de 1200 leilões de imóveis</strong>, que envolveram a solução de diversas questões de alta complexidade jurídica. Imbuído da vivência adquirida, aliada à profundidade técnica dos seus advogados, o Cataldo Siston se destaca pela <strong class="font-medium text-zinc-900">alta especialização em todas as áreas do direito imobiliário</strong>, atuando na esfera consultiva e contenciosa, que é embasada pelo conhecimento estratégico dos institutos de direito processual civil, pilar fundamental para o elevado desempenho na solução dos conflitos.
+                </p>
+                <p>
+                    Nossos advogados especializados em direito imobiliário concentram sua dedicação e competência na criação de soluções especíﬁcas para cada caso, usando de superior técnica jurídica em busca do melhor resultado, com atuação marcante nas questões relacionadas à compra e venda de imóveis, locações imobiliárias, reintegração/imissão na posse, rescisão de contratos imobiliários, distrato de contrato de imóveis, regularização de registros imobiliários, direito condominial, incorporação imobiliária e shopping center.
+                </p>
+                <div class="pt-6 text-center">
+                    <a href="direito-imobiliario.html" class="inline-flex items-center gap-2 text-amber-700 font-semibold uppercase tracking-wider text-sm hover:text-amber-800 transition-colors border-b-2 border-amber-500 pb-1">
+                        Saiba Mais
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="py-24 bg-white relative">
+        <!-- Subtle Marble Texture -->
+        <div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: url('https://img.freepik.com/free-photo/white-marble-texture-background-pattern-with-high-resolution_145211-5.jpg'); background-size: cover;"></div>
+
+        <div class="container mx-auto px-4 lg:px-12 max-w-[1400px] relative z-10">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-serif text-zinc-900">Sobre</h2>
+                </div>
+
+            <div class="flex flex-col md:flex-row items-center gap-12 lg:gap-20">
+                <div class="w-full md:w-5/12 flex justify-center md:justify-end relative group">
+                    <div class="relative w-72 h-72 md:w-80 md:h-80">
+                        <img src="https://cdn.prod.website-files.com/69023853a6b8fa97b90fd72d/69143d1e6ceea5f04f9c43df_perfil-rafael-cataldo.jpg.webp" alt="Raphael Cataldo Siston" class="w-full h-full object-cover object-top shadow-xl z-10 relative rounded-sm grayscale hover:grayscale-0 transition-all duration-500">
+                        <!-- Gold Border Decoration -->
+                        <div class="absolute -bottom-4 -right-4 w-full h-full border-2 border-amber-500 z-0"></div>
+                    </div>
+                </div>
+                
+                <div class="w-full md:w-7/12">
+                    <h3 class="text-2xl font-serif text-zinc-900 mb-2">Raphael Cataldo Siston</h3>
+                    <p class="text-sm text-zinc-500 leading-relaxed max-w-xl mb-6">
+                        Advogado especialista em leilões de imóveis, com mais de 20 anos de experiência em arrematações imobiliárias. Pós-graduado em direito imobiliário e em direito processual civil.
+                    </p>
+                    
+                    <div class="mb-6">
+                        <img src="https://cdn.prod.website-files.com/69023853a6b8fa97b90fd72d/69143de5797f7266b022e62a_assinatura-cataldo.svg" alt="Assinatura Raphael Siston" class="h-12 w-auto">
+                    </div>
+                    
+                    <div>
+                        <span class="block text-xs font-bold text-zinc-900">OAB/RJ nº 153.146</span>
+                        <span class="block text-xs text-zinc-500">raphael@cataldosiston-adv.com.br</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section / Articles Section -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-4 lg:px-12 max-w-[1400px]">
+            <div class="text-center mb-16">
+                <div class="flex items-center justify-center gap-4 mb-4">
+                    <div class="h-px w-12 bg-zinc-300"></div>
+                    <span class="text-zinc-900 font-serif text-xl">Confira entrevistas e artigos do advogado Raphael</span>
+                    <div class="h-px w-12 bg-zinc-300"></div>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-serif text-zinc-900 mb-2">Cataldo Siston sobre leilão de imóveis</h2>
+                </div>
+
+            <div class="relative px-4 sm:px-6 md:px-8 lg:px-12">
+                <button id="articlesPrev" class="absolute left-2 sm:left-4 md:left-0 top-1/2 -translate-y-1/2 text-amber-600 hover:text-amber-700 transition-colors z-10 hidden sm:block">
+                    <div class="w-12 h-12 bg-white border border-zinc-200 rounded-full flex items-center justify-center text-amber-600 shadow-lg hover:scale-110 transition-transform">
+                        <i data-lucide="chevron-left" class="w-6 h-6"></i>
+            </div>
+                </button>
+
+                <div id="articlesContainer" class="overflow-hidden">
+                    <div id="articlesSlider" class="flex transition-transform duration-500 ease-in-out gap-4 sm:gap-6 lg:gap-8">
+                        <!-- Post 1 -->
+                        <article class="flex-shrink-0 bg-white p-6 rounded-sm shadow-lg group border-b-4 border-amber-600 h-full flex flex-col hover:-translate-y-1 transition-transform duration-300 w-full sm:w-[280px] md:w-[320px] lg:w-[calc((100%-4rem)/3)]">
+                            <div class="aspect-video mb-4 overflow-hidden relative">
+                                <img src="https://leilaodeimoveis-cataldosiston.com/wp-content/uploads/2025/02/imoveis-em-leilao-costumam-estar-em-pessimo-estado-de-conservacao-blog-cataldo-siston-advogados.jpg" alt="Imóveis em leilão costumam estar em péssimo estado de conservação?" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <div class="absolute top-2 left-2 bg-amber-600 text-white text-[9px] px-2 py-1 uppercase font-bold tracking-wider">Artigo</div>
+        </div>
+                            <h3 class="font-serif text-lg leading-tight mb-3 text-zinc-900 group-hover:text-amber-600 transition-colors">Imóveis em leilão costumam estar em péssimo estado de conservação?</h3>
+                            <p class="text-xs text-zinc-500 leading-relaxed mb-4 flex-grow line-clamp-4">
+                                Muitos investidores e compradores em potencial se preocupam com o estado de conservação dos imóveis em leilão. A ideia de que essas propriedades estão completamente deterioradas, exigindo reformas onerosas,…
+                            </p>
+                            <div class="mt-auto pt-4 flex gap-1 border-t border-zinc-100">
+                                <a href="https://leilaodeimoveis-cataldosiston.com/imoveis-em-leilao-costumam-estar-em-pessimo-estado-de-conservacao/" target="_blank" class="text-amber-600 text-xs font-bold uppercase hover:underline">Ler mais</a>
+                            </div>
+                        </article>
+
+                        <!-- Post 2 -->
+                        <article class="flex-shrink-0 bg-white p-6 rounded-sm shadow-lg group border-b-4 border-amber-600 h-full flex flex-col hover:-translate-y-1 transition-transform duration-300 w-full sm:w-[280px] md:w-[320px] lg:w-[calc((100%-4rem)/3)]">
+                            <div class="aspect-video mb-4 overflow-hidden relative">
+                                <img src="https://leilaodeimoveis-cataldosiston.com/wp-content/uploads/2024/11/custos-apos-a-arrematacao-blog-cataldo-siston-advogados.jpg" alt="O que você deve pagar, após arrematar um imóvel em leilão?" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <div class="absolute top-2 left-2 bg-amber-600 text-white text-[9px] px-2 py-1 uppercase font-bold tracking-wider">Dica</div>
+                            </div>
+                            <h3 class="font-serif text-lg leading-tight mb-3 text-zinc-900 group-hover:text-amber-600 transition-colors">O que você deve pagar, após arrematar um imóvel em leilão?</h3>
+                            <p class="text-xs text-zinc-500 leading-relaxed mb-4 flex-grow line-clamp-4">
+                                Quando você decide adquirir um imóvel em leilão, seja judicial ou extrajudicial, a arrematação é apenas o primeiro passo para garantir a sua propriedade. O valor do lance é…
+                            </p>
+                            <div class="mt-auto pt-4 flex gap-1 border-t border-zinc-100">
+                                <a href="https://leilaodeimoveis-cataldosiston.com/o-que-voce-deve-pagar-apos-arrematar-um-imovel-em-leilao/" target="_blank" class="text-amber-600 text-xs font-bold uppercase hover:underline">Ler mais</a>
+                            </div>
+                        </article>
+
+                        <!-- Post 3 -->
+                        <article class="flex-shrink-0 bg-white p-6 rounded-sm shadow-lg group border-b-4 border-amber-600 h-full flex flex-col hover:-translate-y-1 transition-transform duration-300 w-full sm:w-[280px] md:w-[320px] lg:w-[calc((100%-4rem)/3)]">
+                            <div class="aspect-video mb-4 overflow-hidden relative">
+                                <img src="https://leilaodeimoveis-cataldosiston.com/wp-content/uploads/2024/08/como-ocorre-a-imissao-na-posse-leiloes-de-imoveis-blog-escritorio-cataldo-siston.webp" alt="Saiba como ocorre a imissão na posse em leilões de imóveis" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <div class="absolute top-2 left-2 bg-amber-600 text-white text-[9px] px-2 py-1 uppercase font-bold tracking-wider">Entrevista</div>
+                            </div>
+                            <h3 class="font-serif text-lg leading-tight mb-3 text-zinc-900 group-hover:text-amber-600 transition-colors">Saiba como ocorre a imissão na posse em leilões de imóveis</h3>
+                            <p class="text-xs text-zinc-500 leading-relaxed mb-4 flex-grow line-clamp-4">
+                                A imissão na posse em leilões de imóveis, seja extrajudiciais ou judiciais, é algo que suscita muitos questionamentos por parte dos licitantes ou interessados em participar desta modalidade de…
+                            </p>
+                            <div class="mt-auto pt-4 flex gap-1 border-t border-zinc-100">
+                                <a href="https://leilaodeimoveis-cataldosiston.com/como-ocorre-a-imissao-na-posse-em-leiloes-de-imoveis/" target="_blank" class="text-amber-600 text-xs font-bold uppercase hover:underline">Ler mais</a>
+                            </div>
+                        </article>
+                        
+                        <!-- Post 4 -->
+                        <article class="flex-shrink-0 bg-white p-6 rounded-sm shadow-lg group border-b-4 border-amber-600 h-full flex flex-col hover:-translate-y-1 transition-transform duration-300 w-full sm:w-[280px] md:w-[320px] lg:w-[calc((100%-4rem)/3)]">
+                            <div class="aspect-video mb-4 overflow-hidden relative">
+                                <img src="https://leilaodeimoveis-cataldosiston.com/wp-content/uploads/2024/08/impugnacao-a-arrematacao-quando-pode-ocorrer-blog-escritorio-cataldo-siston.webp" alt="Impugnação à arrematação do imóvel: quando pode ocorrer?" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <div class="absolute top-2 left-2 bg-amber-600 text-white text-[9px] px-2 py-1 uppercase font-bold tracking-wider">Artigo</div>
+                            </div>
+                            <h3 class="font-serif text-lg leading-tight mb-3 text-zinc-900 group-hover:text-amber-600 transition-colors">Impugnação à arrematação do imóvel: quando pode ocorrer?</h3>
+                            <p class="text-xs text-zinc-500 leading-relaxed mb-4 flex-grow line-clamp-4">
+                                Um dos maiores receios de quem participa de leilões de imóveis, ou daqueles que têm interesse em participar, é chegar ao final de todo o processo e ocorrer algo…
+                            </p>
+                            <div class="mt-auto pt-4 flex gap-1 border-t border-zinc-100">
+                                <a href="https://leilaodeimoveis-cataldosiston.com/impugnacao-a-arrematacao-em-leiloes-de-imoveis/" target="_blank" class="text-amber-600 text-xs font-bold uppercase hover:underline">Ler mais</a>
+                            </div>
+                        </article>
+                        
+                        <!-- Post 5 -->
+                        <article class="flex-shrink-0 bg-white p-6 rounded-sm shadow-lg group border-b-4 border-amber-600 h-full flex flex-col hover:-translate-y-1 transition-transform duration-300 w-full sm:w-[280px] md:w-[320px] lg:w-[calc((100%-4rem)/3)]">
+                            <div class="aspect-video mb-4 overflow-hidden relative">
+                                <img src="https://leilaodeimoveis-cataldosiston.com/wp-content/uploads/2024/03/entrevista-casa-jardim-como-funcionam-leiloes-de-imoveis.png" alt="Leilão de imóveis: como funciona e dicas para participar" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <div class="absolute top-2 left-2 bg-amber-600 text-white text-[9px] px-2 py-1 uppercase font-bold tracking-wider">Entrevista</div>
+                            </div>
+                            <h3 class="font-serif text-lg leading-tight mb-3 text-zinc-900 group-hover:text-amber-600 transition-colors">Leilão de imóveis: como funciona e dicas para participar</h3>
+                            <p class="text-xs text-zinc-500 leading-relaxed mb-4 flex-grow line-clamp-4">
+                                O Raphael Siston, sócio do escritório Cataldo Siston, deu uma entrevista para a Casa & Jardim falando como funcionam os leilões de imóveis e de que forma é possível…
+                            </p>
+                            <div class="mt-auto pt-4 flex gap-1 border-t border-zinc-100">
+                                <a href="https://leilaodeimoveis-cataldosiston.com/leilao-de-imoveis-como-funciona-e-dicas-para-participar/" target="_blank" class="text-amber-600 text-xs font-bold uppercase hover:underline">Ler mais</a>
+                    </div>
+                        </article>
+                </div>
+                </div>
+                
+                <button id="articlesNext" class="absolute right-2 sm:right-4 md:right-0 top-1/2 -translate-y-1/2 text-amber-600 hover:text-amber-700 transition-colors z-10 hidden sm:block">
+                    <div class="w-12 h-12 bg-white border border-zinc-200 rounded-full flex items-center justify-center text-amber-600 shadow-lg hover:scale-110 transition-transform">
+                        <i data-lucide="chevron-right" class="w-6 h-6"></i>
+                    </div>
+                </button>
+            </div>
+
+            <div class="text-center mt-12">
+                <button class="bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs px-10 py-3 rounded-full shadow-lg transition-all uppercase tracking-wider">
+                    Veja todas
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Videos -->
+    <section class="py-24 bg-zinc-50">
+        <div class="container mx-auto px-4 lg:px-12 max-w-[1400px]">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-serif text-zinc-900">Vídeos em destaque</h2>
+                </div>
+
+            <div class="relative px-4 sm:px-6 md:px-8 lg:px-12">
+                <button id="videosPrev" class="absolute left-2 sm:left-4 md:left-0 top-1/2 -translate-y-1/2 text-amber-600 hover:text-amber-700 transition-colors z-10 hidden sm:block">
+                    <div class="w-12 h-12 bg-white border border-zinc-200 rounded-full flex items-center justify-center text-amber-600 shadow-lg hover:scale-110 transition-transform">
+                        <i data-lucide="chevron-left" class="w-6 h-6"></i>
+            </div>
+                </button>
+
+                <div id="videosContainer" class="overflow-hidden">
+                    <div id="videosSlider" class="flex transition-transform duration-500 ease-in-out gap-4 sm:gap-6 lg:gap-8">
+                        <!-- Video 1 -->
+                        <article class="flex-shrink-0 bg-white rounded-lg overflow-hidden group hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 border border-zinc-200 flex flex-col w-full sm:w-[280px] md:w-[320px] lg:w-[calc((100%-4rem)/3)]">
+                            <div class="relative aspect-video overflow-hidden">
+                                <img src="https://img.youtube.com/vi/hbt-4kFMD4Q/hqdefault.jpg" alt="Vantagens de comprar imóveis em leilão" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                                <a href="https://www.youtube.com/watch?v=hbt-4kFMD4Q" target="_blank" class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-colors">
+                                    <div class="w-16 h-16 bg-[#ff0000] rounded-lg flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                                        <i data-lucide="play" class="w-6 h-6 text-white fill-white ml-1"></i>
+                    </div>
+                                </a>
+                            </div>
+                            <div class="p-6 flex flex-col flex-grow">
+                                <h3 class="text-lg font-serif text-zinc-900 mb-2 group-hover:text-amber-600 transition-colors">Quais as vantagens de comprar imóveis em leilão?</h3>
+                                <p class="text-sm text-zinc-500 leading-relaxed flex-grow">
+                                    Existem muitas vantagens nos leilões de imóveis em relação a uma compra e venda comum. Veja alguns motivos que têm levado cada vez mais pessoas a optarem por essa modalidade.
+                                </p>
+                            </div>
+                </article>
+
+                        <!-- Video 2 -->
+                        <article class="flex-shrink-0 bg-white rounded-lg overflow-hidden group hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 border border-zinc-200 flex flex-col w-full sm:w-[280px] md:w-[320px] lg:w-[calc((100%-4rem)/3)]">
+                            <div class="relative aspect-video overflow-hidden">
+                                <img src="https://img.youtube.com/vi/yvQrGmdXDiU/hqdefault.jpg" alt="Parcelamento da arrematação" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                                <a href="https://www.youtube.com/watch?v=yvQrGmdXDiU" target="_blank" class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-colors">
+                                    <div class="w-16 h-16 bg-[#ff0000] rounded-lg flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                                        <i data-lucide="play" class="w-6 h-6 text-white fill-white ml-1"></i>
+                    </div>
+                                </a>
+                            </div>
+                            <div class="p-6 flex flex-col flex-grow">
+                                <h3 class="text-lg font-serif text-zinc-900 mb-2 group-hover:text-amber-600 transition-colors">É possível parcelar o valor da arrematação em leilões de imóveis?</h3>
+                                <p class="text-sm text-zinc-500 leading-relaxed flex-grow">
+                                    Tem dúvidas sobre como deve ser feito o pagamento do valor da arrematação em leilões de imóveis? Quer saber em quais casos é possível realizar o parcelamento? Veja o vídeo que nós preparamos sobre esse assunto.
+                                </p>
+                    </div>
+                </article>
+
+                        <!-- Video 3 -->
+                        <article class="flex-shrink-0 bg-white rounded-lg overflow-hidden group hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 border border-zinc-200 flex flex-col w-full sm:w-[280px] md:w-[320px] lg:w-[calc((100%-4rem)/3)]">
+                            <div class="relative aspect-video overflow-hidden">
+                                <img src="https://img.youtube.com/vi/1keAvaimI5k/hqdefault.jpg" alt="Dívidas do imóvel arrematado" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                                <a href="https://www.youtube.com/watch?v=1keAvaimI5k" target="_blank" class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-colors">
+                                    <div class="w-16 h-16 bg-[#ff0000] rounded-lg flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                                        <i data-lucide="play" class="w-6 h-6 text-white fill-white ml-1"></i>
+                    </div>
+                                </a>
+                            </div>
+                            <div class="p-6 flex flex-col flex-grow">
+                                <h3 class="text-lg font-serif text-zinc-900 mb-2 group-hover:text-amber-600 transition-colors">Quem deve arcar com as dívidas de um imóvel arrematado em leilão?</h3>
+                                <p class="text-sm text-zinc-500 leading-relaxed flex-grow">
+                                    Imóveis vão a leilão para saldar alguma dívida do antigo proprietário. No entanto, e se houver mais dívidas registradas no imóvel, que não possam ser quitadas apenas com o valor da arrematação? Quem precisa arcar o restante? O arrematante ou o executado?
+                                </p>
+                            </div>
+                </article>
+                    </div>
+            </div>
+
+                <button id="videosNext" class="absolute right-2 sm:right-4 md:right-0 top-1/2 -translate-y-1/2 text-amber-600 hover:text-amber-700 transition-colors z-10 hidden sm:block">
+                    <div class="w-12 h-12 bg-white border border-zinc-200 rounded-full flex items-center justify-center text-amber-600 shadow-lg hover:scale-110 transition-transform">
+                        <i data-lucide="chevron-right" class="w-6 h-6"></i>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-20 bg-zinc-50 border-t border-zinc-200 relative" style="background-image: url('/assets/bg/fundo-marmore.png'); background-size: cover; background-position: center;">
+        <div class="absolute inset-0 bg-zinc-50/95"></div>
+        <div class="container mx-auto px-4 lg:px-12 max-w-4xl text-center relative z-10">
+            <div class="mb-4">
+                <h1 class="text-3xl font-serif text-zinc-900">Depoimentos</h1>
+                </div>
+
+            <i data-lucide="quote" class="w-10 h-10 text-amber-500 mx-auto mb-6 fill-amber-500/10"></i>
+            
+            <div class="relative px-12">
+                <button id="testimonialPrev" class="absolute left-0 top-1/2 -translate-y-1/2 text-amber-600 hover:text-amber-700 transition-colors z-10">
+                    <i data-lucide="chevron-left" class="w-8 h-8"></i>
+                </button>
+
+                <div id="testimonialsContainer" class="overflow-hidden">
+                    <div id="testimonialsSlider" class="flex transition-transform duration-500 ease-in-out">
+                        <!-- Testimonial 1 -->
+                        <div class="testimonial-slide min-w-full px-4">
+                            <p class="text-lg font-serif italic text-zinc-600 leading-relaxed mb-8">
+                                "Como cliente e parceiro de negócios do escritório Cataldo Siston há quase 10 anos tenho toda tranquilidade em referendar seus serviços, seu trabalho impecável e histórico de sucesso em todas as aquisições, investimentos e serviços a nós prestados. Além de ser um workaholic sempre comprometido nos mínimos detalhes, nos protegendo contra riscos e cumprindo estritamente todos os prazos."
+                            </p>
+                            <div class="flex flex-col items-center">
+                                <span class="font-bold text-zinc-900 text-sm uppercase tracking-wide">Felipe Bueno</span>
+                                <span class="text-[10px] text-zinc-500 font-medium uppercase tracking-wider mt-1">Presidente da BX Capital</span>
+                            </div>
+                </div>
+
+                        <!-- Testimonial 2 -->
+                        <div class="testimonial-slide min-w-full px-4">
+                            <p class="text-lg font-serif italic text-zinc-600 leading-relaxed mb-8">
+                                "Como sou arquiteta, vinha planejando arrematar um imóvel em leilão para reformá-lo e vendê-lo, como forma de investimento aliado à minha área de atuação. A grande questão para mim sempre foi diminuir os riscos... Através da indicação de um amigo, fui apresentada ao escritório Cataldo Siston."
+                            </p>
+                            <div class="flex flex-col items-center">
+                                <span class="font-bold text-zinc-900 text-sm uppercase tracking-wide">Denise de Castilho Provenzano</span>
+                                <span class="text-[10px] text-zinc-500 font-medium uppercase tracking-wider mt-1">Arquiteta</span>
+                            </div>
+                    </div>
+
+                        <!-- Testimonial 3 -->
+                        <div class="testimonial-slide min-w-full px-4">
+                            <p class="text-lg font-serif italic text-zinc-600 leading-relaxed mb-8">
+                                "Excelente escritório! A assessoria jurídica é impecável e sempre me senti seguro em todos os processos de arrematação. Recomendo sem hesitação."
+                            </p>
+                            <div class="flex flex-col items-center">
+                                <span class="font-bold text-zinc-900 text-sm uppercase tracking-wide">Frederico Brandão</span>
+                                <span class="text-[10px] text-zinc-500 font-medium uppercase tracking-wider mt-1">Investidor</span>
+                            </div>
+                            </div>
+                        
+                        <!-- Testimonial 4 -->
+                        <div class="testimonial-slide min-w-full px-4">
+                            <p class="text-lg font-serif italic text-zinc-600 leading-relaxed mb-8">
+                                "Profissionais extremamente competentes e dedicados. O acompanhamento em cada etapa do processo é detalhado e sempre me mantêm informada sobre tudo."
+                            </p>
+                            <div class="flex flex-col items-center">
+                                <span class="font-bold text-zinc-900 text-sm uppercase tracking-wide">Ana Maria Mendes</span>
+                                <span class="text-[10px] text-zinc-500 font-medium uppercase tracking-wider mt-1">Investidora</span>
+                        </div>
+                            </div>
+                        
+                        <!-- Testimonial 5 -->
+                        <div class="testimonial-slide min-w-full px-4">
+                            <p class="text-lg font-serif italic text-zinc-600 leading-relaxed mb-8">
+                                "Como leiloeiro público, tenho a oportunidade de trabalhar com diversos escritórios. O Cataldo Siston se destaca pela seriedade, conhecimento técnico e comprometimento com os clientes."
+                            </p>
+                            <div class="flex flex-col items-center">
+                                <span class="font-bold text-zinc-900 text-sm uppercase tracking-wide">Rodrigo Portella</span>
+                                <span class="text-[10px] text-zinc-500 font-medium uppercase tracking-wider mt-1">Leiloeiro Público</span>
+                            </div>
+                    </div>
+                        
+                        <!-- Testimonial 6 -->
+                        <div class="testimonial-slide min-w-full px-4">
+                            <p class="text-lg font-serif italic text-zinc-600 leading-relaxed mb-8">
+                                "O escritório Cataldo Siston transformou minha experiência com leilões de imóveis. A expertise deles é realmente diferenciada e os resultados falam por si só."
+                            </p>
+                            <div class="flex flex-col items-center">
+                                <span class="font-bold text-zinc-900 text-sm uppercase tracking-wide">Paulo André Marques</span>
+                                <span class="text-[10px] text-zinc-500 font-medium uppercase tracking-wider mt-1">Investidor</span>
+                            </div>
+                    </div>
+                        
+                        <!-- Testimonial 7 -->
+                        <div class="testimonial-slide min-w-full px-4">
+                            <p class="text-lg font-serif italic text-zinc-600 leading-relaxed mb-8">
+                                "Profissionalismo e conhecimento técnico de alto nível. O escritório Cataldo Siston é referência quando o assunto é leilões de imóveis. Sempre indico para meus clientes."
+                            </p>
+                            <div class="flex flex-col items-center">
+                                <span class="font-bold text-zinc-900 text-sm uppercase tracking-wide">Anderson Carneiro Pereira</span>
+                                <span class="text-[10px] text-zinc-500 font-medium uppercase tracking-wider mt-1">Leiloeiro Público</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button id="testimonialNext" class="absolute right-0 top-1/2 -translate-y-1/2 text-amber-600 hover:text-amber-700 transition-colors z-10">
+                    <i data-lucide="chevron-right" class="w-8 h-8"></i>
+                            </button>
+                        </div>
+
+            <!-- Dots indicator -->
+            <div class="flex justify-center gap-2 mt-8">
+                <button class="testimonial-dot w-2 h-2 rounded-full bg-amber-600 transition-all" data-index="0"></button>
+                <button class="testimonial-dot w-2 h-2 rounded-full bg-zinc-300 hover:bg-amber-400 transition-all" data-index="1"></button>
+                <button class="testimonial-dot w-2 h-2 rounded-full bg-zinc-300 hover:bg-amber-400 transition-all" data-index="2"></button>
+                <button class="testimonial-dot w-2 h-2 rounded-full bg-zinc-300 hover:bg-amber-400 transition-all" data-index="3"></button>
+                <button class="testimonial-dot w-2 h-2 rounded-full bg-zinc-300 hover:bg-amber-400 transition-all" data-index="4"></button>
+                <button class="testimonial-dot w-2 h-2 rounded-full bg-zinc-300 hover:bg-amber-400 transition-all" data-index="5"></button>
+                <button class="testimonial-dot w-2 h-2 rounded-full bg-zinc-300 hover:bg-amber-400 transition-all" data-index="6"></button>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Footer Contact Section -->
+    <section class="relative overflow-hidden" style="background-image: url('https://cdn.prod.website-files.com/69023853a6b8fa97b90fd72d/6916498c666c6d43c4bc7927_bg-newsletter.jpg.webp'); background-size: cover; background-position: center; background-attachment: fixed;">
+        <!-- Elegant Overlay -->
+        <div class="absolute inset-0 bg-gradient-to-br from-zinc-900/95 via-zinc-900/90 to-zinc-800/95"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-amber-600/10 via-transparent to-transparent"></div>
+        
+        <div class="container mx-auto px-4 lg:px-12 max-w-[1400px] flex flex-col md:flex-row items-center pt-24 pb-20 relative z-10">
+            <!-- Form Area -->
+            <div class="w-full md:w-1/2 mb-12 md:mb-0 md:pr-12 relative z-10">
+                <div class="mb-8">
+                    <h2 class="text-4xl md:text-5xl font-serif text-white mb-3 tracking-tight">Receba nossa newsletter</h2>
+                    <div class="w-16 h-0.5 bg-amber-500 mb-4"></div>
+                    <p class="text-sm text-zinc-300 uppercase tracking-[0.15em] font-medium">Oportunidades de negócio, decisões, artigos, cases, etc.</p>
+                </div>
+
+                <form class="space-y-5 max-w-lg bg-white/5 backdrop-blur-xl p-8 rounded-lg border border-white/10 shadow-2xl">
+                    <div>
+                        <label class="block text-xs font-bold text-zinc-300 mb-2 uppercase tracking-wider">Nome*</label>
+                        <input type="text" class="w-full bg-white/10 border border-white/20 text-white placeholder:text-zinc-400 text-sm px-4 py-3 rounded-lg focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all backdrop-blur-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-zinc-300 mb-2 uppercase tracking-wider">Email*</label>
+                        <input type="email" class="w-full bg-white/10 border border-white/20 text-white placeholder:text-zinc-400 text-sm px-4 py-3 rounded-lg focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all backdrop-blur-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-zinc-300 mb-2 uppercase tracking-wider">Telefone*</label>
+                        <input type="tel" class="w-full bg-white/10 border border-white/20 text-white placeholder:text-zinc-400 text-sm px-4 py-3 rounded-lg focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all backdrop-blur-sm">
+                    </div>
+                    
+                    <button type="button" class="w-full bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white font-bold text-sm py-4 uppercase tracking-wider rounded-lg transition-all shadow-lg shadow-amber-600/30 hover:shadow-xl hover:shadow-amber-600/40 hover:-translate-y-0.5 mt-2">
+                        Enviar
+                    </button>
+                    <p class="text-[10px] text-zinc-400 text-center mt-3 leading-relaxed">Prometemos não utilizar suas informações de contato para enviar qualquer tipo de SPAM</p>
+                    </form>
+            </div>
+
+            <!-- Contact Area -->
+            <div class="w-full md:w-1/2 flex items-end justify-center relative">
+                 <!-- Elegant Contact Bar -->
+                 <div class="w-full bg-gradient-to-t from-zinc-900/95 via-zinc-900/90 to-transparent backdrop-blur-md border-t border-amber-500/30 p-8 rounded-t-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                     <div class="flex-1">
+                         <h3 class="font-serif text-white text-xl md:text-2xl mb-2 tracking-tight">Podemos ajudar a solucionar o seu caso!</h3>
+                         <p class="text-amber-400 text-xs uppercase tracking-wider font-medium">Entre em contato conosco</p>
+                        </div>
+                        <div class="flex gap-4">
+                         <a href="#" class="w-12 h-12 bg-white/10 hover:bg-amber-600/20 border border-white/20 hover:border-amber-500/50 rounded-full flex items-center justify-center text-amber-400 hover:text-amber-300 transition-all backdrop-blur-sm hover:scale-110">
+                             <i data-lucide="message-circle" class="w-5 h-5"></i>
+                         </a>
+                         <a href="#" class="w-12 h-12 bg-white/10 hover:bg-amber-600/20 border border-white/20 hover:border-amber-500/50 rounded-full flex items-center justify-center text-amber-400 hover:text-amber-300 transition-all backdrop-blur-sm hover:scale-110">
+                             <i data-lucide="mail" class="w-5 h-5"></i>
+                         </a>
+                         <a href="#" class="w-12 h-12 bg-white/10 hover:bg-amber-600/20 border border-white/20 hover:border-amber-500/50 rounded-full flex items-center justify-center text-amber-400 hover:text-amber-300 transition-all backdrop-blur-sm hover:scale-110">
+                             <i data-lucide="phone" class="w-5 h-5"></i>
+                         </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+
+    <!-- Main Footer -->
+    <footer class="bg-zinc-100 pt-16 pb-8 border-t border-zinc-200 text-zinc-600 text-sm">
+        <div class="container mx-auto px-4 lg:px-12 max-w-[1400px]">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+                <div class="col-span-1">
+                    <a href="#" class="flex flex-col items-start group mb-6">
+                        <img src="https://cdn.prod.website-files.com/69023853a6b8fa97b90fd72d/6911dd6a49f6f0dabff0a498_logotipo_cataldo_siston.png" alt="Cataldo Siston Advogados" class="h-8 w-auto mb-2">
+                    </a>
+                    <p class="text-xs leading-relaxed mb-4">
+                        Leilões de imóveis e advocacia imobiliária<br>
+                        Av. Rio Branco, 156, Gr. 3336 a 3339 Centro<br>
+                        Rio de Janeiro - RJ - Brasil<br>
+                        +55 (21) 3173-3795<br>
+                        +55 (21) 97729-4848
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-xs text-zinc-900 uppercase tracking-wider mb-6">Mapa do Site</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="index.html" class="hover:text-amber-600 transition-colors">Quem Somos</a></li>
+                        <li><a href="imoveis-rj.html" class="hover:text-amber-600 transition-colors">Imóveis em Leilão RJ</a></li>
+                        <li><a href="imoveis-sp.html" class="hover:text-amber-600 transition-colors">Imóveis em Leilão SP</a></li>
+                        <li><a href="#" class="hover:text-amber-600 transition-colors">Leilões da Caixa - RJ</a></li>
+                        <li><a href="#" class="hover:text-amber-600 transition-colors">Leilões da Caixa - SP</a></li>
+                        <li><a href="assessoria.html" class="hover:text-amber-600 transition-colors">Assessoria em leilões</a></li>
+                        <li><a href="direito-imobiliario.html" class="hover:text-amber-600 transition-colors">Direito Imobiliário</a></li>
+                        <li><a href="distrato-imobiliario.html" class="hover:text-amber-600 transition-colors">Distrato imobiliário</a></li>
+                        <li><a href="#" class="hover:text-amber-600 transition-colors">Direito civil</a></li>
+                        <li><a href="#" class="hover:text-amber-600 transition-colors">Casos Reais</a></li>
+                        <li><a href="#" class="hover:text-amber-600 transition-colors">Blog</a></li>
+                        <li><a href="#" class="hover:text-amber-600 transition-colors">Contato</a></li>
+                        <li><a href="#" class="hover:text-amber-600 transition-colors">Política de Privacidade</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-xs text-zinc-900 uppercase tracking-wider mb-6">Fale em Contato</h4>
+                    <p class="text-xs mb-4">Tire suas dúvidas ou siga-nos nas redes sociais</p>
+                    <a href="mailto:contato@cataldosiston.adv.com.br" class="text-xs font-bold text-zinc-900 hover:text-amber-600 mb-6 block">contato@cataldosiston-adv.com.br</a>
+                    <div class="flex gap-4">
+                         <a href="#" class="text-amber-600 hover:text-zinc-900 transition-colors"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+                         <a href="#" class="text-amber-600 hover:text-zinc-900 transition-colors"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                         <a href="#" class="text-amber-600 hover:text-zinc-900 transition-colors"><i data-lucide="youtube" class="w-5 h-5"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-zinc-200 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-zinc-400">
+                <p>O conteúdo do texto desta página é de direito reservado do CATALDO SISTON ADVOGADOS. Sua reprodução, parcial ou total, mesmo citando nossos links, é proibida sem a autorização do autor. Crime de violação de direito autoral – artigo 184 do Código Penal – Lei 9610/98 - Lei de direitos autorais.</p>
+            </div>
+            <div class="mt-4 text-[10px] text-zinc-400 text-center">
+                <p class="mb-2">CNPJ: 22437441000198 | Razão Social: CATALDO SISTON SOCIEDADE DE ADVOGADOS</p>
+                <p class="flex items-center justify-center gap-1">Conforme nossa <a href="#" class="underline">política de privacidade</a> este site faz uso de cookies. <button class="bg-amber-600 text-white px-2 py-0.5 rounded ml-2">Entendido</button></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Whatsapp -->
+    <a href="#" class="fixed bottom-6 right-6 z-50 bg-[#25D366] hover:bg-[#20bd5a] text-white p-3 rounded-full shadow-lg shadow-green-900/20 transition-transform hover:scale-110">
+        <i data-lucide="message-circle" class="w-6 h-6 fill-current"></i>
+    </a>
+
+    <script>
+        if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+        }
+
+        // Testimonials Carousel
+        (function() {
+            let currentTestimonial = 0;
+            const totalTestimonials = 7;
+            const slider = document.getElementById('testimonialsSlider');
+            const prevBtn = document.getElementById('testimonialPrev');
+            const nextBtn = document.getElementById('testimonialNext');
+            const dots = document.querySelectorAll('.testimonial-dot');
+            
+            function updateCarousel() {
+                if (slider) {
+                    slider.style.transform = `translateX(-${currentTestimonial * 100}%)`;
+                }
+                
+                dots.forEach((dot, index) => {
+                    if (index === currentTestimonial) {
+                        dot.classList.remove('bg-zinc-300', 'hover:bg-amber-400');
+                        dot.classList.add('bg-amber-600');
+                        dot.style.width = '0.75rem';
+                        dot.style.height = '0.75rem';
+                    } else {
+                        dot.classList.remove('bg-amber-600');
+                        dot.classList.add('bg-zinc-300', 'hover:bg-amber-400');
+                        dot.style.width = '0.5rem';
+                        dot.style.height = '0.5rem';
+                    }
+                });
+                
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            }
+            
+            function nextTestimonial() {
+                currentTestimonial = (currentTestimonial + 1) % totalTestimonials;
+                updateCarousel();
+            }
+            
+            function prevTestimonial() {
+                currentTestimonial = (currentTestimonial - 1 + totalTestimonials) % totalTestimonial;
+                updateCarousel();
+            }
+            
+            if (prevBtn) prevBtn.addEventListener('click', prevTestimonial);
+            if (nextBtn) nextBtn.addEventListener('click', nextTestimonial);
+            
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    currentTestimonial = index;
+                    updateCarousel();
+                });
+            });
+            
+            updateCarousel();
+        })();
+
+        // Videos Carousel
+        (function() {
+            let currentVideo = 0;
+            const totalVideos = 3;
+            const videosPerView = 3;
+            const maxIndex = Math.max(0, totalVideos - videosPerView);
+            const slider = document.getElementById('videosSlider');
+            const prevBtn = document.getElementById('videosPrev');
+            const nextBtn = document.getElementById('videosNext');
+            
+            function updateVideosCarousel() {
+                if (slider) {
+                    const cardWidth = 100 / videosPerView;
+                    const translateX = currentVideo * cardWidth;
+                    slider.style.transform = `translateX(-${translateX}%)`;
+                }
+                
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            }
+            
+            function nextVideo() {
+                if (currentVideo < maxIndex) {
+                    currentVideo++;
+                } else {
+                    currentVideo = 0;
+                }
+                updateVideosCarousel();
+            }
+            
+            function prevVideo() {
+                if (currentVideo > 0) {
+                    currentVideo--;
+                } else {
+                    currentVideo = maxIndex;
+                }
+                updateVideosCarousel();
+            }
+            
+            if (prevBtn) prevBtn.addEventListener('click', prevVideo);
+            if (nextBtn) nextBtn.addEventListener('click', nextVideo);
+            
+            updateVideosCarousel();
+        })();
+
+        // Articles Carousel
+        (function() {
+            let currentArticle = 0;
+            const totalArticles = 5;
+            const articlesPerView = 3;
+            const maxIndex = totalArticles - articlesPerView;
+            const slider = document.getElementById('articlesSlider');
+            const prevBtn = document.getElementById('articlesPrev');
+            const nextBtn = document.getElementById('articlesNext');
+            
+            function updateArticlesCarousel() {
+                if (slider) {
+                    const cardWidth = 100 / articlesPerView;
+                    const translateX = currentArticle * cardWidth;
+                    slider.style.transform = `translateX(-${translateX}%)`;
+                }
+                
+                if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+                }
+            }
+            
+            function nextArticle() {
+                if (currentArticle < maxIndex) {
+                    currentArticle++;
+                } else {
+                    currentArticle = 0;
+                }
+                updateArticlesCarousel();
+            }
+            
+            function prevArticle() {
+                if (currentArticle > 0) {
+                    currentArticle--;
+                } else {
+                    currentArticle = maxIndex;
+                }
+                updateArticlesCarousel();
+            }
+            
+            if (prevBtn) prevBtn.addEventListener('click', prevArticle);
+            if (nextBtn) nextBtn.addEventListener('click', nextArticle);
+            
+            updateArticlesCarousel();
+        })();
+    </script>
+</body>
+</html>
