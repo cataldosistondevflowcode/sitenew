@@ -1371,7 +1371,7 @@
             : 'bg-red-50 text-red-600 border-red-100';
         
         const enderecoCompleto = [endereco, bairro, cidade, estado].filter(Boolean).join(', ');
-        const detailUrl = `/imovel.html?slug=${encodeURIComponent(finalSlug)}`;
+        const detailUrl = `imovel.html?slug=${encodeURIComponent(finalSlug)}`;
 
         return `
             <article class="bg-white rounded-xl border border-zinc-200 overflow-hidden flex flex-col hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group relative">
