@@ -82,13 +82,82 @@
                   <a href="#" class="text-xs font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider">Contato</a>
               </div>
               
-              <button class="lg:hidden text-zinc-900"><i data-lucide="menu" class="w-6 h-6"></i></button>
+              <button id="mobileMenuToggle" class="lg:hidden text-zinc-900 relative z-50">
+                  <i data-lucide="menu" class="w-6 h-6 mobile-menu-icon"></i>
+                  <i data-lucide="x" class="w-6 h-6 mobile-menu-close hidden"></i>
+              </button>
+          </div>
+
+          <!-- Mobile Menu -->
+          <div id="mobileMenu" class="lg:hidden absolute top-full left-0 right-0 bg-white border-t border-zinc-200 rounded-b-xl shadow-2xl opacity-0 invisible transform -translate-y-4 transition-all duration-300 z-40">
+              <div class="p-6 space-y-4">
+                  <a href="index.html" class="block text-sm font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider py-2">Quem somos</a>
+
+                  <!-- Mobile Dropdown for Imóveis em Leilão -->
+                  <div class="space-y-2">
+                      <div class="text-sm font-medium text-zinc-900 uppercase tracking-wider py-2">Imóveis em Leilão</div>
+                      <div class="pl-4 space-y-2">
+                          <a href="imoveis-rj.html" class="block text-sm text-zinc-600 hover:text-amber-600 transition-colors py-1">Imóveis RJ</a>
+                          <a href="#" class="block text-sm text-zinc-600 hover:text-amber-600 transition-colors py-1">Imóveis SP</a>
+                      </div>
+                  </div>
+
+                  <a href="assessoria.html" class="block text-sm font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider py-2">Assessoria</a>
+                  <a href="#" class="block text-sm font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider py-2">Direito Imobiliário</a>
+                  <a href="#" class="block text-sm font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider py-2">Casos Reais</a>
+                  <a href="#" class="block text-sm font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider py-2">Blog</a>
+                  <a href="#" class="block text-sm font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider py-2">Contato</a>
+
+                  <div class="pt-4 border-t border-zinc-200">
+                      <a href="https://wa.me/5521977294848?text=Olá!%20Tenho%20interesse%20em%20saber%20mais%20sobre%20leilões%20de%20imóveis." target="_blank" class="block w-full text-center bg-amber-600 hover:bg-amber-700 text-white text-sm font-bold py-3 px-4 rounded transition-colors">
+                          Fale Conosco no WhatsApp
+                      </a>
+                  </div>
+              </div>
           </div>
       </div>
   </nav>
+
+  <script>
+      // Mobile Menu Toggle
+      document.addEventListener('DOMContentLoaded', function() {
+          const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+          const mobileMenu = document.getElementById('mobileMenu');
+          const menuIcon = mobileMenuToggle.querySelector('.mobile-menu-icon');
+          const closeIcon = mobileMenuToggle.querySelector('.mobile-menu-close');
+
+          mobileMenuToggle.addEventListener('click', function() {
+              const isOpen = mobileMenu.classList.contains('opacity-100');
+
+              if (isOpen) {
+                  // Close menu
+                  mobileMenu.classList.remove('opacity-100', 'visible', 'translate-y-0');
+                  mobileMenu.classList.add('opacity-0', 'invisible', '-translate-y-4');
+                  menuIcon.classList.remove('hidden');
+                  closeIcon.classList.add('hidden');
+              } else {
+                  // Open menu
+                  mobileMenu.classList.remove('opacity-0', 'invisible', '-translate-y-4');
+                  mobileMenu.classList.add('opacity-100', 'visible', 'translate-y-0');
+                  menuIcon.classList.add('hidden');
+                  closeIcon.classList.remove('hidden');
+              }
+          });
+
+          // Close menu when clicking outside
+          document.addEventListener('click', function(e) {
+              if (!mobileMenuToggle.contains(e.target) && !mobileMenu.contains(e.target)) {
+                  mobileMenu.classList.remove('opacity-100', 'visible', 'translate-y-0');
+                  mobileMenu.classList.add('opacity-0', 'invisible', '-translate-y-4');
+                  menuIcon.classList.remove('hidden');
+                  closeIcon.classList.add('hidden');
+              }
+          });
+      });
+  </script>
   
   <!-- Header / Hero -->
-  <header class="relative w-full h-[850px] bg-zinc-900 flex flex-col -mt-[120px] z-0 overflow-visible">
+  <header class="relative w-full h-[650px] sm:h-[750px] lg:h-[850px] bg-zinc-900 flex flex-col -mt-[120px] z-0 overflow-visible">
       <!-- Hero Background -->
       <div class="absolute inset-0 z-0">
           <img src="https://cdn.prod.website-files.com/69023853a6b8fa97b90fd72d/69122a90a660f6e2466a9cb5_banner-site-equipe.webp" alt="Advogados Cataldo Siston" class="w-full h-full object-cover object-center opacity-40 mix-blend-overlay">
@@ -96,8 +165,8 @@
       </div>
   
       <!-- Hero Content -->
-      <div class="relative z-10 container mx-auto px-4 lg:px-12 flex-grow flex flex-col justify-center items-center text-center max-w-4xl mt-20">
-          <h1 class="text-4xl md:text-6xl lg:text-7xl font-serif text-white mb-8 tracking-tight leading-tight drop-shadow-lg">
+      <div class="relative z-10 container mx-auto px-6 sm:px-8 lg:px-12 flex-grow flex flex-col justify-center items-center text-center max-w-4xl mt-16 sm:mt-20">
+          <h1 class="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-serif text-white mb-6 sm:mb-8 tracking-tight leading-tight drop-shadow-lg">
               Leilão de imóveis e<br>Advocacia imobiliária
           </h1>
           <button class="group bg-amber-600 hover:bg-amber-500 text-white text-sm font-medium px-8 py-3.5 rounded-full transition-all flex items-center gap-2 border border-amber-500 hover:shadow-[0_0_20px_rgba(217,119,6,0.4)] uppercase tracking-wide">
@@ -342,15 +411,15 @@
           </div>
   
           <!-- Auction Carousel -->
-          <div class="relative px-8 md:px-12">
-              <button id="propertiesPrev" class="absolute left-0 top-1/2 -translate-y-1/2 text-amber-600 hover:text-amber-700 transition-colors z-10 hidden md:block">
+          <div class="relative px-4 sm:px-6 md:px-8 lg:px-12">
+              <button id="propertiesPrev" class="absolute left-2 sm:left-4 md:left-0 top-1/2 -translate-y-1/2 text-amber-600 hover:text-amber-700 transition-colors z-10 hidden sm:block">
                   <div class="w-12 h-12 bg-white border border-zinc-200 rounded-full flex items-center justify-center text-amber-600 shadow-lg hover:scale-110 transition-transform">
                       <i data-lucide="chevron-left" class="w-6 h-6"></i>
                   </div>
               </button>
               
               <div id="propertiesContainer" class="overflow-hidden">
-                  <div id="propertiesSlider" class="flex transition-transform duration-500 ease-in-out" style="gap: 2rem;">
+                  <div id="propertiesSlider" class="flex transition-transform duration-500 ease-in-out gap-4 sm:gap-6 lg:gap-8">
                       <!-- Cards serão inseridos dinamicamente via JavaScript -->
                       <div class="flex-shrink-0 text-center py-12" style="width: 100%;">
                           <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500"></div>
@@ -359,7 +428,7 @@
                   </div>
                       </div>
                       
-              <button id="propertiesNext" class="absolute right-0 top-1/2 -translate-y-1/2 text-amber-600 hover:text-amber-700 transition-colors z-10 hidden md:block">
+              <button id="propertiesNext" class="absolute right-2 sm:right-4 md:right-0 top-1/2 -translate-y-1/2 text-amber-600 hover:text-amber-700 transition-colors z-10 hidden sm:block">
                   <div class="w-12 h-12 bg-white border border-zinc-200 rounded-full flex items-center justify-center text-amber-600 shadow-lg hover:scale-110 transition-transform">
                       <i data-lucide="chevron-right" class="w-6 h-6"></i>
                               </div>
@@ -420,17 +489,17 @@
               <h2 class="text-3xl md:text-4xl font-serif text-zinc-900">Vídeos em destaque</h2>
           </div>
           
-          <div class="relative px-8 md:px-12">
-              <button id="videosPrev" class="absolute left-0 top-1/2 -translate-y-1/2 text-amber-600 hover:text-amber-700 transition-colors z-10 hidden md:block">
+          <div class="relative px-4 sm:px-6 md:px-8 lg:px-12">
+              <button id="videosPrev" class="absolute left-2 sm:left-4 md:left-0 top-1/2 -translate-y-1/2 text-amber-600 hover:text-amber-700 transition-colors z-10 hidden sm:block">
                   <div class="w-12 h-12 bg-white border border-zinc-200 rounded-full flex items-center justify-center text-amber-600 shadow-lg hover:scale-110 transition-transform">
                       <i data-lucide="chevron-left" class="w-6 h-6"></i>
                   </div>
                           </button>
               
               <div id="videosContainer" class="overflow-hidden">
-                  <div id="videosSlider" class="flex transition-transform duration-500 ease-in-out" style="gap: 2rem;">
+                  <div id="videosSlider" class="flex transition-transform duration-500 ease-in-out gap-4 sm:gap-6 lg:gap-8">
                       <!-- Video 1 -->
-                      <article class="flex-shrink-0 bg-white rounded-lg overflow-hidden group hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 border border-zinc-200 flex flex-col" style="width: calc((100% - 4rem) / 3);">
+                      <article class="flex-shrink-0 bg-white rounded-lg overflow-hidden group hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 border border-zinc-200 flex flex-col w-full sm:w-[280px] md:w-[320px] lg:w-[calc((100%-4rem)/3)]">
                   <div class="relative aspect-video overflow-hidden">
                       <img src="https://img.youtube.com/vi/hbt-4kFMD4Q/hqdefault.jpg" alt="Vantagens de comprar imóveis em leilão" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                       <a href="https://www.youtube.com/watch?v=hbt-4kFMD4Q" target="_blank" class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-colors">
@@ -448,7 +517,7 @@
               </article>
   
                       <!-- Video 2 -->
-                      <article class="flex-shrink-0 bg-white rounded-lg overflow-hidden group hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 border border-zinc-200 flex flex-col" style="width: calc((100% - 4rem) / 3);">
+                      <article class="flex-shrink-0 bg-white rounded-lg overflow-hidden group hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 border border-zinc-200 flex flex-col w-full sm:w-[280px] md:w-[320px] lg:w-[calc((100%-4rem)/3)]">
                   <div class="relative aspect-video overflow-hidden">
                       <img src="https://img.youtube.com/vi/yvQrGmdXDiU/hqdefault.jpg" alt="Parcelamento da arrematação" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                       <a href="https://www.youtube.com/watch?v=yvQrGmdXDiU" target="_blank" class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-colors">
@@ -466,7 +535,7 @@
               </article>
               
                       <!-- Video 3 -->
-                      <article class="flex-shrink-0 bg-white rounded-lg overflow-hidden group hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 border border-zinc-200 flex flex-col" style="width: calc((100% - 4rem) / 3);">
+                      <article class="flex-shrink-0 bg-white rounded-lg overflow-hidden group hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 border border-zinc-200 flex flex-col w-full sm:w-[280px] md:w-[320px] lg:w-[calc((100%-4rem)/3)]">
                   <div class="relative aspect-video overflow-hidden">
                       <img src="https://img.youtube.com/vi/1keAvaimI5k/hqdefault.jpg" alt="Dívidas do imóvel arrematado" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                       <a href="https://www.youtube.com/watch?v=1keAvaimI5k" target="_blank" class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-colors">
@@ -484,7 +553,7 @@
               </article>
               
                       <!-- Video 4 -->
-                      <article class="flex-shrink-0 bg-white rounded-lg overflow-hidden group hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 border border-zinc-200 flex flex-col" style="width: calc((100% - 4rem) / 3);">
+                      <article class="flex-shrink-0 bg-white rounded-lg overflow-hidden group hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 border border-zinc-200 flex flex-col w-full sm:w-[280px] md:w-[320px] lg:w-[calc((100%-4rem)/3)]">
                   <div class="relative aspect-video overflow-hidden">
                       <img src="https://img.youtube.com/vi/9ZnMzYQJNck/hqdefault.jpg" alt="Imóvel ocupado" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                       <a href="https://www.youtube.com/watch?v=9ZnMzYQJNck" target="_blank" class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-colors">
@@ -502,7 +571,7 @@
               </article>
               
                       <!-- Video 5 -->
-                      <article class="flex-shrink-0 bg-white rounded-lg overflow-hidden group hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 border border-zinc-200 flex flex-col" style="width: calc((100% - 4rem) / 3);">
+                      <article class="flex-shrink-0 bg-white rounded-lg overflow-hidden group hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 border border-zinc-200 flex flex-col w-full sm:w-[280px] md:w-[320px] lg:w-[calc((100%-4rem)/3)]">
                   <div class="relative aspect-video overflow-hidden">
                       <img src="https://img.youtube.com/vi/FQAUWbkwjT8/hqdefault.jpg" alt="Cálculo do ITBI" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                       <a href="https://www.youtube.com/watch?v=FQAUWbkwjT8" target="_blank" class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-colors">
@@ -520,7 +589,7 @@
               </article>
   
                       <!-- Video 6 -->
-                      <article class="flex-shrink-0 bg-white rounded-lg overflow-hidden group hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 border border-zinc-200 flex flex-col" style="width: calc((100% - 4rem) / 3);">
+                      <article class="flex-shrink-0 bg-white rounded-lg overflow-hidden group hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 border border-zinc-200 flex flex-col w-full sm:w-[280px] md:w-[320px] lg:w-[calc((100%-4rem)/3)]">
                   <div class="relative aspect-video overflow-hidden">
                       <img src="https://img.youtube.com/vi/VVxUQtMC-xg/hqdefault.jpg" alt="Leilões extrajudiciais" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                       <a href="https://www.youtube.com/watch?v=VVxUQtMC-xg" target="_blank" class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-colors">
@@ -538,7 +607,7 @@
               </article>
               
                       <!-- Video 7 -->
-                      <article class="flex-shrink-0 bg-white rounded-lg overflow-hidden group hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 border border-zinc-200 flex flex-col" style="width: calc((100% - 4rem) / 3);">
+                      <article class="flex-shrink-0 bg-white rounded-lg overflow-hidden group hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 border border-zinc-200 flex flex-col w-full sm:w-[280px] md:w-[320px] lg:w-[calc((100%-4rem)/3)]">
                   <div class="relative aspect-video overflow-hidden">
                       <img src="https://img.youtube.com/vi/Bps7pphdE_g/hqdefault.jpg" alt="Imissão na posse" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                       <a href="https://www.youtube.com/watch?v=Bps7pphdE_g" target="_blank" class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-colors">
@@ -556,7 +625,7 @@
               </article>
               
                       <!-- Video 8 -->
-                      <article class="flex-shrink-0 bg-white rounded-lg overflow-hidden group hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 border border-zinc-200 flex flex-col" style="width: calc((100% - 4rem) / 3);">
+                      <article class="flex-shrink-0 bg-white rounded-lg overflow-hidden group hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 border border-zinc-200 flex flex-col w-full sm:w-[280px] md:w-[320px] lg:w-[calc((100%-4rem)/3)]">
                   <div class="relative aspect-video overflow-hidden">
                       <img src="https://img.youtube.com/vi/a4yQKEDt7hc/hqdefault.jpg" alt="3 mitos sobre leilões" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                       <a href="https://www.youtube.com/watch?v=a4yQKEDt7hc" target="_blank" class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-colors">
@@ -574,7 +643,7 @@
               </article>
               
                       <!-- Video 9 -->
-                      <article class="flex-shrink-0 bg-white rounded-lg overflow-hidden group hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 border border-zinc-200 flex flex-col" style="width: calc((100% - 4rem) / 3);">
+                      <article class="flex-shrink-0 bg-white rounded-lg overflow-hidden group hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 border border-zinc-200 flex flex-col w-full sm:w-[280px] md:w-[320px] lg:w-[calc((100%-4rem)/3)]">
                   <div class="relative aspect-video overflow-hidden">
                       <img src="https://img.youtube.com/vi/PLACEHOLDER_VIDEO_ID/hqdefault.jpg" alt="5 fatores que podem levar à anulação da arrematação" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                       <a href="https://www.youtube.com/watch?v=PLACEHOLDER_VIDEO_ID" target="_blank" class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-colors">
@@ -592,7 +661,7 @@
               </article>
               
                       <!-- Video 10 -->
-                      <article class="flex-shrink-0 bg-white rounded-lg overflow-hidden group hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 border border-zinc-200 flex flex-col" style="width: calc((100% - 4rem) / 3);">
+                      <article class="flex-shrink-0 bg-white rounded-lg overflow-hidden group hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 border border-zinc-200 flex flex-col w-full sm:w-[280px] md:w-[320px] lg:w-[calc((100%-4rem)/3)]">
                   <div class="relative aspect-video overflow-hidden">
                       <img src="https://img.youtube.com/vi/xGUunlbUAx0/hqdefault.jpg" alt="Carta de arrematação" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                       <a href="https://www.youtube.com/watch?v=xGUunlbUAx0" target="_blank" class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-colors">
@@ -611,7 +680,7 @@
                   </div>
           </div>
   
-              <button id="videosNext" class="absolute right-0 top-1/2 -translate-y-1/2 text-amber-600 hover:text-amber-700 transition-colors z-10 hidden md:block">
+              <button id="videosNext" class="absolute right-2 sm:right-4 md:right-0 top-1/2 -translate-y-1/2 text-amber-600 hover:text-amber-700 transition-colors z-10 hidden sm:block">
                   <div class="w-12 h-12 bg-white border border-zinc-200 rounded-full flex items-center justify-center text-amber-600 shadow-lg hover:scale-110 transition-transform">
                       <i data-lucide="chevron-right" class="w-6 h-6"></i>
                   </div>
@@ -844,17 +913,17 @@
               <h2 class="text-3xl md:text-4xl font-serif text-zinc-900 mb-2">Cataldo Siston sobre leilão de imóveis</h2>
           </div>
   
-          <div class="relative px-8 md:px-12">
-              <button id="articlesPrev" class="absolute left-0 top-1/2 -translate-y-1/2 text-amber-600 hover:text-amber-700 transition-colors z-10 hidden md:block">
+          <div class="relative px-4 sm:px-6 md:px-8 lg:px-12">
+              <button id="articlesPrev" class="absolute left-2 sm:left-4 md:left-0 top-1/2 -translate-y-1/2 text-amber-600 hover:text-amber-700 transition-colors z-10 hidden sm:block">
                   <div class="w-12 h-12 bg-white border border-zinc-200 rounded-full flex items-center justify-center text-amber-600 shadow-lg hover:scale-110 transition-transform">
                       <i data-lucide="chevron-left" class="w-6 h-6"></i>
                   </div>
               </button>
   
               <div id="articlesContainer" class="overflow-hidden">
-                  <div id="articlesSlider" class="flex transition-transform duration-500 ease-in-out" style="gap: 2rem;">
+                  <div id="articlesSlider" class="flex transition-transform duration-500 ease-in-out gap-4 sm:gap-6 lg:gap-8">
               <!-- Post 1 -->
-                      <article class="flex-shrink-0 bg-white p-6 rounded-sm shadow-lg group border-b-4 border-amber-600 h-full flex flex-col hover:-translate-y-1 transition-transform duration-300" style="width: calc((100% - 4rem) / 3);">
+                      <article class="flex-shrink-0 bg-white p-6 rounded-sm shadow-lg group border-b-4 border-amber-600 h-full flex flex-col hover:-translate-y-1 transition-transform duration-300 w-full sm:w-[280px] md:w-[320px] lg:w-[calc((100%-4rem)/3)]">
                    <div class="aspect-video mb-4 overflow-hidden relative">
                       <img src="https://leilaodeimoveis-cataldosiston.com/wp-content/uploads/2025/02/imoveis-em-leilao-costumam-estar-em-pessimo-estado-de-conservacao-blog-cataldo-siston-advogados.jpg" alt="Imóveis em leilão costumam estar em péssimo estado de conservação?" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                       <div class="absolute top-2 left-2 bg-amber-600 text-white text-[9px] px-2 py-1 uppercase font-bold tracking-wider">Artigo</div>
@@ -869,7 +938,7 @@
               </article>
   
               <!-- Post 2 -->
-                      <article class="flex-shrink-0 bg-white p-6 rounded-sm shadow-lg group border-b-4 border-amber-600 h-full flex flex-col hover:-translate-y-1 transition-transform duration-300" style="width: calc((100% - 4rem) / 3);">
+                      <article class="flex-shrink-0 bg-white p-6 rounded-sm shadow-lg group border-b-4 border-amber-600 h-full flex flex-col hover:-translate-y-1 transition-transform duration-300 w-full sm:w-[280px] md:w-[320px] lg:w-[calc((100%-4rem)/3)]">
                    <div class="aspect-video mb-4 overflow-hidden relative">
                       <img src="https://leilaodeimoveis-cataldosiston.com/wp-content/uploads/2024/11/custos-apos-a-arrematacao-blog-cataldo-siston-advogados.jpg" alt="O que você deve pagar, após arrematar um imóvel em leilão?" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                        <div class="absolute top-2 left-2 bg-amber-600 text-white text-[9px] px-2 py-1 uppercase font-bold tracking-wider">Dica</div>
@@ -884,7 +953,7 @@
               </article>
   
               <!-- Post 3 -->
-                      <article class="flex-shrink-0 bg-white p-6 rounded-sm shadow-lg group border-b-4 border-amber-600 h-full flex flex-col hover:-translate-y-1 transition-transform duration-300" style="width: calc((100% - 4rem) / 3);">
+                      <article class="flex-shrink-0 bg-white p-6 rounded-sm shadow-lg group border-b-4 border-amber-600 h-full flex flex-col hover:-translate-y-1 transition-transform duration-300 w-full sm:w-[280px] md:w-[320px] lg:w-[calc((100%-4rem)/3)]">
                    <div class="aspect-video mb-4 overflow-hidden relative">
                       <img src="https://leilaodeimoveis-cataldosiston.com/wp-content/uploads/2024/08/como-ocorre-a-imissao-na-posse-leiloes-de-imoveis-blog-escritorio-cataldo-siston.webp" alt="Saiba como ocorre a imissão na posse em leilões de imóveis" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                        <div class="absolute top-2 left-2 bg-amber-600 text-white text-[9px] px-2 py-1 uppercase font-bold tracking-wider">Entrevista</div>
@@ -899,7 +968,7 @@
               </article>
               
                       <!-- Post 4 -->
-                      <article class="flex-shrink-0 bg-white p-6 rounded-sm shadow-lg group border-b-4 border-amber-600 h-full flex flex-col hover:-translate-y-1 transition-transform duration-300" style="width: calc((100% - 4rem) / 3);">
+                      <article class="flex-shrink-0 bg-white p-6 rounded-sm shadow-lg group border-b-4 border-amber-600 h-full flex flex-col hover:-translate-y-1 transition-transform duration-300 w-full sm:w-[280px] md:w-[320px] lg:w-[calc((100%-4rem)/3)]">
                    <div class="aspect-video mb-4 overflow-hidden relative">
                       <img src="https://leilaodeimoveis-cataldosiston.com/wp-content/uploads/2024/08/impugnacao-a-arrematacao-quando-pode-ocorrer-blog-escritorio-cataldo-siston.webp" alt="Impugnação à arrematação do imóvel: quando pode ocorrer?" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                       <div class="absolute top-2 left-2 bg-amber-600 text-white text-[9px] px-2 py-1 uppercase font-bold tracking-wider">Artigo</div>
@@ -914,7 +983,7 @@
               </article>
               
                       <!-- Post 5 -->
-                      <article class="flex-shrink-0 bg-white p-6 rounded-sm shadow-lg group border-b-4 border-amber-600 h-full flex flex-col hover:-translate-y-1 transition-transform duration-300" style="width: calc((100% - 4rem) / 3);">
+                      <article class="flex-shrink-0 bg-white p-6 rounded-sm shadow-lg group border-b-4 border-amber-600 h-full flex flex-col hover:-translate-y-1 transition-transform duration-300 w-full sm:w-[280px] md:w-[320px] lg:w-[calc((100%-4rem)/3)]">
                    <div class="aspect-video mb-4 overflow-hidden relative">
                       <img src="https://leilaodeimoveis-cataldosiston.com/wp-content/uploads/2024/03/entrevista-casa-jardim-como-funcionam-leiloes-de-imoveis.png" alt="Leilão de imóveis: como funciona e dicas para participar" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                       <div class="absolute top-2 left-2 bg-amber-600 text-white text-[9px] px-2 py-1 uppercase font-bold tracking-wider">Entrevista</div>
@@ -930,7 +999,7 @@
                   </div>
               </div>
               
-              <button id="articlesNext" class="absolute right-0 top-1/2 -translate-y-1/2 text-amber-600 hover:text-amber-700 transition-colors z-10 hidden md:block">
+              <button id="articlesNext" class="absolute right-2 sm:right-4 md:right-0 top-1/2 -translate-y-1/2 text-amber-600 hover:text-amber-700 transition-colors z-10 hidden sm:block">
                   <div class="w-12 h-12 bg-white border border-zinc-200 rounded-full flex items-center justify-center text-amber-600 shadow-lg hover:scale-110 transition-transform">
                       <i data-lucide="chevron-right" class="w-6 h-6"></i>
                   </div>
@@ -1413,7 +1482,7 @@
           }
 
           return `
-              <article class="flex-shrink-0 bg-white rounded-lg overflow-hidden group hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 border border-zinc-200 flex flex-col" style="width: calc((100% - 4rem) / 3);">
+              <article class="flex-shrink-0 bg-white rounded-lg overflow-hidden group hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 border border-zinc-200 flex flex-col w-full sm:w-[280px] md:w-[320px] lg:w-[calc((100%-4rem)/3)]">
                   <a href="${detailUrl}" class="relative h-56 overflow-hidden block">
                       <img src="${photo}" alt="${title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" onerror="this.src='https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&q=80&w=800'">
                       <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors"></div>
