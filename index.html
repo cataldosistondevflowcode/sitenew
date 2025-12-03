@@ -1316,7 +1316,7 @@
           isFileProtocol: window.location.protocol === 'file:',
           // Se estiver em file://, precisa usar a API diretamente (mas requer CORS ou servidor)
           // Se estiver em http://, usa o proxy do Vite
-          proxyUrl: window.location.protocol === 'file:' ? 'https://api.webflow.com/v2' : '/api/webflow',
+          proxyUrl: window.location.protocol === 'file:' ? 'https://api.webflow.com/v2' : (window.location.hostname === 'localhost' ? '/api/webflow' : null),
           // Tenta obter collectionId de meta tag, senão usa padrão
           defaultCollectionId: (() => {
               const metaCollectionId = document.querySelector('meta[name="webflow-collection-id"]');
@@ -1346,6 +1346,12 @@
       // Função para buscar dados do Webflow
       async function fetchWebflowData(endpoint) {
           try {
+              // Se não há proxyUrl configurado (GitHub Pages), não faz chamadas
+              if (!WEBFLOW_CONFIG.proxyUrl) {
+                  console.log('🚫 Webflow API desabilitada no GitHub Pages');
+                  return { items: [] };
+              }
+
               const url = `${WEBFLOW_CONFIG.proxyUrl}${endpoint}`;
               console.log('🔍 Buscando:', url);
               console.log('📋 Protocolo:', window.location.protocol);
