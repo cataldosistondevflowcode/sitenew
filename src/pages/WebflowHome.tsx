@@ -169,7 +169,7 @@ export default function WebflowHome() {
                   <h3 className="text-xl font-serif text-zinc-900 mb-3 font-medium">Expertise em <br />leilão de imóveis</h3>
                   <div className="w-10 h-0.5 bg-amber-500 mb-4"></div>
                   <p className="text-sm text-zinc-600 leading-relaxed">
-                    Mais de <strong className="text-zinc-900">19 anos de experiência</strong> atuando diretamente na arrematação e regularização de mais de <strong className="text-zinc-900">1200 imóveis</strong>.
+                    Mais de <strong className="text-zinc-900">20 anos de experiência</strong> atuando diretamente na arrematação e regularização de mais de <strong className="text-zinc-900">1200 imóveis</strong>.
                   </p>
                 </div>
               </div>

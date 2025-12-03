@@ -109,7 +109,7 @@ export default function WebflowAssessoria() {
               </div>
               <h3 className="text-white font-serif text-lg mb-2">Expertise Comprovada</h3>
               <p className="text-zinc-400 text-sm leading-relaxed">
-                Mais de 900 arrematações imobiliárias em 18 anos de experiência sólida.
+                Mais de 900 arrematações imobiliárias em 20 anos de experiência sólida.
               </p>
             </div>
             
@@ -697,7 +697,7 @@ export default function WebflowAssessoria() {
           <div className="container mx-auto px-4 lg:px-12 max-w-[1400px] flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex flex-col items-center md:items-start">
               <p className="text-[10px] text-zinc-400 mb-1">© 2024 Cataldo Siston Advogados. Todos os direitos reservados.</p>
-              <p className="text-[10px] text-zinc-400">CNPJ: 22.437.441/0001-98 | Razão Social: CATALDO SISTON SOCIEDADE DE ADVOGADOS</p>
+              <p className="text-[10px] text-zinc-400">CNPJ: 22437441000198 | Razão Social: CATALDO SISTON SOCIEDADE DE ADVOGADOS</p>
             </div>
             <div className="flex gap-6">
               <a href="#" className="text-[10px] text-zinc-400 hover:text-zinc-900">Política de Privacidade</a>

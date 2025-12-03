@@ -138,7 +138,7 @@ export function Footer({
             © {new Date().getFullYear()} Cataldo Siston Advogados. Todos os direitos reservados.
           </p>
           <p className="text-[10px] text-zinc-600">
-            CNPJ: 22.437.441/0001-98 | Razão Social: CATALDO SISTON SOCIEDADE DE ADVOGADOS
+            CNPJ: 22437441000198 | Razão Social: CATALDO SISTON SOCIEDADE DE ADVOGADOS
           </p>
         </div>
       </div>

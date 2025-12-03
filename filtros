@@ -1,0 +1,946 @@
+# Sistema de Filtros Completo - Documentação Técnica
+
+## 📋 Visão Geral
+
+Este documento explica **exatamente** como funciona o sistema de filtros de imóveis em leilão. O sistema usa **Supabase** como banco de dados e **React Router** para gerenciar filtros na URL.
+
+**Volume de dados:** ~16.000 imóveis  
+**Tecnologias:** React, TypeScript, Supabase (PostgreSQL), React Router
+
+---
+
+## 🏗️ Arquitetura do Sistema
+
+```
+┌─────────────────┐
+│   URL Params    │ ← Usuário acessa URL com filtros
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│ useFilterParams │ ← Hook lê filtros da URL
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│  Estado Filters │ ← Filtros aplicados no estado
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│  Supabase Query │ ← Query construída com filtros
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│  Resultados     │ ← 40 itens por página
+└─────────────────┘
+```
+
+---
+
+## 📦 Estrutura de Arquivos Necessários
+
+```
+src/
+├── hooks/
+│   └── useFilterParams.tsx      # Hook para gerenciar filtros na URL
+├── integrations/
+│   └── supabase/
+│       └── client.ts             # Cliente do Supabase
+└── utils/
+    └── stringUtils.ts            # Utilitários (sanitização, escape SQL)
+```
+
+---
+
+## 🔧 Arquivo 1: Hook de Filtros (`useFilterParams.tsx`)
+
+### Função Principal
+
+Este hook gerencia a sincronização entre **URL** e **estado dos filtros**.
+
+```typescript
+import { useSearchParams } from 'react-router-dom';
+import { useCallback } from 'react';
+
+export interface FilterParams {
+  city?: string;                    // Cidade única ou múltiplas (separadas por vírgula)
+  type?: string;                    // Tipo de imóvel único ou múltiplos
+  neighborhood?: string;            // Bairro único ou múltiplos
+  location?: string;                // Busca livre em endereço/bairro/cidade
+  keyword?: string;                 // Busca em título/descrição
+  hasSecondAuction?: boolean;       // Apenas com segundo leilão
+  priceRange?: { min?: number; max?: number; };
+  priceRanges?: string[];           // Labels das faixas selecionadas
+  financiamento?: boolean;          // Aceita financiamento
+  fgts?: boolean;                   // Aceita FGTS
+  parcelamento?: boolean;           // Permite parcelamento
+  auctionType?: string;             // Tipo de leilão (Judicial, Extrajudicial, etc.)
+  neighborhoods?: string[];         // Array de bairros
+  cities?: string[];                // Array de cidades
+  dataFimSegundoLeilao?: string;    // Data final (ISO)
+  zone?: string;                    // Zona única
+  zones?: string[];                 // Múltiplas zonas
+}
+
+export const useFilterParams = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // CONVERTE URL → OBJETO FILTROS
+  const parseFiltersFromURL = useCallback((): FilterParams => {
+    const filters: FilterParams = {};
+    
+    // Lê cada parâmetro da URL e converte para o objeto
+    const city = searchParams.get('cidade');
+    if (city) filters.city = city;
+    
+    // ... (lê todos os outros parâmetros)
+    
+    return filters;
+  }, [searchParams]);
+
+  // CONVERTE OBJETO FILTROS → URL
+  const updateURL = useCallback((filters: FilterParams) => {
+    const newParams = new URLSearchParams();
+    
+    if (filters.city) newParams.set('cidade', filters.city);
+    // ... (adiciona todos os outros parâmetros)
+    
+    setSearchParams(newParams, { replace: true });
+  }, [setSearchParams]);
+
+  return {
+    parseFiltersFromURL,  // URL → Filtros
+    updateURL,             // Filtros → URL
+    clearFiltersFromURL,    // Limpar URL
+    getShareableURL,       // Obter URL atual
+    createShareableURL      // Criar URL com filtros
+  };
+};
+```
+
+### Como Funciona
+
+1. **parseFiltersFromURL()**: Lê `?cidade=Rio&tipo=Apartamento` da URL e retorna `{ city: "Rio", type: "Apartamento" }`
+2. **updateURL()**: Recebe `{ city: "Rio" }` e atualiza a URL para `?cidade=Rio`
+3. **Sincronização**: Sempre que filtros mudam, a URL é atualizada (e vice-versa)
+
+---
+
+## 🔧 Arquivo 2: Cliente Supabase (`client.ts`)
+
+```typescript
+import { createClient } from '@supabase/supabase-js';
+
+const SUPABASE_URL = "https://seu-projeto.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sua-chave-publica";
+
+export const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+```
+
+**Função:** Cria conexão com o banco de dados Supabase.
+
+---
+
+## 🔧 Arquivo 3: Utilitários (`stringUtils.ts`)
+
+### Funções de Segurança
+
+```typescript
+// ESCAPA caracteres especiais do SQL para prevenir SQL Injection
+export const escapeSqlLike = (str: string): string => {
+  return str
+    .replace(/\\/g, '\\\\')  // Escapa \
+    .replace(/%/g, '\\%')    // Escapa %
+    .replace(/_/g, '\\_')    // Escapa _
+    .replace(/'/g, "''");    // Escapa '
+};
+
+// REMOVE caracteres problemáticos antes de buscar
+export const sanitizeSearchInput = (str: string): string => {
+  return str
+    .replace(/[,;]/g, '')  // Remove vírgulas e ponto e vírgula
+    .trim();
+};
+```
+
+**Por que são necessárias?**
+- **escapeSqlLike**: Previne SQL Injection em buscas com `ILIKE`
+- **sanitizeSearchInput**: Remove caracteres que podem quebrar a query
+
+---
+
+## 🎯 Arquivo 4: Lógica de Busca (Exemplo Completo)
+
+### Fluxo Completo de uma Busca
+
+```typescript
+import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { useFilterParams, FilterParams } from '@/hooks/useFilterParams';
+import { escapeSqlLike, sanitizeSearchInput } from '@/utils/stringUtils';
+
+const ITEMS_PER_PAGE = 40;
+
+export const PropertyList = () => {
+  const [properties, setProperties] = useState([]);
+  const [filters, setFilters] = useState<FilterParams>({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const [filtersLoaded, setFiltersLoaded] = useState(false);
+
+  const { parseFiltersFromURL, updateURL } = useFilterParams();
+
+  // PASSO 1: Carregar filtros da URL ao montar
+  useEffect(() => {
+    const urlFilters = parseFiltersFromURL();
+    setFilters(urlFilters);
+    setFiltersLoaded(true);
+  }, []);
+
+  // PASSO 2: Buscar imóveis quando filtros ou página mudarem
+  useEffect(() => {
+    if (!filtersLoaded) return;
+    
+    const fetchProperties = async () => {
+      // PASSO 3: Criar query base
+      let query = supabase
+        .from('leiloes_imoveis')
+        .select('*', { count: 'exact' })
+        .eq('estado', 'RJ')           // Filtro base: apenas RJ
+        .gte('leilao_1', 75000);      // Filtro base: mínimo R$ 75k
+
+      // PASSO 4: Aplicar filtros sequencialmente
+      
+      // FILTRO 1: Cidade
+      if (filters.city) {
+        const cidades = filters.city.split(',');
+        if (cidades.length > 1) {
+          query = query.in('cidade', cidades);  // Múltiplas cidades
+        } else {
+          query = query.eq('cidade', filters.city);  // Uma cidade
+        }
+      }
+
+      // FILTRO 2: Tipo de imóvel
+      if (filters.type) {
+        const tipos = filters.type.split(',');
+        if (tipos.length > 1) {
+          query = query.in('tipo_propriedade', tipos);
+        } else {
+          query = query.eq('tipo_propriedade', filters.type);
+        }
+      }
+
+      // FILTRO 3: Bairro
+      if (filters.neighborhood) {
+        const bairros = filters.neighborhood.split(',');
+        if (bairros.length > 1) {
+          query = query.in('bairro', bairros);
+        } else {
+          query = query.eq('bairro', filters.neighborhood);
+        }
+      }
+
+      // FILTRO 4: Localização (busca OR em 3 campos)
+      if (filters.location) {
+        const sanitized = sanitizeSearchInput(filters.location);
+        const escaped = escapeSqlLike(sanitized);
+        // Busca em endereco OU bairro OU cidade
+        query = query.or(
+          `endereco.ilike.%${escaped}%,` +
+          `bairro.ilike.%${escaped}%,` +
+          `cidade.ilike.%${escaped}%`
+        );
+      }
+
+      // FILTRO 5: Palavra-chave (busca OR em 2 campos)
+      if (filters.keyword) {
+        const sanitized = sanitizeSearchInput(filters.keyword);
+        const escaped = escapeSqlLike(sanitized);
+        // Busca em título OU descrição
+        query = query.or(
+          `titulo_propriedade.ilike.%${escaped}%,` +
+          `descricao.ilike.%${escaped}%`
+        );
+      }
+
+      // FILTRO 6: Segundo leilão
+      if (filters.hasSecondAuction) {
+        // Apenas imóveis que TÊM segundo leilão (não é null)
+        query = query
+          .not('data_leilao_2', 'is', null)
+          .not('leilao_2', 'is', null);
+      }
+
+      // FILTRO 7: Faixa de preço
+      if (filters.priceRange) {
+        if (filters.priceRange.min !== undefined) {
+          query = query.gte('leilao_1', filters.priceRange.min);  // >= min
+        }
+        if (filters.priceRange.max !== undefined) {
+          query = query.lte('leilao_1', filters.priceRange.max);  // <= max
+        }
+      }
+
+      // FILTRO 8: Tipo de leilão (lógica especial)
+      if (filters.auctionType) {
+        if (filters.auctionType === "EXTRAJUDICIAL_CUSTOM") {
+          // Todos os extrajudiciais (não é Judicial nem Outros)
+          query = query
+            .neq('tipo_leilao', 'Judicial')
+            .neq('tipo_leilao', 'Outros');
+        } else if (filters.auctionType === "Judicial") {
+          // Judicial OU Outros
+          query = query.in('tipo_leilao', ['Judicial', 'Outros']);
+        } else {
+          // Tipo específico
+          query = query.eq('tipo_leilao', filters.auctionType);
+        }
+      }
+
+      // FILTRO 9: Financiamento
+      if (filters.financiamento === true) {
+        query = query.eq('financiamento', true);
+      }
+
+      // FILTRO 10: FGTS
+      if (filters.fgts === true) {
+        query = query.eq('fgts', true);
+      }
+
+      // FILTRO 11: Parcelamento
+      if (filters.parcelamento === true) {
+        query = query.eq('parcelamento', true);
+      }
+
+      // FILTRO 12: Data final do segundo leilão
+      if (filters.dataFimSegundoLeilao) {
+        query = query.lte('data_leilao_2', filters.dataFimSegundoLeilao);
+      }
+
+      // FILTRO 13: Apenas leilões futuros (automático)
+      const currentDate = new Date();
+      let countQuery = query;
+      if (!filters.dataFimSegundoLeilao) {
+        // Inclui se: data_leilao_1 é null OU >= hoje OU data_leilao_2 >= hoje
+        countQuery = countQuery.or(
+          `data_leilao_1.is.null,` +
+          `data_leilao_1.gte.${currentDate.toISOString()},` +
+          `data_leilao_2.gte.${currentDate.toISOString()}`
+        );
+      }
+
+      // PASSO 5: Obter contagem total (para paginação)
+      const countResult = await countQuery;
+      const total = countResult.count || 0;
+      const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
+
+      // PASSO 6: Aplicar paginação
+      const from = (currentPage - 1) * ITEMS_PER_PAGE;
+      const to = from + ITEMS_PER_PAGE - 1;
+
+      // Aplicar filtro de data na query principal
+      if (!filters.dataFimSegundoLeilao) {
+        query = query.or(
+          `data_leilao_1.is.null,` +
+          `data_leilao_1.gte.${currentDate.toISOString()},` +
+          `data_leilao_2.gte.${currentDate.toISOString()}`
+        );
+      }
+
+      // PASSO 7: Executar query final
+      const { data, error } = await query
+        .range(from, to)                           // Paginação
+        .order('data_leilao_1', { ascending: true }); // Ordenar por data
+
+      if (error) throw error;
+
+      // PASSO 8: Formatar e exibir resultados
+      setProperties(data || []);
+    };
+
+    fetchProperties();
+  }, [currentPage, filters, filtersLoaded]);
+
+  // Função para aplicar novos filtros
+  const applyFilters = (newFilters: FilterParams) => {
+    setFilters(newFilters);
+    updateURL(newFilters);  // Atualiza URL
+    setCurrentPage(1);       // Volta para primeira página
+  };
+
+  return (
+    <div>
+      {/* Seus componentes de filtro aqui */}
+      {/* Lista de imóveis */}
+      {/* Paginação */}
+    </div>
+  );
+};
+```
+
+---
+
+## 📊 Mapeamento: URL ↔ Filtros ↔ Query SQL
+
+### Exemplo 1: URL Simples
+
+**URL:** `?cidade=Rio de Janeiro&tipo=Apartamento`
+
+**Filtros (objeto):**
+```typescript
+{
+  city: "Rio de Janeiro",
+  type: "Apartamento"
+}
+```
+
+**Query SQL gerada:**
+```sql
+SELECT * FROM leiloes_imoveis
+WHERE estado = 'RJ'
+  AND leilao_1 >= 75000
+  AND cidade = 'Rio de Janeiro'
+  AND tipo_propriedade = 'Apartamento'
+  AND (data_leilao_1 IS NULL OR data_leilao_1 >= NOW() OR data_leilao_2 >= NOW())
+ORDER BY data_leilao_1 ASC
+LIMIT 40 OFFSET 0;
+```
+
+### Exemplo 2: Múltiplos Valores
+
+**URL:** `?cidades=Rio de Janeiro,Niterói&tipo=Casa,Apartamento`
+
+**Filtros:**
+```typescript
+{
+  cities: ["Rio de Janeiro", "Niterói"],
+  type: "Casa,Apartamento"
+}
+```
+
+**Query SQL:**
+```sql
+WHERE cidade IN ('Rio de Janeiro', 'Niterói')
+  AND tipo_propriedade IN ('Casa', 'Apartamento')
+```
+
+### Exemplo 3: Busca com OR
+
+**URL:** `?localizacao=Ipanema&palavra_chave=mar`
+
+**Filtros:**
+```typescript
+{
+  location: "Ipanema",
+  keyword: "mar"
+}
+```
+
+**Query SQL:**
+```sql
+WHERE (endereco ILIKE '%Ipanema%' OR bairro ILIKE '%Ipanema%' OR cidade ILIKE '%Ipanema%')
+  AND (titulo_propriedade ILIKE '%mar%' OR descricao ILIKE '%mar%')
+```
+
+### Exemplo 4: Filtros Booleanos
+
+**URL:** `?financiamento=true&fgts=true&preco_min=200000&preco_max=500000`
+
+**Filtros:**
+```typescript
+{
+  financiamento: true,
+  fgts: true,
+  priceRange: { min: 200000, max: 500000 }
+}
+```
+
+**Query SQL:**
+```sql
+WHERE financiamento = true
+  AND fgts = true
+  AND leilao_1 >= 200000
+  AND leilao_1 <= 500000
+```
+
+---
+
+## 🔍 Detalhamento de Cada Filtro
+
+### 1. Filtro de Cidade
+
+**Como funciona:**
+- Se uma cidade: `query.eq('cidade', 'Rio de Janeiro')`
+- Se múltiplas: `query.in('cidade', ['Rio', 'Niterói'])`
+
+**URL:** `?cidade=Rio de Janeiro` ou `?cidades=Rio de Janeiro,Niterói`
+
+**Campo no banco:** `cidade` (text)
+
+---
+
+### 2. Filtro de Tipo de Imóvel
+
+**Como funciona:**
+- Se um tipo: `query.eq('tipo_propriedade', 'Apartamento')`
+- Se múltiplos: `query.in('tipo_propriedade', ['Casa', 'Apartamento'])`
+
+**URL:** `?tipo=Apartamento` ou `?tipo=Casa,Apartamento`
+
+**Campo no banco:** `tipo_propriedade` (text)
+
+**Valores comuns:** "Apartamento", "Casa", "Terreno", "Sala Comercial"
+
+---
+
+### 3. Filtro de Bairro
+
+**Como funciona:**
+- Se um bairro: `query.eq('bairro', 'Copacabana')`
+- Se múltiplos: `query.in('bairro', ['Copacabana', 'Ipanema'])`
+
+**URL:** `?bairro=Copacabana` ou `?bairros=Copacabana,Ipanema`
+
+**Campo no banco:** `bairro` (text)
+
+---
+
+### 4. Filtro de Zona
+
+**Como funciona:**
+- Expande zona para lista de bairros
+- Exemplo: "Zona Sul" → ['Copacabana', 'Ipanema', 'Leblon', ...]
+- Aplica: `query.in('bairro', bairrosDaZona)`
+
+**URL:** `?zona=Zona Sul (Rio de Janeiro)`
+
+**Campo no banco:** `bairro` (expandido)
+
+**Zonas disponíveis (RJ):**
+- Zona Sul, Zona Norte, Zona Oeste, Zona Central
+- Baixada Fluminense
+- Regiões de Niterói
+- Áreas especiais (Grande Tijuca, Grande Méier, etc.)
+
+---
+
+### 5. Filtro de Localização (Busca Livre)
+
+**Como funciona:**
+- Busca case-insensitive em 3 campos (OR)
+- Query: `query.or('endereco.ilike.%termo%,bairro.ilike.%termo%,cidade.ilike.%termo%')`
+- Termo é sanitizado e escapado
+
+**URL:** `?localizacao=Ipanema`
+
+**Campos no banco:** `endereco`, `bairro`, `cidade`
+
+**Exemplo:** Busca "Ipanema" encontra:
+- Endereço: "Rua Ipanema, 123"
+- Bairro: "Ipanema"
+- Cidade: "Ipanema"
+
+---
+
+### 6. Filtro de Palavra-chave
+
+**Como funciona:**
+- Busca case-insensitive em 2 campos (OR)
+- Query: `query.or('titulo_propriedade.ilike.%termo%,descricao.ilike.%termo%')`
+- Termo é sanitizado e escapado
+
+**URL:** `?palavra_chave=mar`
+
+**Campos no banco:** `titulo_propriedade`, `descricao`
+
+**Exemplo:** Busca "mar" encontra:
+- Título: "Apartamento com vista para o mar"
+- Descrição: "Localizado próximo ao mar"
+
+---
+
+### 7. Filtro de Faixa de Preço
+
+**Como funciona:**
+- `min`: `query.gte('leilao_1', min)` (maior ou igual)
+- `max`: `query.lte('leilao_1', max)` (menor ou igual)
+- Se ambos: aplica os dois (AND)
+
+**URL:** `?preco_min=200000&preco_max=500000`
+
+**Campo no banco:** `leilao_1` (number)
+
+**Valor mínimo obrigatório:** R$ 75.000 (sempre aplicado)
+
+---
+
+### 8. Filtro de Tipo de Leilão
+
+**Como funciona:**
+- **"Judicial"**: `query.in('tipo_leilao', ['Judicial', 'Outros'])`
+- **"EXTRAJUDICIAL_CUSTOM"**: `query.neq('tipo_leilao', 'Judicial').neq('tipo_leilao', 'Outros')`
+- **Outros**: `query.eq('tipo_leilao', valor)`
+
+**URL:** `?tipo_leilao=Judicial` ou `?tipo_leilao=EXTRAJUDICIAL_CUSTOM`
+
+**Campo no banco:** `tipo_leilao` (text)
+
+**Valores:** "Judicial", "Extrajudicial", "Outros", "CAIXA"
+
+---
+
+### 9. Filtro de Segundo Leilão
+
+**Como funciona:**
+- Apenas imóveis que TÊM segundo leilão definido
+- Query: `query.not('data_leilao_2', 'is', null).not('leilao_2', 'is', null)`
+
+**URL:** `?segundo_leilao=true`
+
+**Campos no banco:** `data_leilao_2`, `leilao_2`
+
+---
+
+### 10. Filtro de Financiamento
+
+**Como funciona:**
+- `query.eq('financiamento', true)`
+
+**URL:** `?financiamento=true`
+
+**Campo no banco:** `financiamento` (boolean)
+
+---
+
+### 11. Filtro de FGTS
+
+**Como funciona:**
+- `query.eq('fgts', true)`
+
+**URL:** `?fgts=true`
+
+**Campo no banco:** `fgts` (boolean)
+
+---
+
+### 12. Filtro de Parcelamento
+
+**Como funciona:**
+- `query.eq('parcelamento', true)`
+
+**URL:** `?parcelamento=true`
+
+**Campo no banco:** `parcelamento` (boolean)
+
+---
+
+### 13. Filtro de Data Final do Segundo Leilão
+
+**Como funciona:**
+- `query.lte('data_leilao_2', data)` (menor ou igual)
+- Se não houver segundo leilão, usa primeiro como fallback
+
+**URL:** `?data_fim_segundo_leilao=2024-12-31`
+
+**Campo no banco:** `data_leilao_2` (date/timestamp)
+
+---
+
+### 14. Filtro Automático: Apenas Leilões Futuros
+
+**Como funciona:**
+- Aplicado automaticamente (exceto se `dataFimSegundoLeilao` estiver definido)
+- Query: `query.or('data_leilao_1.is.null,data_leilao_1.gte.hoje,data_leilao_2.gte.hoje')`
+- Inclui leilões sem data (null) ou com data futura
+
+**Não precisa ser passado na URL** - é automático
+
+---
+
+## 🔄 Fluxo Completo de uma Busca
+
+### Cenário: Usuário busca "Apartamentos em Copacabana até R$ 500k"
+
+1. **Usuário preenche filtros na interface**
+   ```typescript
+   {
+     type: "Apartamento",
+     neighborhood: "Copacabana",
+     priceRange: { max: 500000 }
+   }
+   ```
+
+2. **Sistema atualiza URL**
+   ```
+   ?tipo=Apartamento&bairro=Copacabana&preco_max=500000
+   ```
+
+3. **Hook lê URL e converte para filtros**
+   ```typescript
+   const filters = parseFiltersFromURL();
+   // { type: "Apartamento", neighborhood: "Copacabana", priceRange: { max: 500000 } }
+   ```
+
+4. **Estado é atualizado**
+   ```typescript
+   setFilters(filters);
+   ```
+
+5. **useEffect detecta mudança e busca dados**
+   ```typescript
+   useEffect(() => {
+     fetchProperties();
+   }, [filters]);
+   ```
+
+6. **Query é construída sequencialmente**
+   ```typescript
+   let query = supabase.from('leiloes_imoveis')
+     .eq('estado', 'RJ')
+     .gte('leilao_1', 75000)
+     .eq('tipo_propriedade', 'Apartamento')
+     .eq('bairro', 'Copacabana')
+     .lte('leilao_1', 500000)
+     .or('data_leilao_1.is.null,data_leilao_1.gte.hoje,data_leilao_2.gte.hoje');
+   ```
+
+7. **Contagem total é obtida**
+   ```typescript
+   const countResult = await query.select('*', { count: 'exact' });
+   // Exemplo: 150 imóveis encontrados
+   ```
+
+8. **Paginação é aplicada**
+   ```typescript
+   const from = (currentPage - 1) * 40;  // 0
+   const to = from + 40 - 1;            // 39
+   query = query.range(from, to);
+   ```
+
+9. **Query final é executada**
+   ```typescript
+   const { data } = await query.order('data_leilao_1', { ascending: true });
+   // Retorna 40 imóveis (página 1)
+   ```
+
+10. **Resultados são formatados e exibidos**
+    ```typescript
+    setProperties(formattedProperties);
+    setTotalCount(150);
+    setTotalPages(4); // 150 / 40 = 3.75 → 4 páginas
+    ```
+
+---
+
+## 📄 Estrutura da Tabela no Banco
+
+### Tabela: `leiloes_imoveis`
+
+| Campo | Tipo | Descrição | Usado em |
+|-------|------|-----------|----------|
+| `id` | number | ID único | Identificação |
+| `titulo_propriedade` | string | Título | Filtro keyword |
+| `endereco` | string | Endereço completo | Filtro location |
+| `bairro` | string | Bairro | Filtros neighborhood, zone, location |
+| `cidade` | string | Cidade | Filtros city, location |
+| `estado` | string | Estado (RJ/SP) | Filtro base |
+| `data_leilao_1` | date | Data do 1º leilão | Filtro data futura, ordenação |
+| `data_leilao_2` | date | Data do 2º leilão | Filtros hasSecondAuction, dataFimSegundoLeilao |
+| `leilao_1` | number | Valor do 1º leilão | Filtros priceRange, valor mínimo |
+| `leilao_2` | number | Valor do 2º leilão | Filtro hasSecondAuction |
+| `tipo_propriedade` | string | Tipo (Casa, Apartamento, etc.) | Filtro type |
+| `tipo_leilao` | string | Judicial, Extrajudicial, etc. | Filtro auctionType |
+| `descricao` | text | Descrição do imóvel | Filtro keyword |
+| `imagem` | string | URL da imagem | Exibição |
+| `financiamento` | boolean | Aceita financiamento | Filtro financiamento |
+| `fgts` | boolean | Aceita FGTS | Filtro fgts |
+| `parcelamento` | boolean | Permite parcelamento | Filtro parcelamento |
+
+---
+
+## 🎯 Parâmetros da URL (Mapeamento Completo)
+
+| Parâmetro URL | Campo Filtro | Tipo | Exemplo |
+|--------------|--------------|------|---------|
+| `cidade` | `city` | string | `?cidade=Rio de Janeiro` |
+| `cidades` | `cities` | string[] | `?cidades=Rio,Niterói` |
+| `bairro` | `neighborhood` | string | `?bairro=Copacabana` |
+| `bairros` | `neighborhoods` | string[] | `?bairros=Copacabana,Ipanema` |
+| `zona` | `zone` | string | `?zona=Zona Sul (Rio de Janeiro)` |
+| `zonas` | `zones` | string[] | `?zonas=Zona Sul,Zona Norte` |
+| `localizacao` | `location` | string | `?localizacao=Ipanema` |
+| `tipo` | `type` | string | `?tipo=Apartamento` |
+| `palavra_chave` | `keyword` | string | `?palavra_chave=mar` |
+| `preco_min` | `priceRange.min` | number | `?preco_min=200000` |
+| `preco_max` | `priceRange.max` | number | `?preco_max=500000` |
+| `faixas_preco` | `priceRanges` | string[] | `?faixas_preco=Até 300k,300k-500k` |
+| `tipo_leilao` | `auctionType` | string | `?tipo_leilao=Judicial` |
+| `segundo_leilao` | `hasSecondAuction` | boolean | `?segundo_leilao=true` |
+| `financiamento` | `financiamento` | boolean | `?financiamento=true` |
+| `fgts` | `fgts` | boolean | `?fgts=true` |
+| `parcelamento` | `parcelamento` | boolean | `?parcelamento=true` |
+| `data_fim_segundo_leilao` | `dataFimSegundoLeilao` | string (ISO) | `?data_fim_segundo_leilao=2024-12-31` |
+
+---
+
+## 🔐 Segurança
+
+### 1. Sanitização de Inputs
+
+**Problema:** Usuário pode digitar caracteres perigosos
+```typescript
+// ❌ PERIGOSO
+const location = "'; DROP TABLE leiloes_imoveis; --";
+
+// ✅ SEGURO
+const sanitized = sanitizeSearchInput(location);
+// Remove vírgulas, ponto e vírgula, espaços extras
+```
+
+### 2. Escape SQL
+
+**Problema:** Caracteres especiais do SQL podem quebrar a query
+```typescript
+// ❌ PERIGOSO
+const termo = "50% desconto";
+query.ilike(`%${termo}%`);  // % é caractere especial!
+
+// ✅ SEGURO
+const escaped = escapeSqlLike(termo);  // "50\% desconto"
+query.ilike(`%${escaped}%`);
+```
+
+### 3. Validação de Tipos
+
+**Problema:** Valores numéricos podem ser inválidos
+```typescript
+// ✅ SEGURO
+const minPrice = searchParams.get('preco_min');
+if (minPrice) {
+  const parsed = parseInt(minPrice);
+  if (!isNaN(parsed)) {
+    filters.priceRange.min = parsed;
+  }
+}
+```
+
+---
+
+## ⚡ Performance
+
+### Otimizações Implementadas
+
+1. **Filtros no servidor** (não no cliente)
+   - Banco processa 16k itens em <1 segundo
+   - Apenas 40 itens são retornados por página
+
+2. **Paginação eficiente**
+   - `LIMIT 40 OFFSET 0` - busca apenas o necessário
+   - Não carrega todos os 16k itens
+
+3. **Contagem separada**
+   - Contagem total sem buscar dados
+   - `select('*', { count: 'exact' })`
+
+4. **Índices no banco** (recomendado)
+   ```sql
+   CREATE INDEX idx_cidade ON leiloes_imoveis(cidade);
+   CREATE INDEX idx_bairro ON leiloes_imoveis(bairro);
+   CREATE INDEX idx_tipo_propriedade ON leiloes_imoveis(tipo_propriedade);
+   CREATE INDEX idx_leilao_1 ON leiloes_imoveis(leilao_1);
+   CREATE INDEX idx_data_leilao_1 ON leiloes_imoveis(data_leilao_1);
+   ```
+
+---
+
+## 🐛 Troubleshooting
+
+### Problema: Filtros não funcionam
+
+**Causa:** Filtros não estão sendo aplicados na query
+
+**Solução:**
+```typescript
+// Verificar se filtros estão sendo lidos
+console.log('Filtros:', filters);
+
+// Verificar se query está sendo construída
+console.log('Query:', query);
+```
+
+### Problema: Busca muito lenta
+
+**Causa:** Falta de índices no banco
+
+**Solução:** Criar índices nos campos filtrados (veja seção Performance)
+
+### Problema: SQL Injection
+
+**Causa:** Não está usando `escapeSqlLike` e `sanitizeSearchInput`
+
+**Solução:** Sempre sanitizar e escapar inputs de busca
+
+### Problema: Paginação incorreta
+
+**Causa:** Contagem total não está sendo calculada
+
+**Solução:** Verificar se `count: 'exact'` está na query
+
+---
+
+## 📚 Resumo Executivo
+
+### O que o sistema faz:
+
+1. **Lê filtros da URL** → Converte para objeto
+2. **Aplica filtros na query** → Constrói query SQL
+3. **Executa no Supabase** → Retorna resultados
+4. **Formata dados** → Exibe na interface
+5. **Atualiza URL** → Permite compartilhamento
+
+### Tecnologias:
+
+- **React** + **TypeScript** (frontend)
+- **Supabase** (PostgreSQL) (backend)
+- **React Router** (gerenciamento de URL)
+
+### Volume:
+
+- **16.000 imóveis** no banco
+- **40 itens por página**
+- **<1 segundo** de resposta
+
+### Filtros disponíveis:
+
+- Localização (cidade, bairro, zona, busca livre)
+- Tipo de imóvel
+- Preço (faixa)
+- Tipo de leilão
+- Características (financiamento, FGTS, parcelamento)
+- Data (segundo leilão, leilões futuros)
+- Busca por texto (título, descrição)
+
+---
+
+## ✅ Checklist de Implementação
+
+- [ ] Instalar `@supabase/supabase-js` e `react-router-dom`
+- [ ] Criar `useFilterParams.tsx`
+- [ ] Criar `client.ts` com credenciais do Supabase
+- [ ] Criar `stringUtils.ts`
+- [ ] Implementar lógica de busca (exemplo completo)
+- [ ] Criar componentes de filtro na UI
+- [ ] Testar cada filtro individualmente
+- [ ] Testar múltiplos filtros combinados
+- [ ] Testar paginação
+- [ ] Testar URLs compartilháveis
+- [ ] Adicionar índices no banco (opcional, mas recomendado)
+
+---
+
+**Fim da Documentação**
+
+Este documento contém **tudo** que você precisa saber sobre o sistema de filtros. Qualquer dúvida, consulte a seção específica acima.
+
