@@ -4,6 +4,7 @@
   <title>Cataldo Siston Advogados | Leilões e Advocacia Imobiliária</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&amp;family=Great+Vibes&amp;display=swap" rel="stylesheet">
@@ -1294,23 +1295,40 @@
           }
       }
 
-      // Função para buscar imóveis em destaque (limitado a alguns para o carrossel)
-      async function getFeaturedProperties(collectionId, limit = 10) {
+      // Configuração do Supabase
+      const SUPABASE_URL = 'https://jmcurflvrvuvzoddjkcg.supabase.co';
+      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImptY3VyZmx2cnZ1dnpvZGRqa2NnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYxMjMzNDQsImV4cCI6MjA2MTY5OTM0NH0.LOtcUSiuDkbCbKCBPTTaDz2ip4Gb1DqjHqkbtzu_3oc';
+
+      // Inicializar cliente Supabase
+      let supabase = null;
+      if (window.supabase && typeof window.supabase.createClient === 'function') {
+          supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+          console.log('✅ Supabase inicializado com sucesso para carousel');
+      } else {
+          console.error('❌ Supabase não está disponível. Certifique-se de incluir o script do Supabase.');
+      }
+
+      // Função para buscar imóveis em destaque do Supabase (limitado a alguns para o carrossel)
+      async function getFeaturedProperties(limit = 10) {
           try {
-              console.log(`🔍 Buscando imóveis da collection: ${collectionId}, limite: ${limit}`);
-              const response = await fetchWebflowData(`/collections/${collectionId}/items?limit=${limit}`);
-              
-              if (!response) {
-                  throw new Error('Resposta vazia da API');
+              if (!supabase) {
+                  throw new Error('Cliente Supabase não inicializado');
               }
 
-              if (!response.items) {
-                  console.warn('⚠️ Resposta não contém items:', response);
-                  throw new Error('Resposta inválida da API - campo items não encontrado');
+              console.log(`🔍 Buscando imóveis do Supabase, limite: ${limit}`);
+
+              const { data: properties, error } = await supabase
+                  .from('leiloes_imoveis')
+                  .select('*')
+                  .limit(limit);
+
+              if (error) {
+                  console.error('❌ Erro do Supabase:', error);
+                  throw error;
               }
 
-              console.log(`✅ Encontrados ${response.items.length} imóveis`);
-              return response.items;
+              console.log(`✅ Encontrados ${properties.length} imóveis no Supabase`);
+              return properties || [];
           } catch (error) {
               console.error('❌ Erro ao buscar propriedades:', error);
               console.error('Detalhes do erro:', {
@@ -1352,24 +1370,35 @@
 
       // Função para criar um card de imóvel
       function createPropertyCard(property) {
-          const fieldData = property.fieldData || {};
-          
-          const title = fieldData['titulo-propriedade'] || fieldData.name || 'Imóvel';
-          const endereco = fieldData.endereco || '';
-          const tipoPropriedade = fieldData['tipo-propriedade'] || fieldData.tipoPropriedade || 'Imóvel';
-          const photo = fieldData.photo?.url || fieldData.photo || 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&q=80&w=800';
-          const dataLeilao1 = fieldData['data-leilao-1'] || '';
-          const valorLeilao1 = fieldData['valor-leilao-1'] || '';
-          const dataLeilao2 = fieldData['data-leilao-2'] || '';
-          const valorLeilao2 = fieldData['valor-leilao-2'] || '';
-          const slug = fieldData.slug || property.id;
-          const zona = fieldData.zona || '';
-          const garagem = fieldData.garagem || '';
-          const collectionId = WEBFLOW_CONFIG.collectionId || WEBFLOW_CONFIG.defaultCollectionId;
-          
-          const detailUrl = `imovel.html?collectionId=${collectionId}&slug=${slug}`;
-          const shareUrl = `https://cataldosiston-adv.com.br/${detailUrl}`;
+          // Usar campos do Supabase diretamente
+          const title = property.titulo_propriedade || property.name || 'Imóvel';
+          const endereco = property.endereco || '';
+          const tipoPropriedade = property.tipo_propriedade || 'Imóvel';
+          const photo = property.foto_principal_url || 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&q=80&w=800';
+          const dataLeilao1 = property.data_leilao || '';
+          const valorLeilao1 = property.lance_inicial || '';
+          const dataLeilao2 = property.data_segundo_leilao || '';
+          const valorLeilao2 = property.valor_segundo_leilao || '';
+          const zona = property.zona || '';
+          const garagem = property.vagas_garagem || '';
+
+          // Gerar slug do título e ID
+          const slug = generateSlug(property);
+
+          const detailUrl = `imovel.html?slug=${encodeURIComponent(slug)}`;
+          const shareUrl = `https://cataldosistondevflowcode.github.io/sitenew/${detailUrl}`;
           const whatsappText = encodeURIComponent(`Olá! Tenho interesse no imóvel: ${title} - ${endereco}`);
+
+          // Função para gerar slug (mesmo do imovel.html)
+          function generateSlug(property) {
+              const title = property.titulo_propriedade || property.name || '';
+              const id = property.id || '';
+              return title.toLowerCase()
+                  .replace(/[^\w\s-]/g, '')
+                  .replace(/\s+/g, '-')
+                  .replace(/-+/g, '-')
+                  .trim() + (id ? `-${id}` : '');
+          }
 
           return `
               <article class="flex-shrink-0 bg-white rounded-lg overflow-hidden group hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 border border-zinc-200 flex flex-col" style="width: calc((100% - 4rem) / 3);">
@@ -1454,19 +1483,10 @@
                   return;
               }
 
-              // Obter collectionId da URL ou usar padrão
-              const urlParams = new URLSearchParams(window.location.search);
-              const collectionId = urlParams.get('collectionId') || WEBFLOW_CONFIG.defaultCollectionId;
-              WEBFLOW_CONFIG.collectionId = collectionId;
+              console.log('📋 Buscando imóveis do Supabase para o carrossel...');
 
-              console.log('📋 Configuração Webflow:', {
-                  collectionId: collectionId,
-                  proxyUrl: WEBFLOW_CONFIG.proxyUrl,
-                  defaultCollectionId: WEBFLOW_CONFIG.defaultCollectionId
-              });
-
-              // Buscar imóveis (limitado a 10 para o carrossel)
-              const properties = await getFeaturedProperties(collectionId, 10);
+              // Buscar imóveis do Supabase (limitado a 10 para o carrossel)
+              const properties = await getFeaturedProperties(10);
 
               if (properties.length === 0) {
                   console.warn('⚠️ Nenhum imóvel retornado da API');
