@@ -7,9 +7,8 @@ const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 const distDir = path.resolve(rootDir, 'dist');
 
-// Arquivos HTML estáticos para copiar
+// Arquivos HTML estáticos para copiar (excluindo index.html que é gerado pelo Vite)
 const htmlFiles = [
-  'index.html',
   'imoveis-rj.html',
   'imovel.html',
   'assessoria.html'
