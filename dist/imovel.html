@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Imóvel - Cataldo Siston Advogados</title>
+  <link rel="icon" type="image/png" href="https://cdn.prod.website-files.com/69023853a6b8fa97b90fd72d/69305cca9521a74c0198aa54_FAVICON.png">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<script>
+    // Configuração do Supabase (injetada automaticamente do .env)
+    window.SUPABASE_URL = 'https://jmcurflvrvuvzoddjkcg.supabase.co';
+    window.SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImptY3VyZmx2cnZ1dnpvZGRqa2NnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYxMjMzNDQsImV4cCI6MjA2MTY5OTM0NH0.LOtcUSiuDkbCbKCBPTTaDz2ip4Gb1DqjHqkbtzu_3oc';
+</script>
+<style>
+    body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+    h1, h2, h3, h4, h5, .font-serif { font-family: 'Playfair Display', serif; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .media-grayscale { filter: grayscale(100%); }
+    .media-grayscale:hover { filter: grayscale(0%); transition: filter 0.3s; }
+    details > summary { list-style: none; }
+    details > summary::-webkit-details-marker { display: none; }
+    .loading-skeleton { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: loading 1.5s ease-in-out infinite; }
+    @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+</style>
+</head>
+<body class="bg-zinc-50 text-zinc-900 antialiased selection:bg-amber-100 selection:text-amber-900">
+
+  <!-- Topbar -->
+  <div class="bg-[#1a1a1a] text-zinc-400 py-2 text-[11px] border-b border-zinc-800/50 relative z-50">
+      <div class="container mx-auto px-4 lg:px-12 flex justify-between items-center max-w-[1400px]">
+          <div class="flex items-center gap-6">
+              <div class="flex items-center gap-2 hover:text-white transition-colors cursor-pointer">
+                  <i data-lucide="mail" class="w-3.5 h-3.5 text-amber-500"></i>
+                  <span>contato@cataldosiston-adv.com.br</span>
+              </div>
+              <div class="hidden sm:flex items-center gap-2 hover:text-white transition-colors cursor-pointer">
+                  <i data-lucide="phone" class="w-3.5 h-3.5 text-amber-500"></i>
+                  <span>+55 (21) 3173-3795</span>
+              </div>
+              <a href="#" class="hidden md:flex items-center gap-1 bg-[#25D366] hover:bg-[#20bd5a] text-white px-2 py-0.5 rounded transition-colors font-semibold">
+                  <i data-lucide="message-circle" class="w-3 h-3"></i> Fale Conosco
+              </a>
+          </div>
+          <div class="flex items-center gap-4">
+              <div class="flex gap-3">
+                  <a href="#" class="hover:text-amber-500 transition-colors"><i data-lucide="facebook" class="w-3.5 h-3.5"></i></a>
+                  <a href="#" class="hover:text-amber-500 transition-colors"><i data-lucide="instagram" class="w-3.5 h-3.5"></i></a>
+                  <a href="#" class="hover:text-amber-500 transition-colors"><i data-lucide="youtube" class="w-3.5 h-3.5"></i></a>
+              </div>
+          </div>
+      </div>
+  </div>
+  
+  <!-- Navbar -->
+  <nav class="sticky top-0 z-40 mx-4 lg:mx-8">
+      <div class="bg-white rounded-xl border border-zinc-200/50 backdrop-blur-md bg-white/90 shadow-lg shadow-zinc-900/5 mt-4">
+          <div class="container mx-auto px-4 lg:px-12 flex justify-between items-center max-w-[1400px] py-6">
+          <a href="index.html" class="flex flex-col items-start group">
+              <div class="flex items-center gap-2 px-3 py-2 rounded-lg">
+                  <img src="https://cdn.prod.website-files.com/69023853a6b8fa97b90fd72d/6911dd6a49f6f0dabff0a498_logotipo_cataldo_siston.png" alt="Cataldo Siston Advogados" class="h-8 w-auto">
+              </div>
+          </a>
+          
+          <div class="hidden lg:flex items-center gap-8">
+              <a href="escritorio-imobiliario.html" class="text-xs font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider">Quem somos</a>
+              <!-- Dropdown Imóveis em Leilão -->
+              <div class="relative group">
+                  <button class="text-xs font-medium text-zinc-900 border-b border-amber-500 pb-1 transition-colors uppercase tracking-wider flex items-center gap-1">
+                      Imóveis em Leilão
+                      <i data-lucide="chevron-down" class="w-3 h-3 group-hover:rotate-180 transition-transform"></i>
+                  </button>
+                  <div class="absolute top-full left-0 mt-2 bg-white border border-zinc-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 min-w-[150px] z-50">
+                      <a href="imoveis-rj.html" class="block px-4 py-3 text-xs font-medium text-zinc-700 hover:text-amber-600 hover:bg-amber-50 transition-colors uppercase tracking-wider">Imóveis RJ</a>
+                      <a href="imoveis-sp.html" class="block px-4 py-3 text-xs font-medium text-zinc-700 hover:text-amber-600 hover:bg-amber-50 transition-colors uppercase tracking-wider">Imóveis SP</a>
+                  </div>
+              </div>
+              <a href="assessoria.html" class="text-xs font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider">Assessoria</a>
+              
+              <!-- Dropdown Direito Imobiliário -->
+              <div class="relative group">
+                  <button class="text-xs font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider flex items-center gap-1">
+                      Direito Imobiliário
+                      <i data-lucide="chevron-down" class="w-3 h-3 group-hover:rotate-180 transition-transform"></i>
+                  </button>
+                  <div class="absolute top-full left-0 mt-2 bg-white border border-zinc-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 min-w-[180px] z-50">
+                      <a href="direito-imobiliario.html" class="block px-4 py-3 text-xs font-medium text-zinc-700 hover:text-amber-600 hover:bg-amber-50 transition-colors uppercase tracking-wider">Direito Imobiliário</a>
+                      <a href="distrato-imobiliario.html" class="block px-4 py-3 text-xs font-medium text-zinc-700 hover:text-amber-600 hover:bg-amber-50 transition-colors uppercase tracking-wider">Distrato Imobiliário</a>
+                  </div>
+              </div>
+
+              <a href="casos-reais.html" class="text-xs font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider">Casos Reais</a>
+              <a href="#" class="text-xs font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider">Blog</a>
+              <a href="#" class="text-xs font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider">Contato</a>
+          </div>
+          
+          <button id="mobileMenuToggle" class="lg:hidden text-zinc-900 relative z-50">
+              <i data-lucide="menu" class="w-6 h-6 mobile-menu-icon"></i>
+              <i data-lucide="x" class="w-6 h-6 mobile-menu-close hidden"></i>
+          </button>
+          </div>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div id="mobileMenu" class="lg:hidden absolute top-full left-0 right-0 bg-white border-t border-zinc-200 rounded-b-xl shadow-2xl opacity-0 invisible transform -translate-y-4 transition-all duration-300 z-40">
+          <div class="p-6 space-y-4">
+              <a href="escritorio-imobiliario.html" class="block text-sm font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider py-2">Quem somos</a>
+
+              <!-- Mobile Dropdown for Imóveis em Leilão -->
+              <div class="space-y-2">
+                  <div class="text-sm font-medium text-zinc-900 uppercase tracking-wider py-2">Imóveis em Leilão</div>
+                  <div class="pl-4 space-y-2">
+                      <a href="imoveis-rj.html" class="block text-sm text-zinc-600 hover:text-amber-600 transition-colors py-1">Imóveis RJ</a>
+                      <a href="imoveis-sp.html" class="block text-sm text-zinc-600 hover:text-amber-600 transition-colors py-1">Imóveis SP</a>
+                  </div>
+              </div>
+
+              <a href="assessoria.html" class="block text-sm font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider py-2">Assessoria</a>
+              
+              <!-- Mobile Dropdown for Direito Imobiliário -->
+              <div class="space-y-2">
+                  <div class="text-sm font-medium text-zinc-900 uppercase tracking-wider py-2">Direito Imobiliário</div>
+                  <div class="pl-4 space-y-2">
+                      <a href="direito-imobiliario.html" class="block text-sm text-zinc-600 hover:text-amber-600 transition-colors py-1">Direito Imobiliário</a>
+                      <a href="distrato-imobiliario.html" class="block text-sm text-zinc-600 hover:text-amber-600 transition-colors py-1">Distrato Imobiliário</a>
+                  </div>
+              </div>
+
+              <a href="casos-reais.html" class="text-xs font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider">Casos Reais</a>
+              <a href="#" class="block text-sm font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider py-2">Blog</a>
+              <a href="#" class="block text-sm font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider py-2">Contato</a>
+
+              <div class="pt-4 border-t border-zinc-200">
+                  <a href="https://wa.me/5521977294848?text=Olá!%20Tenho%20interesse%20em%20saber%20mais%20sobre%20leilões%20de%20imóveis." target="_blank" class="block w-full text-center bg-amber-600 hover:bg-amber-700 text-white text-sm font-bold py-3 px-4 rounded transition-colors">
+                      Fale Conosco no WhatsApp
+                  </a>
+              </div>
+          </div>
+      </div>
+  </nav>
+
+<main class="container mx-auto px-4 lg:px-12 pt-20 pb-6 max-w-[1400px]">
+    
+    <!-- Breadcrumb -->
+    <div class="flex items-center gap-2 text-[10px] text-zinc-400 mb-4 uppercase tracking-wider">
+        <a href="index.html" class="hover:text-zinc-900 transition-colors">Home</a>
+        <i data-lucide="chevron-right" class="w-3 h-3"></i>
+        <a href="imoveis-rj.html" class="hover:text-zinc-900 transition-colors">Imóveis em Leilão RJ</a>
+        <i data-lucide="chevron-right" class="w-3 h-3"></i>
+        <span id="breadcrumb-lote" class="text-zinc-900 font-medium">Carregando...</span>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loading-state" class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 mb-16">
+        <div class="lg:col-span-7">
+            <div class="h-screen rounded-xl loading-skeleton"></div>
+        </div>
+        <div class="lg:col-span-5 space-y-4">
+            <div class="h-8 loading-skeleton rounded"></div>
+            <div class="h-4 loading-skeleton rounded w-3/4"></div>
+            <div class="h-32 loading-skeleton rounded"></div>
+        </div>
+    </div>
+
+    <!-- Main Grid: Maximized Above Fold -->
+    <div id="content-area" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10">
+        
+        <!-- Left: Visuals (Photo, Map, Street View) -->
+        <div class="lg:col-span-7 flex flex-col gap-4">
+            <!-- Media Container -->
+            <div class="relative h-screen rounded-xl overflow-hidden bg-zinc-100 border border-zinc-200 shadow-sm group">
+                
+                <!-- View: Photo -->
+                <div id="view-photo" class="media-view w-full h-full">
+                    <img id="main-image" src="" alt="" class="w-full h-full object-cover">
+                    <div class="absolute top-4 left-4">
+                         <span id="lote-badge" class="bg-white/90 backdrop-blur text-zinc-900 text-[10px] font-semibold uppercase tracking-wider px-2 py-1 rounded shadow-sm border border-zinc-200">
+                             Lote 042
+                         </span>
+                    </div>
+                </div>
+
+                <!-- View: Map (Placeholder) -->
+                <div id="view-map" class="media-view w-full h-full hidden bg-zinc-100 relative">
+                     <iframe id="map-iframe" src="" width="100%" height="100%" style="border:0; filter: grayscale(100%);" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+
+                <!-- View: Street View (Placeholder) -->
+                <div id="view-street" class="media-view w-full h-full hidden bg-zinc-800 relative group-hover:bg-zinc-700 transition-colors">
+                     <img id="street-image" src="" alt="" class="w-full h-full object-cover opacity-50 mix-blend-overlay">
+                     <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="text-center text-white">
+                            <i data-lucide="navigation" class="w-8 h-8 mx-auto mb-2"></i>
+                            <span class="text-sm font-medium">Street View Interativo</span>
+                        </div>
+                     </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur p-1 rounded-lg shadow-lg border border-zinc-200/50 flex gap-1 z-10">
+                    <button onclick="switchView('photo')" id="btn-photo" class="view-btn px-3 py-1.5 rounded-md text-[10px] uppercase font-semibold tracking-wide bg-zinc-900 text-white shadow-sm transition-all">
+                        Foto
+                    </button>
+                    <button onclick="switchView('map')" id="btn-map" class="view-btn px-3 py-1.5 rounded-md text-[10px] uppercase font-semibold tracking-wide text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 transition-all">
+                        Mapa
+                    </button>
+                    <button onclick="switchView('street')" id="btn-street" class="view-btn px-3 py-1.5 rounded-md text-[10px] uppercase font-semibold tracking-wide text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 transition-all">
+                        Street View
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Data & Auction Info -->
+        <div class="lg:col-span-5 flex flex-col">
+            
+            <!-- 1. Header & Status -->
+            <div class="mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <span id="status-badge" class="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-amber-50 text-amber-700 text-[10px] font-semibold uppercase tracking-wider border border-amber-100">
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                        Em Leilão
+                    </span>
+                    <span id="ref-number" class="text-xs text-zinc-400 font-medium">Ref: -</span>
+                </div>
+                
+                <h1 id="property-title" class="text-2xl md:text-3xl font-serif text-zinc-900 tracking-tight leading-[1.1] mb-3">
+                    Carregando...
+                </h1>
+                
+                <div class="flex items-start gap-2 text-sm text-zinc-500 font-light leading-snug">
+                    <i data-lucide="map-pin" class="w-4 h-4 text-zinc-400 mt-0.5 shrink-0"></i>
+                    <span id="property-address">Carregando endereço...</span>
+                </div>
+            </div>
+
+            <!-- 2. Property Specs Grid -->
+            <div class="grid grid-cols-4 gap-2 mb-6 border-t border-b border-zinc-100 py-4">
+                <div class="flex flex-col items-center justify-center text-center p-2 rounded bg-zinc-50/50">
+                    <i data-lucide="building-2" class="w-4 h-4 text-zinc-400 mb-1.5"></i>
+                    <span class="text-[10px] uppercase tracking-wider text-zinc-400">Tipo</span>
+                    <span id="property-type" class="text-xs font-semibold text-zinc-900">-</span>
+                </div>
+                <div class="flex flex-col items-center justify-center text-center p-2 rounded bg-zinc-50/50">
+                    <i data-lucide="ruler" class="w-4 h-4 text-zinc-400 mb-1.5"></i>
+                    <span class="text-[10px] uppercase tracking-wider text-zinc-400">Área</span>
+                    <span id="property-area" class="text-xs font-semibold text-zinc-900">-</span>
+                </div>
+                <div class="flex flex-col items-center justify-center text-center p-2 rounded bg-zinc-50/50">
+                    <i data-lucide="bed" class="w-4 h-4 text-zinc-400 mb-1.5"></i>
+                    <span class="text-[10px] uppercase tracking-wider text-zinc-400">Quartos</span>
+                    <span id="property-bedrooms" class="text-xs font-semibold text-zinc-900">-</span>
+                </div>
+                <div class="flex flex-col items-center justify-center text-center p-2 rounded bg-zinc-50/50">
+                    <i data-lucide="car" class="w-4 h-4 text-zinc-400 mb-1.5"></i>
+                    <span class="text-[10px] uppercase tracking-wider text-zinc-400">Vagas</span>
+                    <span id="property-parking" class="text-xs font-semibold text-zinc-900">-</span>
+                </div>
+            </div>
+
+            <!-- 3. Auction Values Card -->
+            <div id="auction-info" class="bg-white border border-zinc-200 rounded-lg overflow-hidden mb-5 shadow-sm">
+                <!-- Auction data will be populated here -->
+            </div>
+
+            <!-- 4. Payment Info -->
+            <div id="payment-info" class="flex items-start gap-3 bg-blue-50/50 border border-blue-100 p-3 rounded-lg mb-6">
+                <i data-lucide="credit-card" class="w-4 h-4 text-blue-800 mt-0.5 shrink-0"></i>
+                <div class="text-xs text-blue-900 font-light leading-relaxed">
+                    <strong class="font-medium text-blue-900 block mb-0.5">Forma de Pagamento</strong>
+                    <span id="payment-text">À vista ou Parcelado (25% entrada + até 30x corrigidas). Proposta de parcelamento deve ser enviada antes do leilão.</span>
+                </div>
+            </div>
+
+            <!-- 5. Contact & Share Section -->
+            <div class="mt-auto space-y-4 pt-4 border-t border-zinc-100">
+                <!-- Contact Information -->
+                <div class="space-y-2.5">
+                    <div class="flex items-center gap-2.5 text-zinc-600">
+                        <i data-lucide="phone" class="w-4 h-4 text-amber-500"></i>
+                        <a href="tel:+552131733795" class="text-xs hover:text-zinc-900 transition-colors">+55 (21) 3173-3795</a>
+                    </div>
+                    <div class="flex items-center gap-2.5 text-zinc-600">
+                        <i data-lucide="mail" class="w-4 h-4 text-amber-500"></i>
+                        <a href="mailto:contato@cataldosiston-adv.com.br" class="text-xs hover:text-zinc-900 transition-colors">contato@cataldosiston-adv.com.br</a>
+                    </div>
+                </div>
+
+                <!-- WhatsApp CTA Button -->
+                <a href="https://wa.me/5521977294848?text=Olá!%20Tenho%20interesse%20neste%20imóvel." target="_blank" class="block w-full text-white text-xs font-medium py-2.5 px-4 rounded transition-all flex items-center justify-center gap-2 group hover:opacity-90" style="background: linear-gradient(to right, #b8750a, #d68e08);">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                    </svg>
+                    Fale com nossos advogados
+                </a>
+
+                <!-- Share Section -->
+                <div class="pt-3 border-t border-zinc-100">
+                    <h4 class="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 mb-3 text-center">COMPARTILHAR</h4>
+                    <div class="flex items-center justify-center gap-3">
+                        <a href="#" id="share-facebook" class="w-9 h-9 rounded-full bg-amber-50 hover:bg-amber-100 text-amber-600 border border-amber-200 flex items-center justify-center transition-all hover:scale-105" title="Compartilhar no Facebook">
+                            <i data-lucide="facebook" class="w-4 h-4"></i>
+                        </a>
+                        <a href="#" id="share-twitter" class="w-9 h-9 rounded-full bg-amber-50 hover:bg-amber-100 text-amber-600 border border-amber-200 flex items-center justify-center transition-all hover:scale-105" title="Compartilhar no Twitter">
+                            <i data-lucide="twitter" class="w-4 h-4"></i>
+                        </a>
+                        <a href="#" id="share-linkedin" class="w-9 h-9 rounded-full bg-amber-50 hover:bg-amber-100 text-amber-600 border border-amber-200 flex items-center justify-center transition-all hover:scale-105" title="Compartilhar no LinkedIn">
+                            <i data-lucide="linkedin" class="w-4 h-4"></i>
+                        </a>
+                        <a href="https://wa.me/?text=" id="share-whatsapp" target="_blank" class="w-9 h-9 rounded-full bg-amber-50 hover:bg-amber-100 text-amber-600 border border-amber-200 flex items-center justify-center transition-all hover:scale-105" title="Compartilhar no WhatsApp">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                            </svg>
+                        </a>
+                        <a href="mailto:?subject=&body=" id="share-email" class="w-9 h-9 rounded-full bg-amber-50 hover:bg-amber-100 text-amber-600 border border-amber-200 flex items-center justify-center transition-all hover:scale-105" title="Compartilhar por Email">
+                            <i data-lucide="mail" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Description Section (Right below fold) -->
+    <div id="description-section" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-10 mt-10 pt-8 border-t border-zinc-200">
+        <div class="lg:col-span-8">
+            <h3 class="font-serif text-lg text-zinc-900 mb-4">Descrição do Bem</h3>
+            <div id="property-description" class="prose prose-zinc prose-sm text-zinc-600 font-light leading-relaxed max-w-none text-justify">
+                <p>Carregando descrição...</p>
+            </div>
+        </div>
+        <div class="lg:col-span-4">
+             <div class="bg-zinc-50 border border-zinc-200 p-4 rounded-lg mb-6">
+                <h4 class="text-xs font-semibold uppercase tracking-wider text-zinc-900 mb-3">Links Rápidos</h4>
+                <div class="space-y-2 mb-6">
+                    <a id="edital-link" href="#" class="flex items-center justify-between text-xs text-zinc-600 hover:text-zinc-900 p-2 bg-white rounded border border-zinc-200 hover:border-zinc-300 transition-all">
+                        <span>Edital do Leilão</span>
+                        <i data-lucide="file-text" class="w-3 h-3"></i>
+                    </a>
+                    <a id="matricula-link" href="#" class="flex items-center justify-between text-xs text-zinc-600 hover:text-zinc-900 p-2 bg-white rounded border border-zinc-200 hover:border-zinc-300 transition-all">
+                        <span>Matrícula (RGI)</span>
+                        <i data-lucide="file-check" class="w-3 h-3"></i>
+                    </a>
+                </div>
+                
+                <!-- Contact Sidebar (conforme inventário) -->
+                <div class="border-t border-zinc-200 pt-4">
+                    <h4 class="text-xs font-semibold uppercase tracking-wider text-zinc-900 mb-3">Contato</h4>
+                    <div class="space-y-2 text-xs text-zinc-600">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="phone" class="w-3.5 h-3.5 text-amber-600"></i>
+                            <a href="tel:+552131733795" class="hover:text-zinc-900 transition-colors">+55 (21) 3173-3795</a>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="mail" class="w-3.5 h-3.5 text-amber-600"></i>
+                            <a href="mailto:contato@cataldosiston-adv.com.br" class="hover:text-zinc-900 transition-colors">contato@cataldosiston-adv.com.br</a>
+                        </div>
+                    </div>
+                </div>
+             </div>
+        </div>
+    </div>
+
+</main>
+
+<!-- SEÇÃO: BENEFÍCIOS -->
+<section class="py-16 bg-zinc-900 border-t border-zinc-800">
+    <div class="container mx-auto px-4 lg:px-12 max-w-[1400px]">
+        <div class="max-w-2xl mb-10">
+            <h2 class="text-2xl md:text-3xl font-serif text-white mb-3 tracking-tight">Benefícios dos leilões imobiliários</h2>
+            <p class="text-sm md:text-base text-zinc-400 font-light">
+                Imóveis podem ser adquiridos com fortes descontos, tornando a compra vantajosa para investidores e compradores de moradia.
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Benefit 1 -->
+            <div class="group p-6 rounded-xl border border-zinc-800 bg-zinc-800/50 hover:bg-zinc-800 hover:border-amber-500/30 hover:shadow-lg hover:shadow-amber-900/20 transition-all">
+                <div class="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <i data-lucide="trending-up" class="w-5 h-5 text-amber-400"></i>
+                </div>
+                <h3 class="text-sm font-semibold text-white mb-2">Alta rentabilidade</h3>
+                <p class="text-xs text-zinc-400 leading-relaxed">Alta rentabilidade na revenda ou locação do imóvel adquirido.</p>
+            </div>
+            <!-- Benefit 2 -->
+            <div class="group p-6 rounded-xl border border-zinc-800 bg-zinc-800/50 hover:bg-zinc-800 hover:border-amber-500/30 hover:shadow-lg hover:shadow-amber-900/20 transition-all">
+                <div class="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <i data-lucide="home" class="w-5 h-5 text-amber-400"></i>
+                </div>
+                <h3 class="text-sm font-semibold text-white mb-2">Valor abaixo do mercado</h3>
+                <p class="text-xs text-zinc-400 leading-relaxed">Compra da moradia por valor muito abaixo do praticado no mercado.</p>
+            </div>
+            <!-- Benefit 3 -->
+            <div class="group p-6 rounded-xl border border-zinc-800 bg-zinc-800/50 hover:bg-zinc-800 hover:border-amber-500/30 hover:shadow-lg hover:shadow-amber-900/20 transition-all">
+                <div class="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <i data-lucide="shield-check" class="w-5 h-5 text-amber-400"></i>
+                </div>
+                <h3 class="text-sm font-semibold text-white mb-2">Segurança Jurídica</h3>
+                <p class="text-xs text-zinc-400 leading-relaxed">Segurança jurídica do investimento, quando bem assessorado.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SEÇÃO: RISCOS -->
+<section class="py-16 bg-zinc-50 border-t border-zinc-200">
+    <div class="container mx-auto px-4 lg:px-12 max-w-[1400px]">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+            <div>
+                <h2 class="text-2xl font-serif text-zinc-900 mb-4 tracking-tight">Quais são os riscos de arrematar imóveis em leilão?</h2>
+                <p class="text-sm text-zinc-600 font-light leading-relaxed mb-6">
+                    Riscos envolvem demora na finalização da arrematação (posse e propriedade) e possível anulação caso haja vício no processo judicial ou extrajudicial. É fundamental uma análise prévia detalhada.
+                </p>
+                <div class="flex items-center gap-2 text-xs font-medium text-amber-700">
+                    <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+                    <span>Atenção aos detalhes processuais</span>
+                </div>
+            </div>
+            <div class="relative h-full min-h-[200px] bg-white rounded-lg border border-zinc-200 p-6 shadow-sm flex items-center justify-center">
+                <div class="text-center">
+                    <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-zinc-100 mb-3">
+                        <i data-lucide="scale" class="w-6 h-6 text-zinc-400"></i>
+                    </div>
+                    <p class="text-xs text-zinc-500 max-w-xs mx-auto">"O sucesso do investimento depende diretamente da qualidade da análise jurídica prévia."</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SEÇÃO: COMO ARREMATAR -->
+<section class="py-16 bg-zinc-900 border-t border-zinc-800">
+    <div class="container mx-auto px-4 lg:px-12 max-w-[1400px]">
+        <div class="text-center max-w-3xl mx-auto mb-12">
+            <h2 class="text-2xl md:text-3xl font-serif text-white mb-4 tracking-tight">Como arrematar com segurança?</h2>
+            <p class="text-sm text-zinc-400 font-light">
+                O sucesso do investimento é principalmente jurídico. Um escritório especializado garante segurança desde a due diligence até a entrega da posse.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+            <!-- Line connector (Desktop only) -->
+            <div class="hidden md:block absolute top-12 left-[16%] right-[16%] h-px bg-zinc-800 -z-10"></div>
+
+            <!-- Step 1 -->
+            <div class="flex flex-col items-center text-center">
+                <div class="w-24 h-24 bg-zinc-800 border border-zinc-700 rounded-full flex items-center justify-center shadow-lg mb-4 z-10">
+                    <span class="text-2xl font-serif text-zinc-400">01</span>
+                </div>
+                <h3 class="text-xs font-bold uppercase tracking-widest text-white mb-2">Pré-Leilão</h3>
+                <p class="text-xs text-zinc-400 font-light px-4 mb-4">Estudo de viabilidade jurídica do leilão imobiliário e análise de riscos.</p>
+                <div class="w-full max-w-xs aspect-video rounded-lg overflow-hidden border border-zinc-800 shadow-lg">
+                    <iframe src="https://www.youtube.com/embed/hbt-4kFMD4Q" title="Vantagens de comprar imóveis em leilão" class="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="flex flex-col items-center text-center">
+                <div class="w-24 h-24 bg-amber-500 border border-amber-500 rounded-full flex items-center justify-center shadow-lg shadow-amber-900/50 mb-4 z-10">
+                    <span class="text-2xl font-serif text-white">02</span>
+                </div>
+                <h3 class="text-xs font-bold uppercase tracking-widest text-white mb-2">Dia do Leilão</h3>
+                <p class="text-xs text-zinc-400 font-light px-4 mb-4">Acompanhamento dos lances e assinatura do Auto de Arrematação.</p>
+                <div class="w-full max-w-xs aspect-video rounded-lg overflow-hidden border border-zinc-800 shadow-lg">
+                    <iframe src="https://www.youtube.com/embed/yvQrGmdXDiU" title="Parcelamento da arrematação" class="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="flex flex-col items-center text-center">
+                <div class="w-24 h-24 bg-zinc-800 border border-zinc-700 rounded-full flex items-center justify-center shadow-lg mb-4 z-10">
+                    <span class="text-2xl font-serif text-zinc-400">03</span>
+                </div>
+                <h3 class="text-xs font-bold uppercase tracking-widest text-white mb-2">Pós-Leilão</h3>
+                <p class="text-xs text-zinc-400 font-light px-4 mb-4">Desocupação do imóvel, regularização e registro da propriedade.</p>
+                <div class="w-full max-w-xs aspect-video rounded-lg overflow-hidden border border-zinc-800 shadow-lg">
+                    <iframe src="https://www.youtube.com/embed/Bps7pphdE_g" title="Imissão na posse" class="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-12 text-center">
+            <button class="inline-flex items-center gap-2 text-sm font-medium text-zinc-900 bg-amber-500 hover:bg-amber-600 px-6 py-3 rounded-lg shadow-lg shadow-amber-900/30 transition-colors">
+                <span>Saiba mais sobre a nossa assessoria</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- SEÇÃO: FAQ -->
+<section class="py-16 bg-zinc-50 border-t border-zinc-200">
+    <div class="container mx-auto px-4 lg:px-12 max-w-3xl">
+        <h2 class="text-2xl font-serif text-zinc-900 mb-8 tracking-tight text-center">Dúvidas sobre leilões de imóveis</h2>
+        
+        <div class="space-y-2">
+            <!-- FAQ Item 1 -->
+            <details class="group bg-white border border-zinc-200 rounded-lg overflow-hidden hover:border-amber-500/30 transition-colors">
+                <summary class="flex items-center justify-between p-4 cursor-pointer select-none">
+                    <span class="text-sm font-medium text-zinc-700">Como posso ter a posse do imóvel arrematado?</span>
+                    <i data-lucide="chevron-down" class="w-4 h-4 text-zinc-400 group-open:rotate-180 transition-transform"></i>
+                </summary>
+                <div class="px-4 pb-4 pt-0 text-xs text-zinc-500 font-light leading-relaxed border-t border-zinc-100 mt-2 pt-3">
+                    A posse do imóvel arrematado é obtida após a aprovação da arrematação pelo juiz e o cumprimento de todas as obrigações legais, incluindo o pagamento integral do valor e eventuais custas processuais.
+                </div>
+            </details>
+
+            <!-- FAQ Item 2 -->
+            <details class="group bg-white border border-zinc-200 rounded-lg overflow-hidden hover:border-amber-500/30 transition-colors">
+                <summary class="flex items-center justify-between p-4 cursor-pointer select-none">
+                    <span class="text-sm font-medium text-zinc-700">Como é feito o pagamento no leilão judicial?</span>
+                    <i data-lucide="chevron-down" class="w-4 h-4 text-zinc-400 group-open:rotate-180 transition-transform"></i>
+                </summary>
+                <div class="px-4 pb-4 pt-0 text-xs text-zinc-500 font-light leading-relaxed border-t border-zinc-100 mt-2 pt-3">
+                    O pagamento no leilão judicial é feito conforme estabelecido no edital, geralmente em até 10 dias após a arrematação, através de depósito judicial ou conforme determinado pelo juiz responsável.
+                </div>
+            </details>
+
+            <!-- FAQ Item 3 -->
+            <details class="group bg-white border border-zinc-200 rounded-lg overflow-hidden hover:border-amber-500/30 transition-colors">
+                <summary class="flex items-center justify-between p-4 cursor-pointer select-none">
+                    <span class="text-sm font-medium text-zinc-700">Dinheiro de leilão pode ser usado para quitar condomínio após arremate?</span>
+                    <i data-lucide="chevron-down" class="w-4 h-4 text-zinc-400 group-open:rotate-180 transition-transform"></i>
+                </summary>
+                <div class="px-4 pb-4 pt-0 text-xs text-zinc-500 font-light leading-relaxed border-t border-zinc-100 mt-2 pt-3">
+                    Sim, em alguns casos o valor arrecadado no leilão pode ser usado para quitar débitos condominiais, dependendo da decisão judicial e das especificações do processo de execução.
+                </div>
+            </details>
+
+            <!-- FAQ Item 4 -->
+            <details class="group bg-white border border-zinc-200 rounded-lg overflow-hidden hover:border-amber-500/30 transition-colors">
+                <summary class="flex items-center justify-between p-4 cursor-pointer select-none">
+                    <span class="text-sm font-medium text-zinc-700">Imóvel arrematado com hipoteca. O que fazer?</span>
+                    <i data-lucide="chevron-down" class="w-4 h-4 text-zinc-400 group-open:rotate-180 transition-transform"></i>
+                </summary>
+                <div class="px-4 pb-4 pt-0 text-xs text-zinc-500 font-light leading-relaxed border-t border-zinc-100 mt-2 pt-3">
+                    Quando um imóvel com hipoteca é arrematado, é necessário verificar se a hipoteca será extinta com o leilão ou se permanecerá sobre o bem. Recomenda-se assessoria jurídica especializada para análise do caso.
+                </div>
+            </details>
+
+            <!-- FAQ Item 5 -->
+            <details class="group bg-white border border-zinc-200 rounded-lg overflow-hidden hover:border-amber-500/30 transition-colors">
+                <summary class="flex items-center justify-between p-4 cursor-pointer select-none">
+                    <span class="text-sm font-medium text-zinc-700">Quem é responsável pelos débitos de IPTU do imóvel leiloado?</span>
+                    <i data-lucide="chevron-down" class="w-4 h-4 text-zinc-400 group-open:rotate-180 transition-transform"></i>
+                </summary>
+                <div class="px-4 pb-4 pt-0 text-xs text-zinc-500 font-light leading-relaxed border-t border-zinc-100 mt-2 pt-3">
+                    Os débitos de IPTU anteriores ao leilão podem ser de responsabilidade do arrematante, dependendo das condições do edital. É fundamental verificar essa informação antes de participar do leilão.
+                </div>
+            </details>
+
+            <!-- FAQ Item 6 -->
+            <details class="group bg-white border border-zinc-200 rounded-lg overflow-hidden hover:border-amber-500/30 transition-colors">
+                <summary class="flex items-center justify-between p-4 cursor-pointer select-none">
+                    <span class="text-sm font-medium text-zinc-700">É seguro arrematar imóveis em leilão?</span>
+                    <i data-lucide="chevron-down" class="w-4 h-4 text-zinc-400 group-open:rotate-180 transition-transform"></i>
+                </summary>
+                <div class="px-4 pb-4 pt-0 text-xs text-zinc-500 font-light leading-relaxed border-t border-zinc-100 mt-2 pt-3">
+                    Sim, é seguro quando feito com a devida assessoria jurídica especializada. É essencial realizar um estudo prévio de viabilidade jurídica (due diligence) antes de participar do leilão.
+                </div>
+            </details>
+
+            <!-- FAQ Item 7 -->
+            <details class="group bg-white border border-zinc-200 rounded-lg overflow-hidden hover:border-amber-500/30 transition-colors">
+                <summary class="flex items-center justify-between p-4 cursor-pointer select-none">
+                    <span class="text-sm font-medium text-zinc-700">Qual é o valor utilizado como base de cálculo do ITBI?</span>
+                    <i data-lucide="chevron-down" class="w-4 h-4 text-zinc-400 group-open:rotate-180 transition-transform"></i>
+                </summary>
+                <div class="px-4 pb-4 pt-0 text-xs text-zinc-500 font-light leading-relaxed border-t border-zinc-100 mt-2 pt-3">
+                    O ITBI é calculado sobre o valor de arrematação do imóvel no leilão. Algumas jurisdições podem aplicar regras específicas, por isso é importante consultar a legislação local.
+                </div>
+            </details>
+
+            <!-- FAQ Item 8 -->
+            <details class="group bg-white border border-zinc-200 rounded-lg overflow-hidden hover:border-amber-500/30 transition-colors">
+                <summary class="flex items-center justify-between p-4 cursor-pointer select-none">
+                    <span class="text-sm font-medium text-zinc-700">Vale a pena comprar imóvel em leilão?</span>
+                    <i data-lucide="chevron-down" class="w-4 h-4 text-zinc-400 group-open:rotate-180 transition-transform"></i>
+                </summary>
+                <div class="px-4 pb-4 pt-0 text-xs text-zinc-500 font-light leading-relaxed border-t border-zinc-100 mt-2 pt-3">
+                    Pode valer muito a pena, principalmente pela possibilidade de adquirir imóveis com desconto significativo. No entanto, é essencial contar com assessoria jurídica especializada para evitar riscos.
+                </div>
+            </details>
+        </div>
+    </div>
+</section>
+
+<!-- SEÇÃO: IMÓVEIS SIMILARES -->
+<section id="similar-properties-section" class="py-24 bg-zinc-50 border-t border-zinc-200 hidden">
+    <div class="container mx-auto px-4 lg:px-12 max-w-[1400px]">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-serif text-zinc-900 mb-3">Imóveis Similares</h2>
+            <p class="text-zinc-500 font-light">Outras oportunidades que podem interessar</p>
+        </div>
+        
+        <div id="similar-properties-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Imóveis similares serão inseridos aqui via JavaScript -->
+        </div>
+    </div>
+</section>
+
+<!-- SEÇÃO: DEPOIMENTOS -->
+<section class="py-20 bg-zinc-50 border-t border-zinc-200 relative" style="background-image: url('/assets/bg/fundo-marmore.png'); background-size: cover; background-position: center;">
+    <div class="absolute inset-0 bg-zinc-50/95"></div>
+    <div class="container mx-auto px-4 lg:px-12 max-w-4xl text-center relative z-10">
+        <div class="mb-4">
+            <h1 class="text-3xl font-serif text-zinc-900">Depoimentos</h1>
+        </div>
+        
+        <i data-lucide="quote" class="w-10 h-10 text-amber-500 mx-auto mb-6 fill-amber-500/10"></i>
+        
+        <div class="relative px-12">
+            <button id="testimonialPrev" class="absolute left-0 top-1/2 -translate-y-1/2 text-amber-600 hover:text-amber-700 transition-colors z-10">
+                <i data-lucide="chevron-left" class="w-8 h-8"></i>
+            </button>
+            
+            <div id="testimonialsContainer" class="overflow-hidden">
+                <div id="testimonialsSlider" class="flex transition-transform duration-500 ease-in-out">
+                    <!-- Testimonial 1 -->
+                    <div class="testimonial-slide min-w-full px-4">
+                        <p class="text-lg font-serif italic text-zinc-600 leading-relaxed mb-8">
+                            "Como cliente e parceiro de negócios do escritório Cataldo Siston há quase 10 anos tenho toda tranquilidade em referendar seus serviços, seu trabalho impecável e histórico de sucesso em todas as aquisições, investimentos e serviços a nós prestados. Além de ser um workaholic sempre comprometido nos mínimos detalhes, nos protegendo contra riscos e cumprindo estritamente todos os prazos."
+                        </p>
+                        <div class="flex flex-col items-center">
+                            <span class="font-bold text-zinc-900 text-sm uppercase tracking-wide">Felipe Bueno</span>
+                            <span class="text-[10px] text-zinc-500 font-medium uppercase tracking-wider mt-1">Presidente da BX Capital</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Testimonial 2 -->
+                    <div class="testimonial-slide min-w-full px-4">
+                        <p class="text-lg font-serif italic text-zinc-600 leading-relaxed mb-8">
+                            "Trabalho há anos com o escritório Cataldo Siston e sempre fico impressionada com a dedicação e profissionalismo da equipe. Eles realmente entendem de leilões de imóveis e sempre me orientam da melhor forma possível."
+                        </p>
+                        <div class="flex flex-col items-center">
+                            <span class="font-bold text-zinc-900 text-sm uppercase tracking-wide">Denise de Castilho Provenzano</span>
+                            <span class="text-[10px] text-zinc-500 font-medium uppercase tracking-wider mt-1">Arquiteta</span>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial 3 -->
+                    <div class="testimonial-slide min-w-full px-4">
+                        <p class="text-lg font-serif italic text-zinc-600 leading-relaxed mb-8">
+                            "Excelente escritório! A assessoria jurídica é impecável e sempre me senti seguro em todos os processos de arrematação. Recomendo sem hesitação."
+                        </p>
+                        <div class="flex flex-col items-center">
+                            <span class="font-bold text-zinc-900 text-sm uppercase tracking-wide">Frederico Brandão</span>
+                            <span class="text-[10px] text-zinc-500 font-medium uppercase tracking-wider mt-1">Investidor</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Testimonial 4 -->
+                    <div class="testimonial-slide min-w-full px-4">
+                        <p class="text-lg font-serif italic text-zinc-600 leading-relaxed mb-8">
+                            "Profissionais extremamente competentes e dedicados. O acompanhamento em cada etapa do processo é detalhado e sempre me mantêm informada sobre tudo."
+                        </p>
+                        <div class="flex flex-col items-center">
+                            <span class="font-bold text-zinc-900 text-sm uppercase tracking-wide">Ana Maria Mendes</span>
+                            <span class="text-[10px] text-zinc-500 font-medium uppercase tracking-wider mt-1">Investidora</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Testimonial 5 -->
+                    <div class="testimonial-slide min-w-full px-4">
+                        <p class="text-lg font-serif italic text-zinc-600 leading-relaxed mb-8">
+                            "Como leiloeiro público, tenho a oportunidade de trabalhar com diversos escritórios. O Cataldo Siston se destaca pela seriedade, conhecimento técnico e comprometimento com os clientes."
+                        </p>
+                        <div class="flex flex-col items-center">
+                            <span class="font-bold text-zinc-900 text-sm uppercase tracking-wide">Rodrigo Portella</span>
+                            <span class="text-[10px] text-zinc-500 font-medium uppercase tracking-wider mt-1">Leiloeiro Público</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Testimonial 6 -->
+                    <div class="testimonial-slide min-w-full px-4">
+                        <p class="text-lg font-serif italic text-zinc-600 leading-relaxed mb-8">
+                            "O escritório Cataldo Siston transformou minha experiência com leilões de imóveis. A expertise deles é realmente diferenciada e os resultados falam por si só."
+                        </p>
+                        <div class="flex flex-col items-center">
+                            <span class="font-bold text-zinc-900 text-sm uppercase tracking-wide">Paulo André Marques</span>
+                            <span class="text-[10px] text-zinc-500 font-medium uppercase tracking-wider mt-1">Investidor</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Testimonial 7 -->
+                    <div class="testimonial-slide min-w-full px-4">
+                        <p class="text-lg font-serif italic text-zinc-600 leading-relaxed mb-8">
+                            "Profissionalismo e conhecimento técnico de alto nível. O escritório Cataldo Siston é referência quando o assunto é leilões de imóveis. Sempre indico para meus clientes."
+                        </p>
+                        <div class="flex flex-col items-center">
+                            <span class="font-bold text-zinc-900 text-sm uppercase tracking-wide">Anderson Carneiro Pereira</span>
+                            <span class="text-[10px] text-zinc-500 font-medium uppercase tracking-wider mt-1">Leiloeiro Público</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="testimonialNext" class="absolute right-0 top-1/2 -translate-y-1/2 text-amber-600 hover:text-amber-700 transition-colors z-10">
+                <i data-lucide="chevron-right" class="w-8 h-8"></i>
+            </button>
+        </div>
+
+        <!-- Dots indicator -->
+        <div class="flex justify-center gap-2 mt-8">
+            <button class="testimonial-dot w-2 h-2 rounded-full bg-amber-600 transition-all" data-index="0"></button>
+            <button class="testimonial-dot w-2 h-2 rounded-full bg-zinc-300 hover:bg-amber-400 transition-all" data-index="1"></button>
+            <button class="testimonial-dot w-2 h-2 rounded-full bg-zinc-300 hover:bg-amber-400 transition-all" data-index="2"></button>
+            <button class="testimonial-dot w-2 h-2 rounded-full bg-zinc-300 hover:bg-amber-400 transition-all" data-index="3"></button>
+            <button class="testimonial-dot w-2 h-2 rounded-full bg-zinc-300 hover:bg-amber-400 transition-all" data-index="4"></button>
+            <button class="testimonial-dot w-2 h-2 rounded-full bg-zinc-300 hover:bg-amber-400 transition-all" data-index="5"></button>
+            <button class="testimonial-dot w-2 h-2 rounded-full bg-zinc-300 hover:bg-amber-400 transition-all" data-index="6"></button>
+        </div>
+    </div>
+</section>
+
+<!-- Footer Contact Section -->
+<section class="relative overflow-hidden" style="background-image: url('https://cdn.prod.website-files.com/69023853a6b8fa97b90fd72d/6916498c666c6d43c4bc7927_bg-newsletter.jpg.webp'); background-size: cover; background-position: center; background-attachment: fixed;">
+    <!-- Elegant Overlay -->
+    <div class="absolute inset-0 bg-gradient-to-br from-zinc-900/95 via-zinc-900/90 to-zinc-800/95"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-amber-600/10 via-transparent to-transparent"></div>
+    
+    <div class="container mx-auto px-4 lg:px-12 max-w-[1400px] flex flex-col md:flex-row items-center pt-24 pb-20 relative z-10">
+        <!-- Form Area -->
+        <div class="w-full md:w-1/2 mb-12 md:mb-0 md:pr-12 relative z-10">
+            <div class="mb-8">
+                <h2 class="text-4xl md:text-5xl font-serif text-white mb-3 tracking-tight">Receba nossa newsletter</h2>
+                <div class="w-16 h-0.5 bg-amber-500 mb-4"></div>
+                <p class="text-sm text-zinc-300 uppercase tracking-[0.15em] font-medium">Oportunidades de negócio, decisões, artigos, cases, etc.</p>
+            </div>
+
+            <form class="space-y-5 max-w-lg bg-white/5 backdrop-blur-xl p-8 rounded-lg border border-white/10 shadow-2xl">
+                <div>
+                    <label class="block text-xs font-bold text-zinc-300 mb-2 uppercase tracking-wider">Nome*</label>
+                    <input type="text" class="w-full bg-white/10 border border-white/20 text-white placeholder:text-zinc-400 text-sm px-4 py-3 rounded-lg focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all backdrop-blur-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-zinc-300 mb-2 uppercase tracking-wider">Email*</label>
+                    <input type="email" class="w-full bg-white/10 border border-white/20 text-white placeholder:text-zinc-400 text-sm px-4 py-3 rounded-lg focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all backdrop-blur-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-zinc-300 mb-2 uppercase tracking-wider">Telefone*</label>
+                    <input type="tel" class="w-full bg-white/10 border border-white/20 text-white placeholder:text-zinc-400 text-sm px-4 py-3 rounded-lg focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all backdrop-blur-sm">
+                </div>
+                
+                <button type="button" class="w-full bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white font-bold text-sm py-4 uppercase tracking-wider rounded-lg transition-all shadow-lg shadow-amber-600/30 hover:shadow-xl hover:shadow-amber-600/40 hover:-translate-y-0.5 mt-2">
+                    Enviar
+                </button>
+                <p class="text-[10px] text-zinc-400 text-center mt-3 leading-relaxed">Prometemos não utilizar suas informações de contato para enviar qualquer tipo de SPAM</p>
+            </form>
+        </div>
+
+        <!-- Contact Area -->
+        <div class="w-full md:w-1/2 flex items-end justify-center relative">
+             <!-- Elegant Contact Bar -->
+             <div class="w-full bg-gradient-to-t from-zinc-900/95 via-zinc-900/90 to-transparent backdrop-blur-md border-t border-amber-500/30 p-8 rounded-t-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                 <div class="flex-1">
+                     <h3 class="font-serif text-white text-xl md:text-2xl mb-2 tracking-tight">Podemos ajudar a solucionar o seu caso!</h3>
+                     <p class="text-amber-400 text-xs uppercase tracking-wider font-medium">Entre em contato conosco</p>
+                 </div>
+                 <div class="flex gap-4">
+                     <a href="#" class="w-12 h-12 bg-white/10 hover:bg-amber-600/20 border border-white/20 hover:border-amber-500/50 rounded-full flex items-center justify-center text-amber-400 hover:text-amber-300 transition-all backdrop-blur-sm hover:scale-110">
+                         <i data-lucide="message-circle" class="w-5 h-5"></i>
+                     </a>
+                     <a href="#" class="w-12 h-12 bg-white/10 hover:bg-amber-600/20 border border-white/20 hover:border-amber-500/50 rounded-full flex items-center justify-center text-amber-400 hover:text-amber-300 transition-all backdrop-blur-sm hover:scale-110">
+                         <i data-lucide="mail" class="w-5 h-5"></i>
+                     </a>
+                     <a href="#" class="w-12 h-12 bg-white/10 hover:bg-amber-600/20 border border-white/20 hover:border-amber-500/50 rounded-full flex items-center justify-center text-amber-400 hover:text-amber-300 transition-all backdrop-blur-sm hover:scale-110">
+                         <i data-lucide="phone" class="w-5 h-5"></i>
+                     </a>
+                 </div>
+             </div>
+        </div>
+    </div>
+</section>
+
+  <!-- Main Footer -->
+  <footer class="bg-zinc-100 pt-16 pb-8 border-t border-zinc-200 text-zinc-600 text-sm">
+      <div class="container mx-auto px-4 lg:px-12 max-w-[1400px]">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+              <div class="col-span-1">
+                  <a href="#" class="flex flex-col items-start group mb-6">
+                      <img src="https://cdn.prod.website-files.com/69023853a6b8fa97b90fd72d/6911dd6a49f6f0dabff0a498_logotipo_cataldo_siston.png" alt="Cataldo Siston Advogados" class="h-8 w-auto mb-2">
+                  </a>
+                  <p class="text-xs leading-relaxed mb-4">
+                      Leilões de imóveis e advocacia imobiliária<br>
+                      Av. Rio Branco, 156, Gr. 3336 a 3339 Centro<br>
+                      Rio de Janeiro - RJ - Brasil<br>
+                      +55 (21) 3173-3795<br>
+                      +55 (21) 97729-4848
+                  </p>
+              </div>
+              
+              <div>
+                  <h4 class="font-bold text-xs text-zinc-900 uppercase tracking-wider mb-6">Mapa do Site</h4>
+                  <ul class="space-y-2 text-xs">
+                      <li><a href="#" class="hover:text-amber-600 transition-colors">Quem Somos</a></li>
+                      <li><a href="imoveis-rj.html" class="hover:text-amber-600 transition-colors">Imóveis em Leilão RJ</a></li>
+                      <li><a href="imoveis-sp.html" class="hover:text-amber-600 transition-colors">Imóveis em Leilão SP</a></li>
+                      <li><a href="#" class="hover:text-amber-600 transition-colors">Leilões da Caixa - RJ</a></li>
+                      <li><a href="#" class="hover:text-amber-600 transition-colors">Leilões da Caixa - SP</a></li>
+                      <li><a href="#" class="hover:text-amber-600 transition-colors">Assessoria em leilões</a></li>
+                      <li><a href="direito-imobiliario.html" class="hover:text-amber-600 transition-colors">Direito Imobiliário</a></li>
+                      <li><a href="distrato-imobiliario.html" class="hover:text-amber-600 transition-colors">Distrato imobiliário</a></li>
+                      <li><a href="#" class="hover:text-amber-600 transition-colors">Distrato imobiliário</a></li>
+                      <li><a href="#" class="hover:text-amber-600 transition-colors">Direito civil</a></li>
+                      <li><a href="casos-reais.html" class="text-xs font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider">Casos Reais</a></li>
+                      <li><a href="#" class="hover:text-amber-600 transition-colors">Blog</a></li>
+                      <li><a href="#" class="hover:text-amber-600 transition-colors">Contato</a></li>
+                      <li><a href="#" class="hover:text-amber-600 transition-colors">Política de Privacidade</a></li>
+                  </ul>
+              </div>
+  
+               <div>
+                  <h4 class="font-bold text-xs text-zinc-900 uppercase tracking-wider mb-6">Fale em Contato</h4>
+                  <p class="text-xs mb-4">Tire suas dúvidas ou siga-nos nas redes sociais</p>
+                  <a href="mailto:contato@cataldosiston.adv.com.br" class="text-xs font-bold text-zinc-900 hover:text-amber-600 mb-6 block">contato@cataldosiston-adv.com.br</a>
+                  <div class="flex gap-4">
+                       <a href="#" class="text-amber-600 hover:text-zinc-900 transition-colors"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+                       <a href="#" class="text-amber-600 hover:text-zinc-900 transition-colors"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                       <a href="#" class="text-amber-600 hover:text-zinc-900 transition-colors"><i data-lucide="youtube" class="w-5 h-5"></i></a>
+                  </div>
+              </div>
+          </div>
+          
+          <div class="border-t border-zinc-200 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-zinc-400">
+              <p>O conteúdo do texto desta página é de direito reservado do CATALDO SISTON ADVOGADOS. Sua reprodução, parcial ou total, mesmo citando nossos links, é proibida sem a autorização do autor. Crime de violação de direito autoral – artigo 184 do Código Penal – Lei 9610/98 - Lei de direitos autorais.</p>
+          </div>
+          <div class="mt-4 text-[10px] text-zinc-400 text-center">
+              <p class="mb-2">CNPJ: 22437441000198 | Razão Social: CATALDO SISTON SOCIEDADE DE ADVOGADOS</p>
+              <p class="flex items-center justify-center gap-1">Conforme nossa <a href="#" class="underline">política de privacidade</a> este site faz uso de cookies. <button class="bg-amber-600 text-white px-2 py-0.5 rounded ml-2">Entendido</button></p>
+          </div>
+      </div>
+  </footer>
+
+<script>
+    // ============================================
+    // CONFIGURAÇÃO SUPABASE
+    // ============================================
+    const SUPABASE_URL = window.SUPABASE_URL || 'https://seu-projeto.supabase.co';
+    const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || 'sua-chave-publica';
+    
+    // Inicializar cliente Supabase
+    let supabase = null;
+    if (window.supabase && typeof window.supabase.createClient === 'function') {
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        console.log('✅ Supabase inicializado com sucesso');
+    } else {
+        console.error('❌ Supabase não está disponível. Certifique-se de incluir o script do Supabase.');
+    }
+
+    // Função para gerar slug a partir do título e ID (igual ao imoveis-rj.html)
+    function generateSlug(property) {
+        const title = property.titulo_propriedade || property.name || '';
+        let slug = '';
+        
+        if (title) {
+            slug = title
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '') // Remove acentos
+                .replace(/[^a-z0-9]+/g, '-') // Substitui espaços e caracteres especiais por hífen
+                .replace(/(^-|-$)/g, '') // Remove hífens no início e fim
+                .substring(0, 50); // Limita tamanho
+            // Adiciona ID ao final para garantir unicidade
+            if (property.id) {
+                slug = `${slug}-${property.id}`;
+            }
+        } else if (property.id) {
+            slug = property.id.toString();
+        }
+        
+        return slug;
+    }
+
+    // Função para buscar imóvel por slug do Supabase
+    async function getPropertyBySlug(slug) {
+        try {
+            if (!supabase) {
+                throw new Error('Cliente Supabase não inicializado');
+            }
+
+            console.log('🔍 [SUPABASE] Buscando imóvel com slug:', slug);
+            
+            // Tentar extrair ID do slug (formato: titulo-id)
+            const slugParts = slug.split('-');
+            const possibleId = slugParts[slugParts.length - 1];
+            
+            // Se o último segmento for um número, tentar buscar por ID primeiro
+            if (!isNaN(possibleId) && possibleId.length > 0) {
+                const id = parseInt(possibleId);
+                console.log('🔍 [SUPABASE] Tentando buscar por ID:', id);
+                
+                const { data: dataById, error: errorById } = await supabase
+                    .from('leiloes_imoveis')
+                    .select('*')
+                    .eq('id', id)
+                    .single();
+                
+                if (!errorById && dataById) {
+                    // Verificar se o slug gerado corresponde (comparação mais flexível)
+                    const generatedSlug = generateSlug(dataById);
+                    console.log('🔍 [SUPABASE] Slug gerado:', generatedSlug, 'vs slug buscado:', slug);
+                    
+                    // Comparação exata ou por ID apenas
+                    if (generatedSlug === slug || generatedSlug.endsWith(`-${id}`) || slug.endsWith(`-${id}`)) {
+                        console.log('✅ [SUPABASE] Imóvel encontrado por ID:', dataById);
+                        return dataById;
+                    } else {
+                        console.log('⚠️ [SUPABASE] Slug não corresponde, mas ID encontrado. Retornando mesmo assim.');
+                        // Retornar mesmo assim se o ID corresponde
+                        return dataById;
+                    }
+                } else {
+                    console.log('⚠️ [SUPABASE] Não encontrado por ID:', errorById);
+                }
+            }
+            
+            // Se não encontrou por ID, buscar todos e comparar
+            console.log('🔍 [SUPABASE] Buscando todos os imóveis para comparar slug...');
+            const { data: allProperties, error } = await supabase
+                .from('leiloes_imoveis')
+                .select('*')
+                .limit(1000); // Limite razoável
+            
+            if (error) {
+                console.error('❌ [SUPABASE] Erro ao buscar imóveis:', error);
+                return null;
+            }
+            
+            if (!allProperties || allProperties.length === 0) {
+                console.warn('⚠️ [SUPABASE] Nenhum imóvel encontrado');
+                return null;
+            }
+            
+            console.log(`🔍 [SUPABASE] Comparando slug com ${allProperties.length} imóveis...`);
+            
+            // Procurar imóvel com slug correspondente
+            for (const property of allProperties) {
+                const generatedSlug = generateSlug(property);
+                
+                // Comparação exata
+                if (generatedSlug === slug) {
+                    console.log('✅ [SUPABASE] Imóvel encontrado por slug gerado (exato):', property);
+                    return property;
+                }
+                
+                // Comparação por ID no final do slug
+                if (property.id) {
+                    const slugId = slug.split('-').pop();
+                    if (slugId === property.id.toString()) {
+                        console.log('✅ [SUPABASE] Imóvel encontrado por ID no slug:', property);
+                        return property;
+                    }
+                }
+            }
+            
+            console.warn('⚠️ [SUPABASE] Imóvel não encontrado com slug:', slug);
+            console.log('💡 [SUPABASE] Dica: Verifique se o slug está correto ou se o imóvel existe no banco de dados.');
+            return null;
+        } catch (error) {
+            console.error('❌ [SUPABASE] Erro ao buscar propriedade:', error);
+            return null;
+        }
+    }
+
+    // Função para formatar valor monetário
+    function formatCurrency(value) {
+        if (!value) return '-';
+        const num = typeof value === 'string' ? parseFloat(value.replace(/[^\d,.-]/g, '').replace(',', '.')) : value;
+        return new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+            minimumFractionDigits: 2
+        }).format(num);
+    }
+
+    // Função para formatar data
+    function formatDate(dateString) {
+        if (!dateString) return '-';
+        const date = new Date(dateString);
+        return date.toLocaleDateString('pt-BR');
+    }
+
+    // Função para renderizar informações de leilão
+    function renderAuctionInfo(property) {
+        const auctionInfo = document.getElementById('auction-info');
+        
+        // Campos do Supabase
+        const dataLeilao1 = property.data_leilao_1 || '';
+        const valorLeilao1 = property.leilao_1 || 0;
+        const dataLeilao2 = property.data_leilao_2 || '';
+        const valorLeilao2 = property.leilao_2 || 0;
+        
+        let html = '';
+        
+        // 1º Leilão (se existir) - sempre aparece como encerrado se houver 2º leilão
+        if (dataLeilao1 || valorLeilao1) {
+            const isEncerrado = dataLeilao2 || valorLeilao2; // Se tem 2º leilão, o 1º está encerrado
+            html += `
+                <div class="flex items-center justify-between p-3 border-b border-zinc-100 ${isEncerrado ? 'bg-zinc-50/50 opacity-60' : 'bg-white'}">
+                    <div class="flex flex-col">
+                        <span class="text-[10px] uppercase font-bold ${isEncerrado ? 'text-zinc-400' : 'text-amber-600'} tracking-wider">${isEncerrado ? '1º Leilão (Encerrado)' : '1º Leilão (Aberto)'}</span>
+                        <span class="text-xs ${isEncerrado ? 'text-zinc-500' : 'font-medium text-zinc-900'}">${dataLeilao1 ? formatDate(dataLeilao1) : 'Data não informada'}</span>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs ${isEncerrado ? 'text-zinc-400 line-through' : 'text-zinc-400 uppercase tracking-wide'}">${isEncerrado ? 'Mínimo:' : 'Lance Mínimo'}</span>
+                        <span class="block ${isEncerrado ? 'text-sm font-medium text-zinc-500 decoration-zinc-400' : 'text-2xl font-serif font-semibold text-zinc-900 tracking-tight'}">${formatCurrency(valorLeilao1)}</span>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // 2º Leilão (se existir) - sempre aparece como aberto
+        if (dataLeilao2 || valorLeilao2) {
+            html += `
+                <div class="flex items-center justify-between p-4 bg-white relative">
+                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-amber-500"></div>
+                    <div class="flex flex-col">
+                        <span class="text-[10px] uppercase font-bold text-amber-600 tracking-wider mb-0.5">2º Leilão (Aberto)</span>
+                        <span class="text-xs font-medium text-zinc-900">${dataLeilao2 ? `Encerra em: ${formatDate(dataLeilao2)}` : 'Em andamento'}</span>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-[10px] text-zinc-400 uppercase tracking-wide">Lance Mínimo</span>
+                        <div class="text-2xl font-serif font-semibold text-zinc-900 tracking-tight">${formatCurrency(valorLeilao2)}</div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        auctionInfo.innerHTML = html || '<div class="p-4 text-sm text-zinc-500">Informações de leilão não disponíveis</div>';
+    }
+
+    // Função para popular a página com dados do Supabase
+    function populatePage(property) {
+        if (!property) {
+            console.error('Dados do imóvel inválidos');
+            return;
+        }
+
+        // Título e informações básicas - campos do Supabase
+        const title = property.titulo_propriedade || property.name || 'Imóvel';
+        document.getElementById('property-title').textContent = title;
+        
+        // Endereço completo - campos do Supabase
+        const endereco = property.endereco || '';
+        const bairro = property.bairro || '';
+        const cidade = property.cidade || '';
+        const estado = property.estado || '';
+        
+        // Montar endereço completo
+        let enderecoCompleto = endereco;
+        if (bairro) enderecoCompleto += `, ${bairro}`;
+        if (cidade) enderecoCompleto += `, ${cidade}`;
+        if (estado) enderecoCompleto += ` - ${estado}`;
+        
+        document.getElementById('property-address').textContent = enderecoCompleto || 'Endereço não informado';
+        
+        // Referência - usar id ou slug
+        const ref = property.id || property.slug || '-';
+        document.getElementById('ref-number').textContent = `Ref: ${ref}`;
+        
+        // Breadcrumb - usar título ou slug
+        document.getElementById('breadcrumb-lote').textContent = title || property.slug || 'Imóvel';
+
+        // Badge do lote - usar slug (formato mais curto) ou id
+        const loteBadge = document.getElementById('lote-badge');
+        if (property.slug) {
+            // Extrair apenas a parte final do slug se for muito longo
+            const slugParts = property.slug.split('-');
+            loteBadge.textContent = slugParts[slugParts.length - 1].toUpperCase() || property.slug.toUpperCase();
+        } else if (property.id) {
+            loteBadge.textContent = `ID: ${property.id}`;
+        }
+
+        // Status do leilão - campo tipo_leilao do Supabase
+        const statusBadge = document.getElementById('status-badge');
+        const tipoLeilao = property.tipo_leilao || '';
+        if (tipoLeilao) {
+            statusBadge.innerHTML = `
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                ${tipoLeilao}
+            `;
+        } else {
+            // Fallback: verificar se tem leilão ativo
+            const temLeilaoAtivo = property.data_leilao_2 || property.leilao_2;
+            if (temLeilaoAtivo) {
+                statusBadge.innerHTML = `
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                    Em Leilão
+                `;
+            }
+        }
+
+        // Imagem principal - campo imagem do Supabase
+        const mainImage = document.getElementById('main-image');
+        if (property.imagem) {
+            mainImage.src = property.imagem;
+                mainImage.alt = title;
+        } else {
+            mainImage.src = 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=2000';
+            mainImage.alt = title;
+        }
+
+        // Mapa - gerar URL do Google Maps automaticamente
+        const mapIframe = document.getElementById('map-iframe');
+        if (enderecoCompleto) {
+            const address = encodeURIComponent(enderecoCompleto);
+            mapIframe.src = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6d-s6Ukk6Fh5FkE&q=${address}`;
+        }
+
+        // Street View - usar imagem padrão
+        const streetImage = document.getElementById('street-image');
+            streetImage.src = 'https://images.unsplash.com/photo-1542365886-074902187a06?auto=format&fit=crop&q=80&w=2000';
+
+        // Características do imóvel - campos do Supabase
+        document.getElementById('property-type').textContent = property.tipo_propriedade || '-';
+        
+        // Área - usar zona se disponível
+        const area = property.zona || '';
+        document.getElementById('property-area').textContent = area || '-';
+        
+        // Quartos - campo quartos do Supabase
+        document.getElementById('property-bedrooms').textContent = property.quartos || '-';
+        
+        // Vagas - campo garagem do Supabase
+        document.getElementById('property-parking').textContent = property.garagem || '-';
+
+        // Informações de leilão
+        renderAuctionInfo(property);
+
+        // Forma de pagamento - campos do Supabase (boolean)
+        const formasPagamento = [];
+        if (property.fgts === true) formasPagamento.push('FGTS');
+        if (property.financiamento === true) formasPagamento.push('Financiamento');
+        
+        // Texto de parcelamento
+        let textoParcelamento = '';
+        if (property.parcelamento === true) {
+            formasPagamento.push('Parcelamento');
+        }
+        
+        if (formasPagamento.length > 0) {
+            let textoPagamento = `Formas de pagamento: ${formasPagamento.join(', ')}`;
+            document.getElementById('payment-text').textContent = textoPagamento;
+        } else {
+            // Se não houver formas de pagamento, esconder a seção
+            document.getElementById('payment-info').classList.add('hidden');
+        }
+
+        // Descrição - campo descricao do Supabase
+        const descriptionEl = document.getElementById('property-description');
+        const descricao = property.descricao || '';
+        if (descricao) {
+            // Se for HTML, usar innerHTML; se for texto, usar textContent
+            if (descricao.includes('<')) {
+                descriptionEl.innerHTML = descricao;
+            } else {
+                descriptionEl.innerHTML = `<p>${descricao}</p>`;
+            }
+        } else {
+            descriptionEl.innerHTML = '<p>Descrição não disponível.</p>';
+        }
+
+        // Links - usar campo url se disponível
+        // Edital do Leilão
+        if (property.url) {
+            document.getElementById('edital-link').href = property.url;
+            document.getElementById('edital-link').target = '_blank';
+            document.getElementById('edital-link').rel = 'noopener noreferrer';
+        } else {
+            // Se não tiver URL, desabilitar o link
+            document.getElementById('edital-link').href = '#';
+            document.getElementById('edital-link').classList.add('opacity-50', 'cursor-not-allowed');
+        }
+        
+        // Matrícula (RGI) - usar mesmo URL do edital
+        if (property.url) {
+            document.getElementById('matricula-link').href = property.url;
+            document.getElementById('matricula-link').target = '_blank';
+            document.getElementById('matricula-link').rel = 'noopener noreferrer';
+        } else {
+            document.getElementById('matricula-link').href = '#';
+            document.getElementById('matricula-link').classList.add('opacity-50', 'cursor-not-allowed');
+        }
+
+        // Configurar links de compartilhamento
+        const currentUrl = encodeURIComponent(window.location.href);
+        const shareText = encodeURIComponent(`${title} - ${enderecoCompleto}`);
+        const shareTitle = encodeURIComponent(title);
+        
+        // Facebook
+        const facebookLink = document.getElementById('share-facebook');
+        if (facebookLink) {
+            facebookLink.href = `https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`;
+            facebookLink.target = '_blank';
+            facebookLink.rel = 'noopener noreferrer';
+        }
+        
+        // Twitter
+        const twitterLink = document.getElementById('share-twitter');
+        if (twitterLink) {
+            twitterLink.href = `https://twitter.com/intent/tweet?url=${currentUrl}&text=${shareText}`;
+            twitterLink.target = '_blank';
+            twitterLink.rel = 'noopener noreferrer';
+        }
+        
+        // LinkedIn
+        const linkedinLink = document.getElementById('share-linkedin');
+        if (linkedinLink) {
+            linkedinLink.href = `https://www.linkedin.com/sharing/share-offsite/?url=${currentUrl}`;
+            linkedinLink.target = '_blank';
+            linkedinLink.rel = 'noopener noreferrer';
+        }
+        
+        // WhatsApp
+        const whatsappLink = document.getElementById('share-whatsapp');
+        if (whatsappLink) {
+            whatsappLink.href = `https://wa.me/?text=${shareText}%20${currentUrl}`;
+        }
+        
+        // Email
+        const emailLink = document.getElementById('share-email');
+        if (emailLink) {
+            emailLink.href = `mailto:?subject=${shareTitle}&body=${shareText}%20${currentUrl}`;
+        }
+
+        // Mostrar conteúdo
+        document.getElementById('loading-state').classList.add('hidden');
+        document.getElementById('content-area').classList.remove('hidden');
+        document.getElementById('description-section').classList.remove('hidden');
+    }
+
+    // Função para obter parâmetros da URL
+    function getUrlParams() {
+        const params = new URLSearchParams(window.location.search);
+        return {
+            slug: params.get('slug') || params.get('id'),
+        };
+    }
+
+    // Função para criar card de imóvel similar
+    function createSimilarPropertyCard(property) {
+        const title = property.titulo_propriedade || property.name || 'Imóvel';
+        const endereco = property.endereco || '';
+        const photo = property.imagem || 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&q=80&w=800';
+        const valorLeilao2 = property.leilao_2 || property.leilao_1 || 0;
+        const slug = property.slug || property.id;
+        const detailUrl = `imovel.html?slug=${encodeURIComponent(slug)}`;
+
+        return `
+            <article class="bg-white rounded-lg overflow-hidden group hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 border border-zinc-200 flex flex-col">
+                <a href="${detailUrl}" class="relative h-56 overflow-hidden block">
+                    <img src="${photo}" alt="${title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" onerror="this.src='https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&q=80&w=800'">
+                </a>
+                <div class="p-6 flex flex-col flex-grow">
+                    <a href="${detailUrl}" class="block">
+                        <h3 class="text-zinc-900 font-serif text-lg leading-tight mb-2 group-hover:text-amber-600 transition-colors">${title}</h3>
+                        <div class="flex items-start gap-2 text-zinc-500 text-xs mb-4">
+                            <i data-lucide="map-pin" class="w-3.5 h-3.5 mt-0.5 text-amber-600 shrink-0"></i>
+                            <span>${endereco || 'Endereço não informado'}</span>
+                        </div>
+                    </a>
+                    <div class="mt-auto pt-4 border-t border-zinc-100">
+                        <div class="text-xs text-zinc-400 uppercase tracking-wide mb-1">Lance Mínimo</div>
+                        <div class="text-lg font-serif font-semibold text-zinc-900">${formatCurrency(valorLeilao2)}</div>
+                    </div>
+                    <a href="${detailUrl}" class="mt-4 w-full bg-white hover:bg-zinc-50 border-2 border-amber-600 text-amber-600 hover:text-amber-700 text-xs font-bold px-4 py-2.5 rounded flex items-center justify-center gap-2 transition-colors uppercase tracking-wide">
+                        Ver detalhes
+                        <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                    </a>
+                </div>
+            </article>
+        `;
+    }
+
+    // Função para carregar imóveis similares
+    async function loadSimilarProperties(currentSlug) {
+        try {
+            if (!supabase) {
+                console.warn('⚠️ Supabase não inicializado, não é possível carregar imóveis similares');
+                return;
+            }
+
+            // Buscar até 4 imóveis similares (mesmo tipo ou cidade)
+            const { data: properties, error } = await supabase
+                .from('leiloes_imoveis')
+                .select('*')
+                .limit(4);
+            
+            if (error) {
+                console.error('❌ Erro ao buscar imóveis similares:', error);
+                return;
+            }
+
+            if (!properties || properties.length === 0) {
+                return;
+            }
+
+            // Filtrar o imóvel atual e pegar até 3 similares
+            const similarProperties = properties
+                .filter(prop => prop.slug !== currentSlug)
+                .slice(0, 3);
+
+            if (similarProperties.length === 0) {
+                return;
+            }
+
+            const grid = document.getElementById('similar-properties-grid');
+            const section = document.getElementById('similar-properties-section');
+            
+            if (grid && section) {
+                grid.innerHTML = similarProperties.map(prop => createSimilarPropertyCard(prop)).join('');
+                section.classList.remove('hidden');
+                
+                // Reinicializar ícones
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            }
+        } catch (error) {
+            console.error('Erro ao carregar imóveis similares:', error);
+        }
+    }
+
+    // Função principal de inicialização
+    async function init() {
+        // Verificar se Supabase está inicializado
+        if (!supabase) {
+            console.error('❌ Supabase não inicializado');
+            document.getElementById('loading-state').innerHTML = `
+                <div class="col-span-12 text-center py-12">
+                    <p class="text-zinc-600 mb-4">Erro ao inicializar Supabase.</p>
+                    <p class="text-sm text-zinc-500">Verifique o console para mais detalhes.</p>
+                </div>
+            `;
+            return;
+        }
+        
+        // Inicializar ícones Lucide imediatamente
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+
+        // Obter parâmetros da URL
+        const params = getUrlParams();
+        
+        if (!params.slug) {
+            console.error('Parâmetro slug é obrigatório na URL');
+            document.getElementById('loading-state').innerHTML = `
+                <div class="col-span-12 text-center py-12">
+                    <p class="text-zinc-600 mb-4">Parâmetro slug é obrigatório na URL.</p>
+                    <p class="text-sm text-zinc-500">Use: ?slug=YYY</p>
+                </div>
+            `;
+            return;
+        }
+        
+        try {
+            // Buscar dados do imóvel do Supabase
+            console.log('🔍 Iniciando busca do imóvel com slug:', params.slug);
+            const property = await getPropertyBySlug(params.slug);
+            
+            if (!property) {
+                document.getElementById('loading-state').innerHTML = `
+                    <div class="col-span-12 text-center py-12">
+                        <p class="text-zinc-600 mb-4">Imóvel não encontrado.</p>
+                        <p class="text-sm text-zinc-500">Verifique se o slug está correto.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Popular página com os dados
+            populatePage(property);
+            
+            // Carregar imóveis similares
+            await loadSimilarProperties(params.slug);
+            
+            // Recriar ícones após atualizar o DOM (com delay para garantir que o DOM foi atualizado)
+            setTimeout(() => {
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            }, 100);
+        } catch (error) {
+            console.error('Erro ao carregar dados:', error);
+            document.getElementById('loading-state').innerHTML = `
+                <div class="col-span-12 text-center py-12">
+                    <p class="text-zinc-600 mb-4">Erro ao carregar dados do imóvel.</p>
+                    <p class="text-sm text-zinc-500">${error.message}</p>
+                </div>
+            `;
+        }
+    }
+
+    // Função para alternar visualizações
+    function switchView(type) {
+        document.querySelectorAll('.media-view').forEach(el => el.classList.add('hidden'));
+        document.getElementById('view-' + type).classList.remove('hidden');
+        document.querySelectorAll('.view-btn').forEach(btn => {
+            btn.classList.remove('bg-zinc-900', 'text-white', 'shadow-sm');
+            btn.classList.add('text-zinc-500', 'hover:bg-zinc-100', 'hover:text-zinc-900');
+        });
+        const activeBtn = document.getElementById('btn-' + type);
+        activeBtn.classList.remove('text-zinc-500', 'hover:bg-zinc-100', 'hover:text-zinc-900');
+        activeBtn.classList.add('bg-zinc-900', 'text-white', 'shadow-sm');
+    }
+
+    // Expor função globalmente
+    window.switchView = switchView;
+
+    // Inicializar quando o DOM estiver pronto e o Supabase estiver carregado
+    function waitForSupabase() {
+        if (window.supabase && typeof window.supabase.createClient === 'function') {
+            if (!supabase) {
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                console.log('✅ Supabase inicializado após espera');
+            }
+            init();
+        } else {
+            // Tentar novamente após 100ms
+            setTimeout(waitForSupabase, 100);
+        }
+    }
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', waitForSupabase);
+    } else {
+        waitForSupabase();
+    }
+    
+    // Garantir que os ícones sejam inicializados após o carregamento completo
+    window.addEventListener('load', () => {
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    });
+
+    // Testimonials Carousel
+    (function() {
+        let currentTestimonial = 0;
+        const totalTestimonials = 7;
+        const slider = document.getElementById('testimonialsSlider');
+        const prevBtn = document.getElementById('testimonialPrev');
+        const nextBtn = document.getElementById('testimonialNext');
+        const dots = document.querySelectorAll('.testimonial-dot');
+        
+        if (!slider) return;
+        
+        function updateCarousel() {
+            if (slider) {
+                slider.style.transform = `translateX(-${currentTestimonial * 100}%)`;
+            }
+            
+            dots.forEach((dot, index) => {
+                if (index === currentTestimonial) {
+                    dot.classList.remove('bg-zinc-300', 'hover:bg-amber-400');
+                    dot.classList.add('bg-amber-600');
+                    dot.style.width = '0.75rem';
+                    dot.style.height = '0.75rem';
+                } else {
+                    dot.classList.remove('bg-amber-600');
+                    dot.classList.add('bg-zinc-300', 'hover:bg-amber-400');
+                    dot.style.width = '0.5rem';
+                    dot.style.height = '0.5rem';
+                }
+            });
+            
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+        
+        function nextTestimonial() {
+            currentTestimonial = (currentTestimonial + 1) % totalTestimonials;
+            updateCarousel();
+        }
+        
+        function prevTestimonial() {
+            currentTestimonial = (currentTestimonial - 1 + totalTestimonials) % totalTestimonials;
+            updateCarousel();
+        }
+        
+        if (prevBtn) prevBtn.addEventListener('click', prevTestimonial);
+        if (nextBtn) nextBtn.addEventListener('click', nextTestimonial);
+        
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentTestimonial = index;
+                updateCarousel();
+            });
+        });
+        
+        updateCarousel();
+    })();
+
+    // Mobile Menu Toggle
+    document.addEventListener('DOMContentLoaded', function() {
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+        if (!mobileMenuToggle || !mobileMenu) return;
+        
+        const menuIcon = mobileMenuToggle.querySelector('.mobile-menu-icon');
+        const closeIcon = mobileMenuToggle.querySelector('.mobile-menu-close');
+
+        mobileMenuToggle.addEventListener('click', function() {
+            const isOpen = mobileMenu.classList.contains('opacity-100');
+            
+            if (isOpen) {
+                // Close menu
+                mobileMenu.classList.remove('opacity-100', 'visible', 'translate-y-0');
+                mobileMenu.classList.add('opacity-0', 'invisible', '-translate-y-4');
+                menuIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
+            } else {
+                // Open menu
+                mobileMenu.classList.remove('opacity-0', 'invisible', '-translate-y-4');
+                mobileMenu.classList.add('opacity-100', 'visible', 'translate-y-0');
+                menuIcon.classList.add('hidden');
+                closeIcon.classList.remove('hidden');
+            }
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!mobileMenuToggle.contains(e.target) && !mobileMenu.contains(e.target)) {
+                mobileMenu.classList.remove('opacity-100', 'visible', 'translate-y-0');
+                mobileMenu.classList.add('opacity-0', 'invisible', '-translate-y-4');
+                menuIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
+            }
+        });
+    });
+
+</script>
+</body>
+</html>
+
