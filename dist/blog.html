@@ -1,1424 +1,442 @@
-<html lang="pt-BR" class="scroll-smooth"><head>
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog - Artigos e Entrevistas | Cataldo Siston Advogados</title>
-    <link rel="icon" type="image/png" href="https://cdn.prod.website-files.com/69023853a6b8fa97b90fd72d/69305cca9521a74c0198aa54_FAVICON.png">
+    <title>Imóveis em Leilão | Cataldo Siston Advogados</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
         h1, h2, h3, h4, h5, .font-serif { font-family: 'Playfair Display', serif; }
         
-        /* Custom Marble/Texture Background */
-        .bg-marble {
-            background-color: #f9fafb;
+        /* Custom Dark Texture Background */
+        .bg-noise {
+            background-color: #09090b;
             background-image: 
-                radial-gradient(at 0% 0%, rgba(0,0,0,0.02) 0px, transparent 50%),
-                radial-gradient(at 100% 0%, rgba(0,0,0,0.02) 0px, transparent 50%);
+                radial-gradient(at 0% 0%, rgba(255,255,255,0.03) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(217, 119, 6, 0.05) 0px, transparent 50%);
         }
-        
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #18181b; }
-        ::-webkit-scrollbar-thumb { background: #52525b; border-radius: 3px; }
+        ::-webkit-scrollbar-track { background: #09090b; }
+        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #d97706; }
 
-        /* Smooth table striping */
-        .table-row-custom:nth-child(even) { background-color: #fafafa; }
-        .table-row-custom:hover { background-color: #f4f4f5; }
+        /* Typography spacing for article content */
+        .article-content p { margin-bottom: 1.5rem; line-height: 1.8; color: #a1a1aa; }
+        .article-content h2 { color: white; margin-top: 3rem; margin-bottom: 1rem; font-size: 1.875rem; line-height: 2.25rem; font-weight: 500; letter-spacing: -0.025em; font-family: 'Playfair Display', serif; }
+        .article-content h3 { color: white; margin-top: 2rem; margin-bottom: 0.75rem; font-size: 1.5rem; line-height: 2rem; font-weight: 500; font-family: 'Playfair Display', serif; }
+        .article-content ul { margin-bottom: 1.5rem; list-style-type: disc; padding-left: 1.5rem; color: #a1a1aa; }
+        .article-content li { margin-bottom: 0.5rem; }
+        .article-content strong { color: #e4e4e7; font-weight: 600; }
+        .article-content blockquote { border-left: 2px solid #d97706; padding-left: 1.5rem; margin: 2rem 0; font-style: italic; color: #d4d4d8; font-family: 'Playfair Display', serif; font-size: 1.25rem; }
     </style>
 </head>
-<body class="bg-white text-zinc-600 antialiased flex flex-col min-h-screen">
+<body class="bg-zinc-950 text-zinc-400 antialiased flex flex-col min-h-screen bg-noise selection:bg-amber-900 selection:text-white">
 
     <!-- Topbar -->
-    <div class="bg-[#1a1a1a] text-zinc-400 py-2 text-[11px] border-b border-zinc-800/50 relative z-50">
-        <div class="container mx-auto px-4 lg:px-12 flex justify-between items-center max-w-[1400px]">
-            <div class="flex items-center gap-6">
-                <div class="flex items-center gap-2 hover:text-white transition-colors cursor-pointer">
-                    <i data-lucide="mail" class="w-3.5 h-3.5 text-amber-500"></i>
+    <div class="bg-zinc-950 border-b border-zinc-900 text-zinc-500 py-2.5">
+        <div class="container mx-auto px-6 max-w-7xl flex flex-col md:flex-row justify-between items-center text-xs font-medium gap-3">
+            <div class="flex flex-wrap justify-center md:justify-start items-center gap-6">
+                <a href="mailto:contato@cataldosiston-adv.com.br" class="hover:text-amber-500 transition-colors flex items-center gap-2">
+                    <i data-lucide="mail" class="w-3.5 h-3.5" stroke-width="1.5"></i>
                     <span>contato@cataldosiston-adv.com.br</span>
-                </div>
-                <div class="hidden sm:flex items-center gap-2 hover:text-white transition-colors cursor-pointer">
-                    <i data-lucide="phone" class="w-3.5 h-3.5 text-amber-500"></i>
+                </a>
+                <a href="tel:+552131733795" class="hover:text-amber-500 transition-colors flex items-center gap-2">
+                    <i data-lucide="phone" class="w-3.5 h-3.5" stroke-width="1.5"></i>
                     <span>+55 (21) 3173-3795</span>
-                </div>
-                <a href="#" class="hidden md:flex items-center gap-1 bg-[#25D366] hover:bg-[#20bd5a] text-white px-2 py-0.5 rounded transition-colors font-semibold">
-                    <i data-lucide="message-circle" class="w-3 h-3"></i> Fale Conosco
+                </a>
+                <a href="https://wa.me/552131733795" class="text-green-600 hover:text-green-500 transition-colors flex items-center gap-2">
+                    <i data-lucide="message-circle" class="w-3.5 h-3.5" stroke-width="1.5"></i>
+                    <span>Fale Conosco</span>
                 </a>
             </div>
-            <div class="flex items-center gap-4">
-                <div class="flex gap-3">
-                    <a href="#" class="hover:text-amber-500 transition-colors"><i data-lucide="facebook" class="w-3.5 h-3.5"></i></a>
-                    <a href="#" class="hover:text-amber-500 transition-colors"><i data-lucide="instagram" class="w-3.5 h-3.5"></i></a>
-                    <a href="#" class="hover:text-amber-500 transition-colors"><i data-lucide="youtube" class="w-3.5 h-3.5"></i></a>
+            <div class="flex gap-4">
+                <a href="#" class="hover:text-white transition-colors"><i data-lucide="facebook" class="w-3.5 h-3.5" stroke-width="1.5"></i></a>
+                <a href="#" class="hover:text-white transition-colors"><i data-lucide="instagram" class="w-3.5 h-3.5" stroke-width="1.5"></i></a>
+                <a href="#" class="hover:text-white transition-colors"><i data-lucide="scale" class="w-3.5 h-3.5" stroke-width="1.5"></i></a>
+                <a href="#" class="hover:text-white transition-colors"><i data-lucide="youtube" class="w-3.5 h-3.5" stroke-width="1.5"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <header class="sticky top-0 z-50 bg-zinc-950/80 backdrop-blur-xl border-b border-zinc-900">
+        <div class="container mx-auto px-6 max-w-7xl h-24 flex items-center justify-between">
+            <a href="/" class="flex flex-col group">
+                <div class="flex items-center gap-2">
+                    <span class="font-serif text-2xl tracking-tight text-white font-medium">CATALDO SISTON</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="h-px w-8 bg-amber-600"></span>
+                    <span class="text-[10px] uppercase tracking-[0.2em] text-zinc-500 group-hover:text-amber-600 transition-colors">Advogados</span>
+                </div>
+            </a>
+
+            <nav class="hidden lg:flex items-center gap-8 text-xs font-medium uppercase tracking-wide text-zinc-400">
+                <a href="#" class="hover:text-amber-500 transition-colors">Quem Somos</a>
+                <a href="#" class="hover:text-amber-500 transition-colors">Imóveis em Leilão</a>
+                <a href="#" class="hover:text-amber-500 transition-colors">Assessoria</a>
+                <a href="#" class="hover:text-amber-500 transition-colors">Direito Imobiliário</a>
+                <a href="#" class="text-amber-500">Blog</a>
+                <a href="#contato" class="bg-zinc-100 text-zinc-950 px-5 py-2.5 rounded hover:bg-amber-500 hover:text-white transition-all">Contato</a>
+            </nav>
+
+            <button class="lg:hidden text-white">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Breadcrumb & Article Header -->
+    <div class="relative pt-12 pb-12 lg:pt-20 lg:pb-16 bg-zinc-950 border-b border-zinc-900">
+        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
+        <div class="container mx-auto px-6 max-w-7xl relative z-10">
+            
+            <div class="max-w-4xl mx-auto">
+                <!-- Breadcrumbs -->
+                <nav class="flex items-center gap-2 text-[10px] uppercase tracking-widest text-zinc-500 mb-8 font-medium">
+                    <a href="#" class="hover:text-amber-500 transition-colors">Home</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3 text-zinc-700"></i>
+                    <a href="#" class="hover:text-amber-500 transition-colors">Blog</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3 text-zinc-700"></i>
+                    <span class="text-amber-600">Leilões de Imóveis</span>
+                </nav>
+
+                <h1 class="text-3xl md:text-5xl lg:text-6xl font-serif text-white tracking-tight leading-tight mb-8">
+                    Imóveis em leilão costumam estar em péssimo estado de conservação?
+                </h1>
+
+                <!-- Meta Data -->
+                <div class="flex flex-wrap items-center gap-6 border-t border-zinc-800 pt-6">
+                    <div class="flex items-center gap-3">
+                        <img src="https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&q=80&w=100" alt="Raphael Siston" class="w-10 h-10 rounded-full object-cover border border-zinc-700">
+                        <div class="flex flex-col">
+                            <span class="text-zinc-200 text-xs font-medium">Raphael Siston</span>
+                            <span class="text-zinc-600 text-[10px] uppercase tracking-wider">Advogado Especialista</span>
+                        </div>
+                    </div>
+                    <div class="hidden md:block w-px h-8 bg-zinc-800"></div>
+                    <div class="flex items-center gap-2 text-zinc-500 text-xs">
+                        <i data-lucide="calendar" class="w-4 h-4"></i>
+                        <span>21 Fev 2025</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-zinc-500 text-xs">
+                        <i data-lucide="clock" class="w-4 h-4"></i>
+                        <span>6 min de leitura</span>
+                    </div>
+                    <div class="ml-auto flex gap-2">
+                        <button class="w-8 h-8 rounded-full border border-zinc-800 bg-zinc-900/50 flex items-center justify-center text-zinc-400 hover:text-white hover:border-amber-600 transition-colors">
+                            <i data-lucide="linkedin" class="w-3.5 h-3.5"></i>
+                        </button>
+                        <button class="w-8 h-8 rounded-full border border-zinc-800 bg-zinc-900/50 flex items-center justify-center text-zinc-400 hover:text-white hover:border-amber-600 transition-colors">
+                            <i data-lucide="twitter" class="w-3.5 h-3.5"></i>
+                        </button>
+                        <button class="w-8 h-8 rounded-full border border-zinc-800 bg-zinc-900/50 flex items-center justify-center text-zinc-400 hover:text-white hover:border-amber-600 transition-colors">
+                            <i data-lucide="facebook" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Navbar -->
-    <nav class="sticky top-0 z-40 mx-4 lg:mx-8">
-        <div class="bg-white rounded-xl border border-zinc-200/50 backdrop-blur-md bg-white/90 shadow-lg shadow-zinc-900/5 mt-4">
-            <div class="container mx-auto px-4 lg:px-12 flex justify-between items-center max-w-[1400px] py-6">
-                <a href="index.html" class="flex flex-col items-start group">
-                    <div class="flex items-center gap-2 px-3 py-2 rounded-lg">
-                        <img src="https://cdn.prod.website-files.com/69023853a6b8fa97b90fd72d/6911dd6a49f6f0dabff0a498_logotipo_cataldo_siston.png" alt="Cataldo Siston Advogados" class="h-8 w-auto">
-                </div>
-            </a>
-
-                <div class="hidden lg:flex items-center gap-8">
-                    <a href="escritorio-imobiliario.html" class="text-xs font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider">Quem somos</a>
-
-                    <!-- Dropdown Imóveis em Leilão -->
-                    <div class="relative group">
-                        <button class="text-xs font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider flex items-center gap-1">
-                            Imóveis em Leilão
-                            <i data-lucide="chevron-down" class="w-3 h-3 group-hover:rotate-180 transition-transform"></i>
-            </button>
-                        <div class="absolute top-full left-0 mt-2 bg-white border border-zinc-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 min-w-[150px] z-50">
-                            <a href="imoveis-rj.html" class="block px-4 py-3 text-xs font-medium text-zinc-700 hover:text-amber-600 hover:bg-amber-50 transition-colors uppercase tracking-wider">Imóveis RJ</a>
-                            <a href="imoveis-sp.html" class="block px-4 py-3 text-xs font-medium text-zinc-700 hover:text-amber-600 hover:bg-amber-50 transition-colors uppercase tracking-wider">Imóveis SP</a>
-        </div>
-                    </div>
-
-                    <a href="assessoria.html" class="text-xs font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider">Assessoria</a>
-                    
-                    <!-- Dropdown Direito Imobiliário -->
-                    <div class="relative group">
-                        <button class="text-xs font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider flex items-center gap-1">
-                            Direito Imobiliário
-                            <i data-lucide="chevron-down" class="w-3 h-3 group-hover:rotate-180 transition-transform"></i>
-                        </button>
-                        <div class="absolute top-full left-0 mt-2 bg-white border border-zinc-200 rounded-lg shadow-lg opacity-100 visible transition-all duration-200 min-w-[180px] z-50">
-                            <a href="direito-imobiliario.html" class="block px-4 py-3 text-xs font-medium text-zinc-700 hover:text-amber-600 hover:bg-amber-50 transition-colors uppercase tracking-wider">Direito Imobiliário</a>
-                            <a href="distrato-imobiliario.html" class="block px-4 py-3 text-xs font-medium text-zinc-700 hover:text-amber-600 hover:bg-amber-50 transition-colors uppercase tracking-wider">Distrato Imobiliário</a>
-                        </div>
-                    </div>
-
-                    <a href="casos-reais.html" class="text-xs font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider">Casos Reais</a>
-                    <a href="blog.html" class="text-xs font-medium text-zinc-900 border-b border-amber-500 pb-1 transition-colors uppercase tracking-wider">Blog</a>
-                    <a href="contato.html" class="text-xs font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider">Contato</a>
-                </div>
+    <!-- Main Content Area -->
+    <main class="py-12 lg:py-20 bg-zinc-950">
+        <div class="container mx-auto px-6 max-w-7xl">
+            <div class="grid lg:grid-cols-12 gap-12">
                 
-                <button id="mobileMenuToggle" class="lg:hidden text-zinc-900 relative z-50">
-                    <i data-lucide="menu" class="w-6 h-6 mobile-menu-icon"></i>
-                    <i data-lucide="x" class="w-6 h-6 mobile-menu-close hidden"></i>
-                </button>
-            </div>
+                <!-- Share Stick (Left) -->
+                <div class="hidden lg:flex lg:col-span-1 flex-col gap-4 sticky top-32 h-fit items-center">
+                    <span class="text-[10px] uppercase tracking-widest text-zinc-600 font-bold vertical-lr mb-2" style="writing-mode: vertical-rl; transform: rotate(180deg);">Compartilhar</span>
+                    <button class="w-10 h-10 rounded border border-zinc-800 hover:bg-zinc-900 text-zinc-500 hover:text-amber-500 transition-all flex items-center justify-center">
+                        <i data-lucide="linkedin" class="w-4 h-4"></i>
+                    </button>
+                    <button class="w-10 h-10 rounded border border-zinc-800 hover:bg-zinc-900 text-zinc-500 hover:text-green-500 transition-all flex items-center justify-center">
+                        <i data-lucide="message-circle" class="w-4 h-4"></i>
+                    </button>
+                    <button class="w-10 h-10 rounded border border-zinc-800 hover:bg-zinc-900 text-zinc-500 hover:text-blue-500 transition-all flex items-center justify-center">
+                        <i data-lucide="facebook" class="w-4 h-4"></i>
+                    </button>
+                    <button class="w-10 h-10 rounded border border-zinc-800 hover:bg-zinc-900 text-zinc-500 hover:text-white transition-all flex items-center justify-center">
+                        <i data-lucide="link" class="w-4 h-4"></i>
+                    </button>
+                </div>
 
-            <!-- Mobile Menu -->
-            <div id="mobileMenu" class="lg:hidden absolute top-full left-0 right-0 bg-white border-t border-zinc-200 rounded-b-xl shadow-2xl opacity-0 invisible transform -translate-y-4 transition-all duration-300 z-40">
-                <div class="p-6 space-y-4">
-                    <a href="escritorio-imobiliario.html" class="block text-sm font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider py-2">Quem somos</a>
-
-                    <!-- Mobile Dropdown for Imóveis em Leilão -->
-                    <div class="space-y-2">
-                        <div class="text-sm font-medium text-zinc-900 uppercase tracking-wider py-2">Imóveis em Leilão</div>
-                        <div class="pl-4 space-y-2">
-                            <a href="imoveis-rj.html" class="block text-sm text-zinc-600 hover:text-amber-600 transition-colors py-1">Imóveis RJ</a>
-                            <a href="imoveis-sp.html" class="block text-sm text-zinc-600 hover:text-amber-600 transition-colors py-1">Imóveis SP</a>
-                        </div>
+                <!-- Article Body (Center) -->
+                <article class="col-span-12 lg:col-span-8 lg:pr-8 article-content">
+                    <!-- Featured Image -->
+                    <div class="mb-12 rounded-lg overflow-hidden border border-zinc-800 shadow-2xl relative aspect-[16/9]">
+                        <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=1200" alt="Imóvel antigo" class="object-cover w-full h-full opacity-90">
+                        <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/60 to-transparent"></div>
                     </div>
 
-                    <a href="assessoria.html" class="block text-sm font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider py-2">Assessoria</a>
+                    <p class="text-lg text-zinc-300 font-light leading-relaxed">
+                        Muitos investidores e compradores em potencial se preocupam com o estado de conservação dos imóveis em leilão. A ideia de que essas propriedades estão completamente deterioradas, exigindo reformas onerosas, é uma das principais barreiras que afastam interessados. No entanto, será que essa percepção condiz com a realidade do mercado atual?
+                    </p>
+
+                    <h2>O mito da "ruína" no leilão judicial</h2>
+                    <p>
+                        É comum associar o leilão judicial a imóveis abandonados. Contudo, grande parte dos bens leiloados são ocupados pelos próprios devedores até o momento da arrematação. Isso significa que, em muitos casos, o imóvel está em condições habitáveis, pois vinha sendo utilizado como moradia ou sede comercial.
+                    </p>
+                    <p>
+                        A deterioração severa costuma ocorrer em casos específicos de abandono prolongado, o que é exceção e não regra. Além disso, o laudo de avaliação — documento obrigatório no processo — deve descrever o estado de conservação do bem, permitindo que o investidor calcule eventuais custos de reparo antes de ofertar o lance.
+                    </p>
+
+                    <blockquote>
+                        "O investidor diligente não deve temer o estado do imóvel, mas sim a falta de informação. O edital e o laudo de avaliação são os mapas para um bom negócio."
+                    </blockquote>
+
+                    <h2>Imóveis Ocupados vs. Desocupados</h2>
+                    <p>
+                        Uma distinção importante a ser feita é entre imóveis ocupados e desocupados.
+                    </p>
+                    <ul>
+                        <li><strong>Imóveis Ocupados:</strong> Geralmente estão em melhor estado de conservação interna, pois a manutenção básica tende a ser mantida pelos moradores. O risco aqui envolve a desocupação, que deve ser conduzida juridicamente.</li>
+                        <li><strong>Imóveis Desocupados:</strong> Podem sofrer com a ação do tempo se estiverem fechados há muito tempo, mas oferecem a vantagem da posse imediata (ou mais célere) após a regularização da carta de arrematação.</li>
+                    </ul>
+
+                    <h3>Como mitigar riscos na aquisição?</h3>
+                    <p>
+                        Para evitar surpresas desagradáveis, a assessoria jurídica especializada é fundamental. Além de analisar o processo judicial para garantir a segurança jurídica da arrematação, o advogado especialista pode identificar indícios no processo sobre a real situação fática do bem.
+                    </p>
+                    <p>
+                        Fotos anexadas ao laudo de avaliação, data da última vistoria pelo Oficial de Justiça e até mesmo pesquisas de mercado na região podem fornecer um panorama claro se o investimento exigirá uma reforma estética ("retrofit") ou estrutural.
+                    </p>
+
+                    <div class="bg-zinc-900/50 border-l-2 border-amber-600 p-6 my-8 rounded-r-lg">
+                        <h4 class="text-white font-serif text-lg mb-2">Dica do Especialista</h4>
+                        <p class="text-sm text-zinc-400 m-0 !leading-relaxed !mb-0">
+                            Sempre considere no seu cálculo de viabilidade econômica uma margem de segurança para reformas básicas (pintura, elétrica e hidráulica), mesmo que o imóvel aparente estar em bom estado. Isso garante a rentabilidade da operação.
+                        </p>
+                    </div>
+
+                    <h2>Conclusão</h2>
+                    <p>
+                        Afirmar que imóveis em leilão estão sempre em péssimo estado é um mito que pode fazer você perder excelentes oportunidades de negócio. Com a devida diligência prévia (Due Diligence) e o acompanhamento de um escritório especializado, é possível adquirir bens com descontos de 40% a 60% sobre o valor de mercado que necessitam apenas de intervenções cosméticas.
+                    </p>
+                    <p>
+                        O segredo do sucesso nos leilões não é a sorte, mas a informação qualificada aliada à estratégia jurídica correta.
+                    </p>
+
+                    <!-- Author Box -->
+                    <div class="mt-16 p-8 bg-zinc-900 border border-zinc-800 rounded-lg flex flex-col md:flex-row gap-6 items-center md:items-start text-center md:text-left">
+                        <img src="https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&q=80&w=200" alt="Raphael Siston" class="w-20 h-20 rounded-full object-cover border-2 border-amber-600/30">
+                        <div class="flex-1">
+                            <h4 class="text-white font-serif text-xl mb-1">Raphael Siston</h4>
+                            <p class="text-amber-600 text-[10px] uppercase tracking-widest font-bold mb-3">Sócio Fundador</p>
+                            <p class="text-zinc-400 text-sm leading-relaxed">
+                                Especialista em Direito Imobiliário e Leilões Judiciais e Extrajudiciais. Com vasta experiência na assessoria de arrematantes, atua garantindo segurança jurídica e rentabilidade em investimentos imobiliários.
+                            </p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Sidebar (Right) -->
+                <aside class="col-span-12 lg:col-span-3 space-y-12">
                     
-                    <!-- Mobile Dropdown for Direito Imobiliário -->
-                    <div class="space-y-2">
-                        <div class="text-sm font-medium text-zinc-900 uppercase tracking-wider py-2">Direito Imobiliário</div>
-                        <div class="pl-4 space-y-2">
-                            <a href="direito-imobiliario.html" class="block text-sm text-zinc-600 hover:text-amber-600 transition-colors py-1">Direito Imobiliário</a>
-                            <a href="distrato-imobiliario.html" class="block text-sm text-zinc-600 hover:text-amber-600 transition-colors py-1">Distrato Imobiliário</a>
+                    <!-- Search Widget -->
+                    <div class="relative group">
+                        <div class="absolute -inset-0.5 bg-gradient-to-r from-amber-600 to-amber-900 rounded opacity-20 blur transition duration-500"></div>
+                        <div class="relative flex bg-zinc-900 rounded border border-zinc-800 overflow-hidden">
+                            <input type="text" placeholder="Buscar..." class="w-full bg-transparent border-none text-white px-4 py-3 placeholder:text-zinc-600 focus:outline-none text-xs">
+                            <button class="text-zinc-500 hover:text-amber-500 px-4 transition-colors">
+                                <i data-lucide="search" class="w-4 h-4"></i>
+                            </button>
                         </div>
                     </div>
 
-                    <a href="casos-reais.html" class="block text-sm font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider py-2">Casos Reais</a>
-                    <a href="blog.html" class="block text-sm font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider py-2">Blog</a>
-                    <a href="contato.html" class="block text-sm font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider py-2">Contato</a>
+                    <!-- Categories -->
+                    <div>
+                        <h4 class="text-white font-serif text-lg mb-6 flex items-center gap-2">
+                            <span class="w-1 h-4 bg-amber-600 rounded-sm"></span> Categorias
+                        </h4>
+                        <ul class="space-y-1">
+                            <li><a href="#" class="block py-2 px-3 rounded hover:bg-zinc-900 text-sm text-zinc-400 hover:text-amber-500 transition-colors border-l border-transparent hover:border-amber-600/30">Leilões de Imóveis <span class="text-zinc-600 text-xs float-right">12</span></a></li>
+                            <li><a href="#" class="block py-2 px-3 rounded hover:bg-zinc-900 text-sm text-zinc-400 hover:text-amber-500 transition-colors border-l border-transparent hover:border-amber-600/30">Direito Imobiliário <span class="text-zinc-600 text-xs float-right">08</span></a></li>
+                            <li><a href="#" class="block py-2 px-3 rounded hover:bg-zinc-900 text-sm text-zinc-400 hover:text-amber-500 transition-colors border-l border-transparent hover:border-amber-600/30">Notícias <span class="text-zinc-600 text-xs float-right">05</span></a></li>
+                            <li><a href="#" class="block py-2 px-3 rounded hover:bg-zinc-900 text-sm text-zinc-400 hover:text-amber-500 transition-colors border-l border-transparent hover:border-amber-600/30">Regularização <span class="text-zinc-600 text-xs float-right">03</span></a></li>
+                        </ul>
+                    </div>
 
-                    <div class="pt-4 border-t border-zinc-200">
-                        <a href="https://wa.me/5521977294848?text=Olá!%20Tenho%20interesse%20em%20saber%20mais%20sobre%20leilões%20de%20imóveis." target="_blank" class="block w-full text-center bg-amber-600 hover:bg-amber-700 text-white text-sm font-bold py-3 px-4 rounded transition-colors">
-                            Fale Conosco no WhatsApp
+                    <!-- Newsletter -->
+                    <div class="bg-zinc-900/40 border border-zinc-800 p-6 rounded-lg backdrop-blur-sm">
+                        <h4 class="text-white font-serif text-lg mb-2">Newsletter</h4>
+                        <p class="text-xs text-zinc-500 mb-4 leading-relaxed">Receba análises jurídicas e oportunidades de leilão diretamente no seu e-mail.</p>
+                        <form class="space-y-3">
+                            <input type="email" placeholder="Seu melhor e-mail" class="w-full bg-zinc-950 border border-zinc-800 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-600 transition-colors">
+                            <button class="w-full bg-zinc-100 hover:bg-amber-500 hover:text-white text-zinc-950 font-medium text-xs uppercase tracking-wider py-2.5 rounded transition-all">
+                                Inscrever-se
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Popular Posts -->
+                    <div>
+                        <h4 class="text-white font-serif text-lg mb-6 flex items-center gap-2">
+                            <span class="w-1 h-4 bg-amber-600 rounded-sm"></span> Destaques
+                        </h4>
+                        <div class="space-y-6">
+                            <a href="#" class="group flex gap-4 items-start">
+                                <div class="w-16 h-16 rounded bg-zinc-900 border border-zinc-800 overflow-hidden shrink-0">
+                                    <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&q=80&w=200" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity">
+                                </div>
+                                <div>
+                                    <h5 class="text-sm font-medium text-zinc-300 group-hover:text-amber-500 transition-colors line-clamp-2 leading-snug">Custos ocultos na arrematação de imóveis</h5>
+                                    <span class="text-[10px] text-zinc-600 mt-1 block">25 Nov 2024</span>
+                                </div>
+                            </a>
+                            <a href="#" class="group flex gap-4 items-start">
+                                <div class="w-16 h-16 rounded bg-zinc-900 border border-zinc-800 overflow-hidden shrink-0">
+                                    <img src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=200" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity">
+                                </div>
+                                <div>
+                                    <h5 class="text-sm font-medium text-zinc-300 group-hover:text-amber-500 transition-colors line-clamp-2 leading-snug">Imissão na posse: o guia definitivo</h5>
+                                    <span class="text-[10px] text-zinc-600 mt-1 block">28 Ago 2024</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </aside>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Read Next Section -->
+    <section class="border-t border-zinc-900 bg-zinc-950 py-16">
+        <div class="container mx-auto px-6 max-w-7xl">
+            <h3 class="text-2xl font-serif text-white mb-8">Continue Lendo</h3>
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Related 1 -->
+                <article class="group cursor-pointer">
+                    <div class="overflow-hidden rounded border border-zinc-800 aspect-[3/2] mb-4">
+                        <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80 group-hover:opacity-100">
+                    </div>
+                    <span class="text-amber-600 text-[10px] uppercase tracking-widest font-bold">Direito Imobiliário</span>
+                    <h4 class="text-lg text-white font-serif mt-2 group-hover:text-amber-500 transition-colors">Herança de imóveis: como proceder?</h4>
+                </article>
+                <!-- Related 2 -->
+                <article class="group cursor-pointer">
+                    <div class="overflow-hidden rounded border border-zinc-800 aspect-[3/2] mb-4">
+                        <img src="https://images.unsplash.com/photo-1562564055-71e051d33c19?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80 group-hover:opacity-100">
+                    </div>
+                    <span class="text-amber-600 text-[10px] uppercase tracking-widest font-bold">Leilões</span>
+                    <h4 class="text-lg text-white font-serif mt-2 group-hover:text-amber-500 transition-colors">ITBI e a base de cálculo em leilões</h4>
+                </article>
+                <!-- Related 3 -->
+                <article class="group cursor-pointer">
+                    <div class="overflow-hidden rounded border border-zinc-800 aspect-[3/2] mb-4">
+                        <img src="https://images.unsplash.com/photo-1577415124269-fc1140a69e91?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80 group-hover:opacity-100">
+                    </div>
+                    <span class="text-amber-600 text-[10px] uppercase tracking-widest font-bold">Entrevistas</span>
+                    <h4 class="text-lg text-white font-serif mt-2 group-hover:text-amber-500 transition-colors">Entrevista Casa & Jardim: Dicas para arrematar</h4>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final Footer CTA Area (Dark Theme Adapted) -->
+    <footer class="bg-zinc-950 text-zinc-400 relative overflow-hidden border-t border-zinc-900" id="contato">
+        <!-- Decoration -->
+        <div class="absolute top-0 right-0 w-2/3 h-full bg-gradient-to-l from-amber-950/10 to-transparent pointer-events-none"></div>
+
+        <div class="container mx-auto px-6 max-w-7xl pt-24 pb-12 relative z-10">
+            <div class="flex flex-col lg:flex-row gap-16 items-start lg:items-end mb-24">
+                
+                <!-- Form -->
+                <div class="lg:w-2/3 w-full">
+                    <div class="mb-12">
+                        <h2 class="text-3xl lg:text-4xl font-serif text-white mb-4">Podemos ajudar a solucionar o seu caso!</h2>
+                        <p class="text-amber-600 font-bold text-sm tracking-widest uppercase mb-2">Entre em contato conosco</p>
+                        <p class="text-zinc-500 font-light text-lg">Receba nossa newsletter com oportunidades de negócio, decisões, artigos e cases.</p>
+                    </div>
+
+                    <form class="space-y-4 max-w-2xl bg-zinc-900/30 p-8 rounded-lg border border-zinc-800 backdrop-blur-sm">
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label class="text-[10px] uppercase font-bold tracking-widest text-zinc-600 ml-1">Nome*</label>
+                                <input type="text" class="w-full bg-zinc-950 border border-zinc-800 rounded px-4 py-3 focus:outline-none focus:border-amber-600 focus:bg-zinc-900 transition-all text-white placeholder:text-zinc-800 text-sm">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-[10px] uppercase font-bold tracking-widest text-zinc-600 ml-1">Email*</label>
+                                <input type="email" class="w-full bg-zinc-950 border border-zinc-800 rounded px-4 py-3 focus:outline-none focus:border-amber-600 focus:bg-zinc-900 transition-all text-white placeholder:text-zinc-800 text-sm">
+                            </div>
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-4 items-end">
+                            <div class="space-y-1">
+                                <label class="text-[10px] uppercase font-bold tracking-widest text-zinc-600 ml-1">Telefone*</label>
+                                <input type="tel" class="w-full bg-zinc-950 border border-zinc-800 rounded px-4 py-3 focus:outline-none focus:border-amber-600 focus:bg-zinc-900 transition-all text-white placeholder:text-zinc-800 text-sm">
+                            </div>
+                            <button class="w-full bg-amber-600 hover:bg-amber-500 text-white font-semibold py-3 rounded transition-all shadow-lg shadow-amber-900/20 uppercase text-xs tracking-widest h-[46px] mt-4 md:mt-0">
+                                Enviar Mensagem
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Contact Details Box -->
+                    <div class="mt-12 flex flex-wrap gap-6">
+                        <a href="#" class="px-6 py-4 rounded border border-zinc-800 flex items-center justify-center text-zinc-400 hover:text-white hover:border-amber-600 transition-all bg-zinc-900/50 hover:bg-zinc-900 gap-3">
+                            <i data-lucide="mail" class="w-5 h-5 text-amber-600"></i>
+                            <span class="text-sm">contato@cataldosiston-adv.com.br</span>
+                        </a>
+                        <a href="#" class="px-6 py-4 rounded border border-zinc-800 flex items-center justify-center text-zinc-400 hover:text-white hover:border-amber-600 transition-all bg-zinc-900/50 hover:bg-zinc-900 gap-3">
+                            <i data-lucide="phone" class="w-5 h-5 text-amber-600"></i>
+                            <span class="text-sm">+55 (21) 3173-3795</span>
                         </a>
                     </div>
                 </div>
+
+                <!-- Footer Image -->
+                <div class="lg:w-1/3 relative hidden lg:block">
+                     <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent z-10"></div>
+                     <img src="https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&q=80&w=600" alt="Raphael Footer" class="relative z-0 w-full h-auto object-cover rounded-lg border border-zinc-800 shadow-2xl opacity-70 hover:opacity-100 transition-opacity duration-700">
+                </div>
             </div>
-        </div>
-    </nav>
 
-    <!-- Hero Section -->
-    <section class="relative z-10 py-32 md:py-48 flex items-center justify-center bg-zinc-950">
-        <div class="absolute inset-0 z-0">
-            <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&amp;fit=crop&amp;q=80&amp;w=1920" alt="Background" class="w-full h-full object-cover opacity-20">
-            <div class="absolute inset-0 bg-gradient-to-b from-zinc-950 via-zinc-950/80 to-zinc-950"></div>
-        </div>
-
-        <div class="container mx-auto px-6 max-w-4xl relative z-10 text-center">
-            <h1 class="text-5xl md:text-7xl font-serif text-white tracking-tight mb-6">
-                Blog
-            </h1>
-            <p class="text-zinc-400 text-lg md:text-xl font-light mb-10 max-w-2xl mx-auto">
-                Artigos, entrevistas e insights sobre leilões de imóveis e direito imobiliário
-            </p>
-            
-            <a href="#contato" class="inline-flex items-center gap-2 bg-amber-600 hover:bg-amber-500 text-white text-sm font-medium px-8 py-3.5 rounded-full transition-all transform hover:-translate-y-1 shadow-lg shadow-amber-900/30 uppercase tracking-widest">
-                Entre em contato
-                <i data-lucide="arrow-right" class="w-4 h-4"></i>
-            </a>
-        </div>
-    </section>
-
-    <!-- Featured Blog Posts -->
-    <section class="py-24 bg-white">
-        <div class="container mx-auto px-6 max-w-6xl">
-            <div class="grid md:grid-cols-2 gap-x-12 gap-y-20">
-                
-                <!-- Case 1 -->
-                <div class="group">
-                    <h3 class="font-serif text-2xl text-zinc-900 mb-6">Apartamento 501</h3>
-                    <div class="relative aspect-[4/3] overflow-hidden rounded bg-zinc-100 mb-6 shadow-md">
-                        <img src="https://images.unsplash.com/photo-1512918760513-95f1b299960b?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Ocean Front" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                        <div class="absolute bottom-4 right-4 bg-black/80 backdrop-blur-sm text-white text-[10px] uppercase font-bold px-3 py-1.5 rounded flex items-center gap-2">
-                            <i data-lucide="eye" class="w-3 h-3 text-amber-500"></i> Visão da rua
-                        </div>
-                    </div>
-                    <div class="space-y-4">
-                        <p class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Av. Lúcio Costa 2930, Barra da Tijuca (Ocean Front)</p>
-                        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-t border-zinc-100 pt-4">
-                            <div>
-                                <span class="block text-xs text-zinc-500 mb-1">Valor de arrematação</span>
-                                <span class="text-2xl font-serif text-zinc-900 font-medium">R$ 2.984.000,00</span>
-                            </div>
-                            <div class="text-left sm:text-right">
-                                <span class="block text-xs text-zinc-500 mb-1">Histórico de mercado</span>
-                                <span class="text-xl font-serif text-amber-600">R$ 6.200.000,00</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Case 2 -->
-                <div class="group">
-                    <h3 class="font-serif text-2xl text-zinc-900 mb-6">Apartamento 201</h3>
-                    <div class="relative aspect-[4/3] overflow-hidden rounded bg-zinc-100 mb-6 shadow-md">
-                        <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Copacabana" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                        <div class="absolute bottom-4 right-4 bg-black/80 backdrop-blur-sm text-white text-[10px] uppercase font-bold px-3 py-1.5 rounded flex items-center gap-2">
-                            <i data-lucide="eye" class="w-3 h-3 text-amber-500"></i> Visão da rua
-                        </div>
-                    </div>
-                    <div class="space-y-4">
-                        <p class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Av. Atlântica 2406, Copacabana</p>
-                        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-t border-zinc-100 pt-4">
-                            <div>
-                                <span class="block text-xs text-zinc-500 mb-1">Valor de arrematação</span>
-                                <span class="text-2xl font-serif text-zinc-900 font-medium">R$ 2.855.000,00</span>
-                            </div>
-                            <div class="text-left sm:text-right">
-                                <span class="block text-xs text-zinc-500 mb-1">Histórico de mercado</span>
-                                <span class="text-xl font-serif text-amber-600">R$ 4.262.270,00</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Case 3 -->
-                <div class="group">
-                    <h3 class="font-serif text-2xl text-zinc-900 mb-6">Apartamento 101</h3>
-                    <div class="relative aspect-[4/3] overflow-hidden rounded bg-zinc-100 mb-6 shadow-md">
-                        <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Botafogo" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                        <div class="absolute bottom-4 right-4 bg-black/80 backdrop-blur-sm text-white text-[10px] uppercase font-bold px-3 py-1.5 rounded flex items-center gap-2">
-                            <i data-lucide="eye" class="w-3 h-3 text-amber-500"></i> Visão da rua
-                        </div>
-                    </div>
-                    <div class="space-y-4">
-                        <p class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Rua Oliveira Fausto 45, Botafogo</p>
-                        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-t border-zinc-100 pt-4">
-                            <div>
-                                <span class="block text-xs text-zinc-500 mb-1">Valor de arrematação</span>
-                                <span class="text-2xl font-serif text-zinc-900 font-medium">R$ 501.000,00</span>
-                            </div>
-                            <div class="text-left sm:text-right">
-                                <span class="block text-xs text-zinc-500 mb-1">Histórico de mercado</span>
-                                <span class="text-xl font-serif text-amber-600">R$ 1.147.015,67</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Case 4 -->
-                <div class="group">
-                    <h3 class="font-serif text-2xl text-zinc-900 mb-6">Apartamento 301</h3>
-                    <div class="relative aspect-[4/3] overflow-hidden rounded bg-zinc-100 mb-6 shadow-md">
-                        <img src="https://images.unsplash.com/photo-1484154218962-a1c002085d2f?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Leblon" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                        <div class="absolute bottom-4 right-4 bg-black/80 backdrop-blur-sm text-white text-[10px] uppercase font-bold px-3 py-1.5 rounded flex items-center gap-2">
-                            <i data-lucide="eye" class="w-3 h-3 text-amber-500"></i> Visão da rua
-                        </div>
-                    </div>
-                    <div class="space-y-4">
-                        <p class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Av. Afrânio de Melo Franco 15, Leblon</p>
-                        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-t border-zinc-100 pt-4">
-                            <div>
-                                <span class="block text-xs text-zinc-500 mb-1">Valor de arrematação</span>
-                                <span class="text-2xl font-serif text-zinc-900 font-medium">R$ 3.600.000,00</span>
-                            </div>
-                            <div class="text-left sm:text-right">
-                                <span class="block text-xs text-zinc-500 mb-1">Histórico de mercado</span>
-                                <span class="text-xl font-serif text-amber-600">R$ 5.115.917,50</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Case 5 -->
-                <div class="group">
-                    <h3 class="font-serif text-2xl text-zinc-900 mb-6">Apartamento 101</h3>
-                    <div class="relative aspect-[4/3] overflow-hidden rounded bg-zinc-100 mb-6 shadow-md">
-                        <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Ipanema" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                        <div class="absolute bottom-4 right-4 bg-black/80 backdrop-blur-sm text-white text-[10px] uppercase font-bold px-3 py-1.5 rounded flex items-center gap-2">
-                            <i data-lucide="eye" class="w-3 h-3 text-amber-500"></i> Visão da rua
-                        </div>
-                    </div>
-                    <div class="space-y-4">
-                        <p class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Rua Barão da Torre 172, Ipanema</p>
-                        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-t border-zinc-100 pt-4">
-                            <div>
-                                <span class="block text-xs text-zinc-500 mb-1">Valor de arrematação</span>
-                                <span class="text-2xl font-serif text-zinc-900 font-medium">R$ 1.710.000,00</span>
-                            </div>
-                            <div class="text-left sm:text-right">
-                                <span class="block text-xs text-zinc-500 mb-1">Histórico de mercado</span>
-                                <span class="text-xl font-serif text-amber-600">R$ 2.915.000,00</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Case 6 -->
-                <div class="group">
-                    <h3 class="font-serif text-2xl text-zinc-900 mb-6">Apartamento 702</h3>
-                    <div class="relative aspect-[4/3] overflow-hidden rounded bg-zinc-100 mb-6 shadow-md">
-                        <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Laranjeiras" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                        <div class="absolute bottom-4 right-4 bg-black/80 backdrop-blur-sm text-white text-[10px] uppercase font-bold px-3 py-1.5 rounded flex items-center gap-2">
-                            <i data-lucide="eye" class="w-3 h-3 text-amber-500"></i> Visão da rua
-                        </div>
-                    </div>
-                    <div class="space-y-4">
-                        <p class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Rua Pinheiro Machado 69, Laranjeiras</p>
-                        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-t border-zinc-100 pt-4">
-                            <div>
-                                <span class="block text-xs text-zinc-500 mb-1">Valor de arrematação</span>
-                                <span class="text-2xl font-serif text-zinc-900 font-medium">R$ 675.000,00</span>
-                            </div>
-                            <div class="text-left sm:text-right">
-                                <span class="block text-xs text-zinc-500 mb-1">Histórico de mercado</span>
-                                <span class="text-xl font-serif text-amber-600">R$ 1.100.000,00</span>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Footer Bottom -->
+            <div class="grid md:grid-cols-4 gap-12 border-t border-zinc-900 pt-16 text-xs text-zinc-500 font-light">
+                <div class="space-y-6">
+                    <h3 class="font-serif text-white text-xl">CATALDO SISTON<br><span class="text-[10px] text-amber-600 tracking-widest font-sans uppercase font-bold">Advogados</span></h3>
+                    <p>Leilões de imóveis e advocacia imobiliária</p>
+                    <p>Av. Rio Branco, 156, Gr. 3336 a 3339 Centro<br>- Rio de Janeiro - RJ - Brasil</p>
                 </div>
                 
-                 <!-- Case 7 -->
-                <div class="group">
-                    <h3 class="font-serif text-2xl text-zinc-900 mb-6">Apartamento 402</h3>
-                    <div class="relative aspect-[4/3] overflow-hidden rounded bg-zinc-100 mb-6 shadow-md">
-                        <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Av Prefeito Dulcídio Cardoso" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                        <div class="absolute bottom-4 right-4 bg-black/80 backdrop-blur-sm text-white text-[10px] uppercase font-bold px-3 py-1.5 rounded flex items-center gap-2">
-                            <i data-lucide="eye" class="w-3 h-3 text-amber-500"></i> Visão da rua
-                        </div>
-                    </div>
-                    <div class="space-y-4">
-                        <p class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Av Prefeito Dulcídio Cardoso 424</p>
-                        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-t border-zinc-100 pt-4">
-                            <div>
-                                <span class="block text-xs text-zinc-500 mb-1">Valor de arrematação</span>
-                                <span class="text-2xl font-serif text-zinc-900 font-medium">R$ 771.250,70</span>
-                            </div>
-                            <div class="text-left sm:text-right">
-                                <span class="block text-xs text-zinc-500 mb-1">Histórico de mercado</span>
-                                <span class="text-xl font-serif text-amber-600">R$ 1.302.501,40</span>
-                            </div>
-                        </div>
-                    </div>
+                <div>
+                    <h4 class="text-white font-medium mb-6 uppercase tracking-widest text-[10px]">Mapa do Site</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="hover:text-amber-500 transition-colors">Quem Somos</a></li>
+                        <li><a href="#" class="hover:text-amber-500 transition-colors">Imóveis em Leilão RJ</a></li>
+                        <li><a href="#" class="hover:text-amber-500 transition-colors">Assessoria em leilões</a></li>
+                        <li><a href="#" class="hover:text-amber-500 transition-colors">Direito Imobiliário</a></li>
+                        <li><a href="#" class="hover:text-amber-500 transition-colors">Blog</a></li>
+                    </ul>
                 </div>
-
-                <!-- Case 8 -->
-                <div class="group">
-                    <h3 class="font-serif text-2xl text-zinc-900 mb-6">Apartamento 1709</h3>
-                    <div class="relative aspect-[4/3] overflow-hidden rounded bg-zinc-100 mb-6 shadow-md">
-                        <img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Rua Moraes e Silva" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                        <div class="absolute bottom-4 right-4 bg-black/80 backdrop-blur-sm text-white text-[10px] uppercase font-bold px-3 py-1.5 rounded flex items-center gap-2">
-                            <i data-lucide="eye" class="w-3 h-3 text-amber-500"></i> Visão da rua
-                        </div>
-                    </div>
-                    <div class="space-y-4">
-                        <p class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Rua Moraes e Silva, 51</p>
-                        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-t border-zinc-100 pt-4">
-                            <div>
-                                <span class="block text-xs text-zinc-500 mb-1">Valor de arrematação</span>
-                                <span class="text-2xl font-serif text-zinc-900 font-medium">R$ 360.000,00</span>
-                            </div>
-                            <div class="text-left sm:text-right">
-                                <span class="block text-xs text-zinc-500 mb-1">Histórico de mercado</span>
-                                <span class="text-xl font-serif text-amber-600">R$ 706.614,83</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Case 9 -->
-                <div class="group">
-                    <h3 class="font-serif text-2xl text-zinc-900 mb-6">Apartamento 603</h3>
-                    <div class="relative aspect-[4/3] overflow-hidden rounded bg-zinc-100 mb-6 shadow-md">
-                        <img src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Flamengo" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                        <div class="absolute bottom-4 right-4 bg-black/80 backdrop-blur-sm text-white text-[10px] uppercase font-bold px-3 py-1.5 rounded flex items-center gap-2">
-                            <i data-lucide="eye" class="w-3 h-3 text-amber-500"></i> Visão da rua
-                        </div>
-                    </div>
-                    <div class="space-y-4">
-                        <p class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Praia do Flamengo 350, Flamengo</p>
-                        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-t border-zinc-100 pt-4">
-                            <div>
-                                <span class="block text-xs text-zinc-500 mb-1">Valor de arrematação</span>
-                                <span class="text-2xl font-serif text-zinc-900 font-medium">R$ 905.000,00</span>
-                            </div>
-                            <div class="text-left sm:text-right">
-                                <span class="block text-xs text-zinc-500 mb-1">Histórico de mercado</span>
-                                <span class="text-xl font-serif text-amber-600">R$ 1.395.000,00</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Case 10 -->
-                <div class="group">
-                    <h3 class="font-serif text-2xl text-zinc-900 mb-6">Cobertura 607</h3>
-                    <div class="relative aspect-[4/3] overflow-hidden rounded bg-zinc-100 mb-6 shadow-md">
-                        <img src="https://images.unsplash.com/photo-1515263487990-61b07816b324?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Barra" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                        <div class="absolute bottom-4 right-4 bg-black/80 backdrop-blur-sm text-white text-[10px] uppercase font-bold px-3 py-1.5 rounded flex items-center gap-2">
-                            <i data-lucide="eye" class="w-3 h-3 text-amber-500"></i> Visão da rua
-                        </div>
-                    </div>
-                    <div class="space-y-4">
-                        <p class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Av. Lúcio Costa 4.666, Barra da Tijuca</p>
-                        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-t border-zinc-100 pt-4">
-                            <div>
-                                <span class="block text-xs text-zinc-500 mb-1">Valor de arrematação</span>
-                                <span class="text-2xl font-serif text-zinc-900 font-medium">R$ 910.000,00</span>
-                            </div>
-                            <div class="text-left sm:text-right">
-                                <span class="block text-xs text-zinc-500 mb-1">Histórico de mercado</span>
-                                <span class="text-xl font-serif text-amber-600">R$ 1.525.000,00</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Blog Articles Archive -->
-    <section class="py-24 bg-marble border-t border-zinc-200">
-        <div class="container mx-auto px-6 max-w-7xl">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-5xl font-serif text-zinc-900 tracking-tight mb-4 relative inline-block">
-                    <span class="relative z-10 px-6">Arquivo de Artigos e Entrevistas</span>
-                    <span class="absolute bottom-2 left-0 w-full h-1 bg-amber-200/50 -z-0"></span>
-                </h2>
-            </div>
-
-            <div class="bg-white rounded shadow-xl overflow-hidden border border-zinc-100">
-                <div class="overflow-x-auto max-h-[800px] overflow-y-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-zinc-950 text-white text-xs uppercase tracking-wider sticky top-0 z-10">
-                                <th class="p-4 font-medium border-b border-zinc-800">#</th>
-                                <th class="p-4 font-medium border-b border-zinc-800">Localização</th>
-                                <th class="p-4 font-medium border-b border-zinc-800">Processo</th>
-                                <th class="p-4 font-medium border-b border-zinc-800 text-right">Valor Investido</th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-xs text-zinc-600 font-medium">
-                            <!-- Rendered rows based on provided data -->
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">1</td>
-                                <td class="p-4">RUA PROF. ORTIZ MONTEIRO 72, APT: 102, LARANJEIRAS</td>
-                                <td class="p-4 font-mono text-zinc-400">0019219-31.1999.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 248.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">2</td>
-                                <td class="p-4">RUA SÃO FRANCISCO XAVIER 40, APT: 801, TIJUCA</td>
-                                <td class="p-4 font-mono text-zinc-400">0071294-42.2002.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 166.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">3</td>
-                                <td class="p-4">RUA GENERAL ESPÍRITO SANTO CARDOSO 139, APT: 101, TIJUCA</td>
-                                <td class="p-4 font-mono text-zinc-400">0111506-37.2004.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 225.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">4</td>
-                                <td class="p-4">RUA GENERAL ESPÍRITO SANTO CARDOSO 139, APT: 501, TIJUCA</td>
-                                <td class="p-4 font-mono text-zinc-400">0111506-37.2004.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 255.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">5</td>
-                                <td class="p-4">RUA VISCONDE DE PIRAJÁ 12, APT: 102, IPANEMA</td>
-                                <td class="p-4 font-mono text-zinc-400">0143259-75.2005.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 273.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">6</td>
-                                <td class="p-4">RUA GARIBALDI 95, APT 101, TIJUCA</td>
-                                <td class="p-4 font-mono text-zinc-400">0243353-41.1999.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 95.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">7</td>
-                                <td class="p-4">RUA MARIZ E BARROS 1058, AP 508, TIJUCA</td>
-                                <td class="p-4 font-mono text-zinc-400">0070546-39.2004.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 103.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">8</td>
-                                <td class="p-4">RUA URUGUAI 265 , APTO 101, TIJUCA</td>
-                                <td class="p-4 font-mono text-zinc-400">0119817-27.1998.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 200.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">9</td>
-                                <td class="p-4">DUQUESA DE BRAGANÇA, 85, APTO 401, ANDARAÍ</td>
-                                <td class="p-4 font-mono text-zinc-400">0178022-34.2007.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 120.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">10</td>
-                                <td class="p-4">RUA ENGENHEIRO ATAULPHO COUTINHO 80, APT: 1101, BLOCO 01. COBERTURA NO CONDOMÍNIO MANDALA. 2 VAGAS E 4 QUARTOS</td>
-                                <td class="p-4 font-mono text-zinc-400">0005624-49.2001.8.19.0209</td>
-                                <td class="p-4 text-right">R$ 890.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">11</td>
-                                <td class="p-4">AV. LÚCIO COSTA, 3800, APT: 222. CONDOMÍNIO SAVOIR, BARRA DA TIJUCA</td>
-                                <td class="p-4 font-mono text-zinc-400">0006698-70.2003.8.19.0209</td>
-                                <td class="p-4 text-right">R$ 260.000,00</td>
-                            </tr>
-                            <!-- Items 12-100 placeholder representation due to length limits, but filling strictly for style showcase -->
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">12</td>
-                                <td class="p-4">RUA BARÃO DE MESQUITA 614, APTO 604, ANDARAÍ</td>
-                                <td class="p-4 font-mono text-zinc-400">1998.001.165293-6</td>
-                                <td class="p-4 text-right">R$ 100.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">13</td>
-                                <td class="p-4">RUA AFONSO ARINOS DE MELO FRANCO 239, APTO 1702, BARRA DA TIJUCA</td>
-                                <td class="p-4 font-mono text-zinc-400">1999.001.026938-2</td>
-                                <td class="p-4 text-right">R$ 316.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">14</td>
-                                <td class="p-4">RUA HENRIQUE VALADARES 100, APT: 302, CENTRO</td>
-                                <td class="p-4 font-mono text-zinc-400">2004.001.055477-0</td>
-                                <td class="p-4 text-right">R$ 160.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">15</td>
-                                <td class="p-4">AV SERNAMBETIBA 3800, APTO 709, BARRA DA TIJUCA (ED SAVOIR VIVRE)</td>
-                                <td class="p-4 font-mono text-zinc-400">2005.001.081868-4</td>
-                                <td class="p-4 text-right">R$ 800.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">16</td>
-                                <td class="p-4">DES. ALFREDO RUSSEL 67, APT: 502, LEBLON</td>
-                                <td class="p-4 font-mono text-zinc-400">0191242-36.2006.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 815.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">17</td>
-                                <td class="p-4">RUA OLIVEIRA FAUSTO 45, APT: 101, BOTAFOGO</td>
-                                <td class="p-4 font-mono text-zinc-400">1999.001.041066-2</td>
-                                <td class="p-4 text-right">R$ 501.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">18</td>
-                                <td class="p-4">RUA URUGUAI 237, APT: 703, TIJUCA</td>
-                                <td class="p-4 font-mono text-zinc-400">2005.001.007244-3</td>
-                                <td class="p-4 text-right">R$ 192.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">19</td>
-                                <td class="p-4">RUA SÃO CLEMENTE, Nº 117, BL 01, APT: 1003, BOTAFOGO</td>
-                                <td class="p-4 font-mono text-zinc-400">0007433-74.2001.8.19.0209</td>
-                                <td class="p-4 text-right">R$ 880.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">20</td>
-                                <td class="p-4">AV. ATAULFO DE PAIVA 50, APARTAMENTO 905, LEBLON, RIO DE JANEIRO</td>
-                                <td class="p-4 font-mono text-zinc-400">0062258-05.2004.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 257.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">21</td>
-                                <td class="p-4">RUA GOES MONTEIRO 08, BL C, APT: 901 (MORADA DO SOL), BOTAFOGO</td>
-                                <td class="p-4 font-mono text-zinc-400">1997.001.071145-1</td>
-                                <td class="p-4 text-right">R$ 603.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">22</td>
-                                <td class="p-4">RUA JEQUITIBÁ 09, CASA, JARDIM BOTÂNICO</td>
-                                <td class="p-4 font-mono text-zinc-400">2003.001.036020-1</td>
-                                <td class="p-4 text-right">R$ 1.100.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">23</td>
-                                <td class="p-4">AV. PRESIDENTE VARGAS 2007/1105, CIDADE NOVA</td>
-                                <td class="p-4 font-mono text-zinc-400">0029337-27.2003.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 108.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">24</td>
-                                <td class="p-4">RUA SACOPÃ 804, APT 301, LAGOA</td>
-                                <td class="p-4 font-mono text-zinc-400">0271057-48.2007.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 1.270.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">25</td>
-                                <td class="p-4">PRAIA DO FLAMENGO 350, APT: 603, FLAMENGO</td>
-                                <td class="p-4 font-mono text-zinc-400">2007.001.016467-7</td>
-                                <td class="p-4 text-right">R$ 905.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">26</td>
-                                <td class="p-4">RUA CARDOSO JÚNIOR 335 LARANJEIRAS</td>
-                                <td class="p-4 font-mono text-zinc-400">2005.001.157084-0</td>
-                                <td class="p-4 text-right">R$ 1.010.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">27</td>
-                                <td class="p-4">AV. MARACANÃ, 1529 APTO. 401, TIJUCA</td>
-                                <td class="p-4 font-mono text-zinc-400">0272216-55.2009.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 291.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">28</td>
-                                <td class="p-4">RUA DOS BENEDITINOS, 10 GRUPO COMERCIAL 1102, CENTRO</td>
-                                <td class="p-4 font-mono text-zinc-400">0133350-33.2010.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 210.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">29</td>
-                                <td class="p-4">RUA ANA LEONIDIA 343,BL A, APT: 302, MÉIER</td>
-                                <td class="p-4 font-mono text-zinc-400">0013833-34.2006.8.19.0208</td>
-                                <td class="p-4 text-right">R$ 116.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">30</td>
-                                <td class="p-4">RUA CONDE DE BONFIM N 862 BL 2 COB. 1, TIJUCA</td>
-                                <td class="p-4 font-mono text-zinc-400">2008.212.008794-0</td>
-                                <td class="p-4 text-right">R$ 480.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">31</td>
-                                <td class="p-4">R. MARIA LUIZA PITANGA, 85 APTO. 305, BARRA DA TIJUCA</td>
-                                <td class="p-4 font-mono text-zinc-400">2002.209.003603-8</td>
-                                <td class="p-4 text-right">R$ 467.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">32</td>
-                                <td class="p-4">ALEXANDRE STOCKLER, 328, CASA, GÁVEA</td>
-                                <td class="p-4 font-mono text-zinc-400">2006.001.053381-3</td>
-                                <td class="p-4 text-right">R$ 890.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">33</td>
-                                <td class="p-4">R. ATAULPHO COUTINHO, 80 BLOCO 3 APTO708 - MANDALA, BARRA DA TIJUCA</td>
-                                <td class="p-4 font-mono text-zinc-400">0010865-47.2014.8.19.0209</td>
-                                <td class="p-4 text-right">R$ 520.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">34</td>
-                                <td class="p-4">JOATHUR BUENO, 220 LOTE 1, BARRA DA TIJUCA</td>
-                                <td class="p-4 font-mono text-zinc-400">0007410-89.2005.8.19.0209</td>
-                                <td class="p-4 text-right">R$ 1.470.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">35</td>
-                                <td class="p-4">R. PRADO JÚNIOR, 160 APTO. 1107, COPACABANA</td>
-                                <td class="p-4 font-mono text-zinc-400">2005.001.135968-5</td>
-                                <td class="p-4 text-right">R$ 218.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">36</td>
-                                <td class="p-4">RUA HADOCK LOBO 300, BL 01, APT: 504, TIJUCA</td>
-                                <td class="p-4 font-mono text-zinc-400">1997.001.081100-7</td>
-                                <td class="p-4 text-right">R$ 385.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">37</td>
-                                <td class="p-4">RUA ARISTARCO RAMOS 85/201, ILHA DO GOVERNADOR</td>
-                                <td class="p-4 font-mono text-zinc-400">1991.001.137473-8</td>
-                                <td class="p-4 text-right">R$ 150.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">38</td>
-                                <td class="p-4">R. BARATA RIBEIRO, 339 APTO. 202, COPACABANA</td>
-                                <td class="p-4 font-mono text-zinc-400">2005.001.062612-6</td>
-                                <td class="p-4 text-right">R$ 670.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">39</td>
-                                <td class="p-4">AV. LÚCIO COSTA 2930, BL 01, APT: 501, BARRA DA TIJUCA (OCEAN FRONT)</td>
-                                <td class="p-4 font-mono text-zinc-400">2008.001.114157-2</td>
-                                <td class="p-4 text-right">R$ 2.984.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">40</td>
-                                <td class="p-4">COBERTURA N° 607 SITUADA NA AV. LÚCI0 COSTA. N° 4.666 D0 EDIFICI0 PRAIA D0 RIO, BARRA DA TIJUCA/RJ</td>
-                                <td class="p-4 font-mono text-zinc-400">0028421-33.2012.8.19.0209</td>
-                                <td class="p-4 text-right">R$ 910.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">41</td>
-                                <td class="p-4">RUA JERÔNIMO DE LEMOS, 122, APTO. 401</td>
-                                <td class="p-4 font-mono text-zinc-400">0046204-56.2007.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 90.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">42</td>
-                                <td class="p-4">AV. 28 DE SETEMBRO, 226, APTO. 1406</td>
-                                <td class="p-4 font-mono text-zinc-400">0111264-44.2005.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 101.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">43</td>
-                                <td class="p-4">AV. PREFEITO DULCÍDIO CARDOSO 1315, APT: 1204, BL 03, BARRA DA TIJUCA (WONDERFULL)</td>
-                                <td class="p-4 font-mono text-zinc-400">0001420-59.2001.8.19.0209</td>
-                                <td class="p-4 text-right">R$ 300.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">44</td>
-                                <td class="p-4">RUA MARIA ANGÉLICA 301, APT: 704, JARDIM BOTÂNICO</td>
-                                <td class="p-4 font-mono text-zinc-400">0210454-24.1998.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 195.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">45</td>
-                                <td class="p-4">AV. ATLÂNTICA 2406/201, COPACABANA</td>
-                                <td class="p-4 font-mono text-zinc-400">0042959-08.2005.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 2.855.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">46</td>
-                                <td class="p-4">RUA JOAQUIM MURTINHO 772, APT: 302, SANTA TERESA</td>
-                                <td class="p-4 font-mono text-zinc-400">1999.001.109046-8</td>
-                                <td class="p-4 text-right">R$ 265.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">47</td>
-                                <td class="p-4">BENEDITINOS, 18 SOBRELOJA, CENTRO</td>
-                                <td class="p-4 font-mono text-zinc-400">0088616-60.2011.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 809.181,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">48</td>
-                                <td class="p-4">AV. PRESIDENTE WILSON, 228 9º ANDAR, CENTRO</td>
-                                <td class="p-4 font-mono text-zinc-400">0134736-11.2004.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 900.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">49</td>
-                                <td class="p-4">FRANKLIN ROOSEVELT, 194 LOJAS E, F E G, CENTRO</td>
-                                <td class="p-4 font-mono text-zinc-400">0260447-16.2010.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 2.750.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">50</td>
-                                <td class="p-4">RUA BENEDITINOS 10, SALA 1101, CENTRO</td>
-                                <td class="p-4 font-mono text-zinc-400">0133358-10.2010.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 370.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">51</td>
-                                <td class="p-4">PREF.DULCÍDIO CARDOSO, 2848 APTO BL 1 402 (FOUR SEASONS), BARRA DA TIJUCA</td>
-                                <td class="p-4 font-mono text-zinc-400">2008.209.007263-0</td>
-                                <td class="p-4 text-right">R$ 690.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">52</td>
-                                <td class="p-4">RUA SANTO AFONSO 436, APT: 204, TIJUCA</td>
-                                <td class="p-4 font-mono text-zinc-400">0214455-32.2010.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 480.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">53</td>
-                                <td class="p-4">RUA TEODORO DA SILVA 750, APT: 801, COBERTURA, VILA ISABEL</td>
-                                <td class="p-4 font-mono text-zinc-400">0017238-44.2011.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 600.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">54</td>
-                                <td class="p-4">RUA MAYRINK VEIGA 32, LOJA COM SUBSOLO, CENTRO</td>
-                                <td class="p-4 font-mono text-zinc-400">0057309-06.2002.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 490.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">55</td>
-                                <td class="p-4">AV. MAL, CÂMARA, 160 SALAS 231 / 232 / 233, CENTRO</td>
-                                <td class="p-4 font-mono text-zinc-400">0171263-98.2000.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 2.200.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">56</td>
-                                <td class="p-4">RUA URUGUAI 471, APT: 103, TIJUCA</td>
-                                <td class="p-4 font-mono text-zinc-400">2004.001.119443-8</td>
-                                <td class="p-4 text-right">R$ 245.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">57</td>
-                                <td class="p-4">RUA PRUDENTE DE MORAES 266, APT: 101, IPANEMA</td>
-                                <td class="p-4 font-mono text-zinc-400">1997.001.099591-0</td>
-                                <td class="p-4 text-right">R$ 1.950.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">58</td>
-                                <td class="p-4">RUA ANDRADE PERTENCE 46, APT: 606, CATETE</td>
-                                <td class="p-4 font-mono text-zinc-400">0113068-76.2007.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 390.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">59</td>
-                                <td class="p-4">RUA TAVARES MACEDO 215, APT:1.102, ICARAÍ</td>
-                                <td class="p-4 font-mono text-zinc-400">0010714-40.2013.8.19.0002</td>
-                                <td class="p-4 text-right">R$ 1.170.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">60</td>
-                                <td class="p-4">AV. AFRÂNIO DE MELO FRANCO 15, APT: 301, LEBLON</td>
-                                <td class="p-4 font-mono text-zinc-400">0188003-77.2013.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 3.600.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">61</td>
-                                <td class="p-4">RUA BENEDITINOS 10, SALA 1103, CENTRO</td>
-                                <td class="p-4 font-mono text-zinc-400">0133345-11.2010.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 400.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">62</td>
-                                <td class="p-4">RUA VISCONDE DE ABAETÉ 109, BLOCO 02, APT: 402, VILA ISABEL</td>
-                                <td class="p-4 font-mono text-zinc-400">2008.001.290648-1</td>
-                                <td class="p-4 text-right">R$ 269.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">63</td>
-                                <td class="p-4">RUA SOUZA LIMA 27, APT: 501, COPACABANA</td>
-                                <td class="p-4 font-mono text-zinc-400">0175090-63.2013.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 870.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">64</td>
-                                <td class="p-4">AV. NOSSA SENHORA DE COPACABANA 195, LOJA 208, COPACABANA</td>
-                                <td class="p-4 font-mono text-zinc-400">0227752-67.2014.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 200.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">65</td>
-                                <td class="p-4">AV. NOSSA SENHORA DE COPACABANA 1.150, APT:704, COPACABANA</td>
-                                <td class="p-4 font-mono text-zinc-400">0077099-53.2014.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 320.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">66</td>
-                                <td class="p-4">RUA BARÃO DE MESQUITA 585, APT: 801, ANDARAÍ</td>
-                                <td class="p-4 font-mono text-zinc-400">1995.001.040081-7</td>
-                                <td class="p-4 text-right">R$ 420.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">67</td>
-                                <td class="p-4">RUA JOSÉ VICENTE 97, APT 1.204, DUPLEX, GRAJAÚ</td>
-                                <td class="p-4 font-mono text-zinc-400">1998.001.104467-5</td>
-                                <td class="p-4 text-right">R$ 395.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">68</td>
-                                <td class="p-4">RUA TEODORO DA SILVA 750, APT: 202, VILA ISABEL</td>
-                                <td class="p-4 font-mono text-zinc-400">2008.001.121124-0</td>
-                                <td class="p-4 text-right">R$ 262.200,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">69</td>
-                                <td class="p-4">RUA PROFESSOR COUTINHO FROIS 323, AP: 201, BARRA DA TIJUCA</td>
-                                <td class="p-4 font-mono text-zinc-400">0027938-32.2014.8.19.0209</td>
-                                <td class="p-4 text-right">R$ 1.950.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">70</td>
-                                <td class="p-4">RUA FONTE DA SAUDADE 317, APT:101, LAGOA</td>
-                                <td class="p-4 font-mono text-zinc-400">0321080-80.2016.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 1.610.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">71</td>
-                                <td class="p-4">RUA BARÃO DA TORRE 172, APT: 101, IPANEMA</td>
-                                <td class="p-4 font-mono text-zinc-400">0029053-91.2018.8.19.000</td>
-                                <td class="p-4 text-right">R$ 1.710.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">72</td>
-                                <td class="p-4">RUA HADDOCK LOBO 407, BL 02, APT: 903, TIJUCA</td>
-                                <td class="p-4 font-mono text-zinc-400">2002.001.022555-1</td>
-                                <td class="p-4 text-right">R$ 335.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">73</td>
-                                <td class="p-4">AV. RIO BRANCO 45, LOJA C, CENTRO</td>
-                                <td class="p-4 font-mono text-zinc-400">0368307-13.2009.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 1.700.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">74</td>
-                                <td class="p-4">AV. AQUARELA DO BRASIL 333, BL 01, APT: 901, SÃO CONRADO</td>
-                                <td class="p-4 font-mono text-zinc-400">0287631-39.2013.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 1.370.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">75</td>
-                                <td class="p-4">ESTRADA DOS BANDEIRANTES LOTE 01 DO PAL 45.341, JACAREPAGUÁ</td>
-                                <td class="p-4 font-mono text-zinc-400">0102014-67.2017.5.01.0049</td>
-                                <td class="p-4 text-right">R$ 1.800.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">76</td>
-                                <td class="p-4">RUA BARÃO DE LUCENA 55, APT: 402, BOTAFOGO</td>
-                                <td class="p-4 font-mono text-zinc-400">0191311-58.2012.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 720.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">77</td>
-                                <td class="p-4">RUA BARATA RIBEIRO 681, APT: 304, COPACABANA</td>
-                                <td class="p-4 font-mono text-zinc-400">0069091-24.2013.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 413.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">78</td>
-                                <td class="p-4">RUA JOSÉ AMÉRICO DE ALMEIDA 122, APT: 302, COBERTURA, RECREIO</td>
-                                <td class="p-4 font-mono text-zinc-400">0477473-67.2015.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 910.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">79</td>
-                                <td class="p-4">RUA BARÃO DE ITAPAGIPE 385, BL 01, APT: 306, TIJUCA</td>
-                                <td class="p-4 font-mono text-zinc-400">2003.001.026479-0</td>
-                                <td class="p-4 text-right">R$ 280.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">80</td>
-                                <td class="p-4">RUA PIO CORRÊA 92, BL 01, APT: 203, JARDIM BOTÂNICO</td>
-                                <td class="p-4 font-mono text-zinc-400">0121593-42-2010.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 635.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">81</td>
-                                <td class="p-4">RUA FRANCISCO GOES CALMON 210, APT:201, ILHA DO GOVERNADOR</td>
-                                <td class="p-4 font-mono text-zinc-400">1994.207.000303-8</td>
-                                <td class="p-4 text-right">R$ 539.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">82</td>
-                                <td class="p-4">AV. BARTOLOMEU MITRE 450, LOJA C, LEBLON</td>
-                                <td class="p-4 font-mono text-zinc-400">0018632-39.2014.8.19.0209</td>
-                                <td class="p-4 text-right">R$ 504.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">83</td>
-                                <td class="p-4">RUA BARTOLOMEU MITRE 455, APT: 608, LEBLON</td>
-                                <td class="p-4 font-mono text-zinc-400">0342610-77.2015.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 700.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">84</td>
-                                <td class="p-4">RUA TORRES HOMEM 1.113, APT: 401, VILA ISABEL</td>
-                                <td class="p-4 font-mono text-zinc-400">2006.001.129505-3</td>
-                                <td class="p-4 text-right">R$ 166.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">85</td>
-                                <td class="p-4">RUA SILVEIRA MARTINS 164, APT: 804, CATETE</td>
-                                <td class="p-4 font-mono text-zinc-400">2008.001.094637-2</td>
-                                <td class="p-4 text-right">R$ 632.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">86</td>
-                                <td class="p-4">RUA CONDE DE BONFIM 100, APT: 703, TIJUCA</td>
-                                <td class="p-4 font-mono text-zinc-400">0232494-33.2017.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 367.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">87</td>
-                                <td class="p-4">RUA CARMELA DUTRA 33, APT: 202, TIJUCA</td>
-                                <td class="p-4 font-mono text-zinc-400">2005.001.162714-0</td>
-                                <td class="p-4 text-right">R$ 357.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">88</td>
-                                <td class="p-4">RUA PINHEIRO MACHADO 69, APT: 702, LARANJEIRAS</td>
-                                <td class="p-4 font-mono text-zinc-400">1996.001.097731-0</td>
-                                <td class="p-4 text-right">R$ 675.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">89</td>
-                                <td class="p-4">RUA BARONESA DE POCONÉ 152, BL 01, APT: 402, LAGOA</td>
-                                <td class="p-4 font-mono text-zinc-400">0509699-62.2014.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 855.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">90</td>
-                                <td class="p-4">Rua Geminiano Gois, Freguesia, Jacarapeguá, nº 1.300, apto 1.502/RJ</td>
-                                <td class="p-4 font-mono text-zinc-400">0328974-49.2012.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 373.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">91</td>
-                                <td class="p-4">Rua Oliveira Fausto, nº 45, apto 508, Botafogo</td>
-                                <td class="p-4 font-mono text-zinc-400">0243994-96.2017.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 800.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">92</td>
-                                <td class="p-4">RUA FERREIRA PONTES 00257, APT 0207 ANDARAI</td>
-                                <td class="p-4 font-mono text-zinc-400">EXTRAJUDICIAL</td>
-                                <td class="p-4 text-right">R$ 340.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">93</td>
-                                <td class="p-4">Av. 13 de maio, nº 47, apto 2206, Centro/RJ</td>
-                                <td class="p-4 font-mono text-zinc-400">0220288-60.2012.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 168.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">94</td>
-                                <td class="p-4">Apto l.206, Avenida Henrique Dodswoth, n. 133.</td>
-                                <td class="p-4 font-mono text-zinc-400">0000869-20.1984.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 326.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">95</td>
-                                <td class="p-4">ApTO 509 Bloco 1 Entrada B do Edifício , situado na Rua das Laranjeiras</td>
-                                <td class="p-4 font-mono text-zinc-400">0087676-56.2015.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 157.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">96</td>
-                                <td class="p-4">apto 402 Av Prefeito Dulcídio Cardoso 424, bloco 2</td>
-                                <td class="p-4 font-mono text-zinc-400">0021351-33.2010.8.19.0209</td>
-                                <td class="p-4 text-right">R$ 771.250,70</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">97</td>
-                                <td class="p-4">apto 1502 na Rua Geminiano Gois, 1300, Jacarepagua</td>
-                                <td class="p-4 font-mono text-zinc-400">0328974-49.2012.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 373.000,00</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">98</td>
-                                <td class="p-4">apto 1709 bloco 1 Rua Moraes e Silva, 51</td>
-                                <td class="p-4 font-mono text-zinc-400">0312382-22.2015.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 360.000,00</td>
-                            </tr>
-                            <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">99</td>
-                                <td class="p-4">Rua 24 de maio, n. 215, apto 205, Engenho Novo/RJ</td>
-                                <td class="p-4 font-mono text-zinc-400">00110401-73.2016.8.19.0202</td>
-                                <td class="p-4 text-right">R$ 154.119,33</td>
-                            </tr>
-                             <tr class="table-row-custom transition-colors border-b border-zinc-50">
-                                <td class="p-4">100</td>
-                                <td class="p-4">Rua do Catete, n. 338, apto 306, Catete/RJ</td>
-                                <td class="p-4 font-mono text-zinc-400">0066434-36.2018.8.19.0001</td>
-                                <td class="p-4 text-right">R$ 320.000,00</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Videos Section -->
-    <section class="py-24 bg-zinc-950">
-        <div class="container mx-auto px-6 max-w-6xl">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl lg:text-5xl font-serif text-white tracking-tight mb-2">Vídeos</h2>
-                <h3 class="text-2xl font-serif text-amber-600 tracking-tight">Entrevistas e Conteúdo</h3>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-12">
-                
-                <!-- Video 1 -->
-                <div class="space-y-4 group">
-                    <div class="relative aspect-video bg-zinc-900 rounded-lg overflow-hidden border border-zinc-800 group-hover:border-amber-700/50 transition-colors">
-                        <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Live com leiloeiro" class="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity">
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <div class="w-16 h-16 rounded-full bg-amber-600 flex items-center justify-center text-white shadow-xl group-hover:scale-110 transition-transform cursor-pointer">
-                                <i data-lucide="play" class="w-6 h-6 fill-current ml-1"></i>
-                            </div>
-                        </div>
-                        <div class="absolute bottom-4 left-4 bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded flex items-center gap-1">
-                            <i data-lucide="youtube" class="w-3 h-3"></i> YouTube
-                        </div>
-                    </div>
-                    <div>
-                        <h4 class="text-white font-medium text-lg leading-snug mb-2 group-hover:text-amber-500 transition-colors">Live com leiloeiro: Leilão de imóveis com Raphael Cataldo Siston e Rymer Leilões</h4>
-                        <p class="text-zinc-500 text-sm leading-relaxed">Assista à live sobre leilão de imóveis com o advogado especialista Raphael Cataldo Siston no perfil Rymer Leilões.</p>
-                    </div>
-                </div>
-
-                <!-- Video 2 -->
-                <div class="space-y-4 group">
-                    <div class="relative aspect-video bg-zinc-900 rounded-lg overflow-hidden border border-zinc-800 group-hover:border-amber-700/50 transition-colors">
-                        <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Casos Reais Botafogo" class="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity">
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <div class="w-16 h-16 rounded-full bg-amber-600 flex items-center justify-center text-white shadow-xl group-hover:scale-110 transition-transform cursor-pointer">
-                                <i data-lucide="play" class="w-6 h-6 fill-current ml-1"></i>
-                            </div>
-                        </div>
-                         <div class="absolute bottom-4 left-4 bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded flex items-center gap-1">
-                            <i data-lucide="youtube" class="w-3 h-3"></i> YouTube
-                        </div>
-                    </div>
-                    <div>
-                        <h4 class="text-white font-medium text-lg leading-snug mb-2 group-hover:text-amber-500 transition-colors">Casos Reais Botafogo: Leilão de imóvel – Botafogo/RJ Escritório Cataldo Siston Advogados</h4>
-                        <p class="text-zinc-500 text-sm leading-relaxed">Caso real de imóvel em leilão em Botafogo, assessorado pela equipe jurídica do escritório Cataldo Siston Advogados.</p>
-                    </div>
-                </div>
-
-                <!-- Video 3 -->
-                <div class="space-y-4 group">
-                    <div class="relative aspect-video bg-zinc-900 rounded-lg overflow-hidden border border-zinc-800 group-hover:border-amber-700/50 transition-colors">
-                        <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Casos Reais Ipanema" class="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity">
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <div class="w-16 h-16 rounded-full bg-amber-600 flex items-center justify-center text-white shadow-xl group-hover:scale-110 transition-transform cursor-pointer">
-                                <i data-lucide="play" class="w-6 h-6 fill-current ml-1"></i>
-                            </div>
-                        </div>
-                         <div class="absolute bottom-4 left-4 bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded flex items-center gap-1">
-                            <i data-lucide="youtube" class="w-3 h-3"></i> YouTube
-                        </div>
-                    </div>
-                    <div>
-                        <h4 class="text-white font-medium text-lg leading-snug mb-2 group-hover:text-amber-500 transition-colors">Casos Reais Ipanema: Leilão de imóvel – Ipanema/RJ Escritório Cataldo Siston Advogados</h4>
-                        <p class="text-zinc-500 text-sm leading-relaxed">Caso real de imóvel em leilão em Ipanema, assessorado pela equipe jurídica do escritório Cataldo Siston Advogados.</p>
-                    </div>
-                </div>
-
-                <!-- Video 4 -->
-                <div class="space-y-4 group">
-                    <div class="relative aspect-video bg-zinc-900 rounded-lg overflow-hidden border border-zinc-800 group-hover:border-amber-700/50 transition-colors">
-                        <img src="https://images.unsplash.com/photo-1512918760513-95f1b299960b?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Casos Reais Fonte da Saudade" class="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity">
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <div class="w-16 h-16 rounded-full bg-amber-600 flex items-center justify-center text-white shadow-xl group-hover:scale-110 transition-transform cursor-pointer">
-                                <i data-lucide="play" class="w-6 h-6 fill-current ml-1"></i>
-                            </div>
-                        </div>
-                         <div class="absolute bottom-4 left-4 bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded flex items-center gap-1">
-                            <i data-lucide="youtube" class="w-3 h-3"></i> YouTube
-                        </div>
-                    </div>
-                    <div>
-                        <h4 class="text-white font-medium text-lg leading-snug mb-2 group-hover:text-amber-500 transition-colors">Casos Reais Fonte da Saudade: Leilão de imóvel – Fonte da Saudade/RJ – Escritório Cataldo Siston Advogados</h4>
-                        <p class="text-zinc-500 text-sm leading-relaxed">Caso real de imóvel em leilão na Fonte da Saudade assessorado pela equipe jurídica do escritório Cataldo Siston Advogados.</p>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- About Raphael Section -->
-    <section class="py-24 bg-white">
-        <div class="container mx-auto px-6 max-w-5xl">
-             <div class="text-center mb-16">
-                <h2 class="text-4xl lg:text-5xl font-serif text-zinc-900 tracking-tight">Sobre</h2>
-            </div>
-            
-            <div class="flex flex-col md:flex-row items-center gap-16">
-                <div class="w-full md:w-1/3 relative">
-                    <div class="absolute inset-0 bg-amber-100 rounded-lg transform translate-x-3 translate-y-3 -z-0"></div>
-                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Raphael Cataldo Siston" class="relative z-10 w-full rounded-lg shadow-xl object-cover grayscale hover:grayscale-0 transition-all duration-500 border border-zinc-200">
-                </div>
-                <div class="w-full md:w-2/3">
-                    <h2 class="text-3xl font-serif text-zinc-900 mb-6">Raphael Cataldo Siston</h2>
-                    <p class="text-lg text-zinc-500 font-light leading-relaxed mb-8">
-                        Advogado especialista em leilões de imóveis, com mais de 19 anos de experiência em arrematações imobiliárias. Pós-graduado em direito imobiliário e em direito processual civil.
-                    </p>
-                    
-                    <div class="space-y-2 border-t border-zinc-100 pt-8">
-                         <!-- Signature Placeholder -->
-                        <div class="font-serif italic text-4xl text-amber-600 mb-4 opacity-80" style="font-family: 'Playfair Display', serif;">Raphael Siston</div>
-                        <p class="text-sm font-medium text-zinc-900 uppercase tracking-widest">OAB/RJ nº 153.146</p>
-                        <a href="mailto:raphael@cataldosiston-adv.com.br" class="text-zinc-500 text-sm hover:text-amber-600 transition-colors block">raphael@cataldosiston-adv.com.br</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Footer Contact Section -->
-    <section class="relative overflow-hidden" style="background-image: url('https://cdn.prod.website-files.com/69023853a6b8fa97b90fd72d/6916498c666c6d43c4bc7927_bg-newsletter.jpg.webp'); background-size: cover; background-position: center; background-attachment: fixed;">
-        <!-- Elegant Overlay -->
-        <div class="absolute inset-0 bg-gradient-to-br from-zinc-900/95 via-zinc-900/90 to-zinc-800/95"></div>
-        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-amber-600/10 via-transparent to-transparent"></div>
-        
-        <div class="container mx-auto px-4 lg:px-12 max-w-[1400px] flex flex-col md:flex-row items-center pt-24 pb-20 relative z-10">
-            <!-- Form Area -->
-            <div class="w-full md:w-1/2 mb-12 md:mb-0 md:pr-12 relative z-10">
-                <div class="mb-8">
-                    <h2 class="text-4xl md:text-5xl font-serif text-white mb-3 tracking-tight">Receba nossa newsletter</h2>
-                    <div class="w-16 h-0.5 bg-amber-500 mb-4"></div>
-                    <p class="text-sm text-zinc-300 uppercase tracking-[0.15em] font-medium">Oportunidades de negócio, decisões, artigos, cases, etc.</p>
-                </div>
-  
-                <form class="space-y-5 max-w-lg bg-white/5 backdrop-blur-xl p-8 rounded-lg border border-white/10 shadow-2xl">
-                    <div>
-                        <label class="block text-xs font-bold text-zinc-300 mb-2 uppercase tracking-wider">Nome*</label>
-                        <input type="text" class="w-full bg-white/10 border border-white/20 text-white placeholder:text-zinc-400 text-sm px-4 py-3 rounded-lg focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all backdrop-blur-sm">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-zinc-300 mb-2 uppercase tracking-wider">Email*</label>
-                        <input type="email" class="w-full bg-white/10 border border-white/20 text-white placeholder:text-zinc-400 text-sm px-4 py-3 rounded-lg focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all backdrop-blur-sm">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-zinc-300 mb-2 uppercase tracking-wider">Telefone*</label>
-                        <input type="tel" class="w-full bg-white/10 border border-white/20 text-white placeholder:text-zinc-400 text-sm px-4 py-3 rounded-lg focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all backdrop-blur-sm">
-                    </div>
-                    
-                    <button type="button" class="w-full bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white font-bold text-sm py-4 uppercase tracking-wider rounded-lg transition-all shadow-lg shadow-amber-600/30 hover:shadow-xl hover:shadow-amber-600/40 hover:-translate-y-0.5 mt-2">
-                        Enviar
-                    </button>
-                    <p class="text-[10px] text-zinc-400 text-center mt-3 leading-relaxed">Prometemos não utilizar suas informações de contato para enviar qualquer tipo de SPAM</p>
-            </form>
-            </div>
-  
-            <!-- Contact Area -->
-            <div class="w-full md:w-1/2 flex items-end justify-center relative">
-                 <!-- Elegant Contact Bar -->
-                 <div class="w-full bg-gradient-to-t from-zinc-900/95 via-zinc-900/90 to-transparent backdrop-blur-md border-t border-amber-500/30 p-8 rounded-t-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-                     <div class="flex-1">
-                         <h3 class="font-serif text-white text-xl md:text-2xl mb-2 tracking-tight">Podemos ajudar a solucionar o seu caso!</h3>
-                         <p class="text-amber-400 text-xs uppercase tracking-wider font-medium">Entre em contato conosco</p>
-                     </div>
-                     <div class="flex gap-4">
-                         <a href="#" class="w-12 h-12 bg-white/10 hover:bg-amber-600/20 border border-white/20 hover:border-amber-500/50 rounded-full flex items-center justify-center text-amber-400 hover:text-amber-300 transition-all backdrop-blur-sm hover:scale-110">
-                             <i data-lucide="message-circle" class="w-5 h-5"></i>
-                         </a>
-                         <a href="#" class="w-12 h-12 bg-white/10 hover:bg-amber-600/20 border border-white/20 hover:border-amber-500/50 rounded-full flex items-center justify-center text-amber-400 hover:text-amber-300 transition-all backdrop-blur-sm hover:scale-110">
-                             <i data-lucide="mail" class="w-5 h-5"></i>
-                         </a>
-                         <a href="#" class="w-12 h-12 bg-white/10 hover:bg-amber-600/20 border border-white/20 hover:border-amber-500/50 rounded-full flex items-center justify-center text-amber-400 hover:text-amber-300 transition-all backdrop-blur-sm hover:scale-110">
-                             <i data-lucide="phone" class="w-5 h-5"></i>
-                         </a>
-                     </div>
-                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials Section -->
-    <section class="py-32 bg-marble">
-        <div class="container mx-auto px-6 max-w-4xl text-center relative">
-            <h2 class="text-center font-serif text-4xl text-zinc-900 mb-16">Depoimentos</h2>
-            
-            <div class="flex justify-center mb-8">
-                <i data-lucide="quote" class="w-10 h-10 text-amber-500 fill-current opacity-30"></i>
-            </div>
-            
-            <div class="relative px-12">
-                <button class="absolute left-0 top-1/2 -translate-y-1/2 text-zinc-300 hover:text-amber-600 transition-colors">
-                    <i data-lucide="chevron-left" class="w-10 h-10"></i>
-                </button>
-                <button class="absolute right-0 top-1/2 -translate-y-1/2 text-zinc-300 hover:text-amber-600 transition-colors">
-                    <i data-lucide="chevron-right" class="w-10 h-10"></i>
-                </button>
-
-                <div class="space-y-8">
-                    <p class="text-lg md:text-xl font-light text-zinc-600 leading-relaxed italic">
-                        "Como sou arquiteta, vinha planejando arrematar um imóvel em leilão para reformá-lo e vende-lo... A grande questão para mim sempre foi diminuir os riscos... Através da indicação de um amigo, fui apresentada ao escritório Cataldo Siston, e desde o primeiro contato fui muito bem atendida... Em todas as fases, incluindo emissão da posse até o registro de imóveis, a eficiência e profissionalismo do escritório esteve presente."
-                    </p>
-                    <div class="pt-4 border-t border-zinc-200 inline-block px-12">
-                        <h4 class="text-lg font-serif text-zinc-900 font-medium">Felipe Bueno</h4>
-                        <span class="text-amber-600 text-xs uppercase tracking-widest font-bold">Presidente da BX Capital</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Blog Section -->
-    <section id="blog" class="py-32 bg-white">
-        <div class="container mx-auto px-6 max-w-7xl">
-            <div class="text-center mb-20 relative">
-                <span class="text-amber-600 text-xs font-bold tracking-widest uppercase mb-4 block">Postagens do Blog</span>
-                <h2 class="text-4xl lg:text-5xl font-serif text-zinc-900 tracking-tight relative z-10 inline-block bg-white px-8">
-                    Últimas Publicações
-                </h2>
-                <div class="absolute top-1/2 left-0 w-full h-px bg-zinc-100 -z-0"></div>
-            </div>
-
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Post 1 -->
-                <article class="group cursor-pointer flex flex-col h-full border border-zinc-100 rounded hover:border-amber-100 hover:shadow-lg transition-all">
-                    <div class="relative h-60 overflow-hidden rounded-t">
-                        <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&amp;fit=crop&amp;q=80&amp;w=600" alt="Imissão" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-zinc-900/30 group-hover:bg-zinc-900/10 transition-colors"></div>
-                    </div>
-                    <div class="p-8 flex-1 flex flex-col">
-                        <h3 class="text-xl font-serif text-zinc-900 mb-4 group-hover:text-amber-700 transition-colors">Saiba como ocorre a imissão na posse em leilões de imóveis</h3>
-                        <p class="text-zinc-500 text-sm font-light leading-relaxed mb-6 flex-1 line-clamp-3">A imissão na posse em leilões de imóveis, seja extrajudiciais ou judiciais, é algo que suscita muitos questionamentos por parte dos licitantes ou interessados...</p>
-                        <span class="text-amber-600 text-xs font-bold uppercase flex items-center gap-2 group-hover:gap-3 transition-all">Ler Mais <i data-lucide="arrow-right" class="w-3 h-3"></i></span>
-                    </div>
-                </article>
-
-                <!-- Post 2 -->
-                <article class="group cursor-pointer flex flex-col h-full border border-zinc-100 rounded hover:border-amber-100 hover:shadow-lg transition-all">
-                    <div class="relative h-60 overflow-hidden rounded-t">
-                        <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&amp;fit=crop&amp;q=80&amp;w=600" alt="Impugnação" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-zinc-900/30 group-hover:bg-zinc-900/10 transition-colors"></div>
-                    </div>
-                    <div class="p-8 flex-1 flex flex-col">
-                        <h3 class="text-xl font-serif text-zinc-900 mb-4 group-hover:text-amber-700 transition-colors">Impugnação à arrematação do imóvel: quando pode ocorrer?</h3>
-                        <p class="text-zinc-500 text-sm font-light leading-relaxed mb-6 flex-1 line-clamp-3">Um dos maiores receios de quem participa de leilões de imóveis, ou daqueles que têm interesse em participar, é chegar ao final de todo o processo e ocorrer algo...</p>
-                        <span class="text-amber-600 text-xs font-bold uppercase flex items-center gap-2 group-hover:gap-3 transition-all">Ler Mais <i data-lucide="arrow-right" class="w-3 h-3"></i></span>
-                    </div>
-                </article>
-
-                <!-- Post 3 -->
-                <article class="group cursor-pointer flex flex-col h-full border border-zinc-100 rounded hover:border-amber-100 hover:shadow-lg transition-all">
-                    <div class="relative h-60 overflow-hidden rounded-t">
-                        <img src="https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?auto=format&amp;fit=crop&amp;q=80&amp;w=600" alt="Estado" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-zinc-900/30 group-hover:bg-zinc-900/10 transition-colors"></div>
-                    </div>
-                    <div class="p-8 flex-1 flex flex-col">
-                        <h3 class="text-xl font-serif text-zinc-900 mb-4 group-hover:text-amber-700 transition-colors">Imóveis em leilão costumam estar em péssimo estado de conservação?</h3>
-                        <p class="text-zinc-500 text-sm font-light leading-relaxed mb-6 flex-1 line-clamp-3">Muitos investidores e compradores em potencial se preocupam com o estado de conservação dos imóveis em leilão. A ideia de que essas propriedades...</p>
-                        <span class="text-amber-600 text-xs font-bold uppercase flex items-center gap-2 group-hover:gap-3 transition-all">Ler Mais <i data-lucide="arrow-right" class="w-3 h-3"></i></span>
-                    </div>
-                </article>
-            </div>
-
-            <div class="text-center mt-12">
-                <a href="#" class="inline-flex items-center gap-2 bg-amber-600 hover:bg-amber-500 text-white px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest transition-colors shadow-lg shadow-amber-900/20">
-                    Veja todas
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Main Footer -->
-    <footer class="bg-zinc-100 pt-16 pb-8 border-t border-zinc-200 text-zinc-600 text-sm">
-        <div class="container mx-auto px-4 lg:px-12 max-w-[1400px]">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
-                <div class="col-span-1">
-                    <a href="index.html" class="flex flex-col items-start group mb-6">
-                        <img src="https://cdn.prod.website-files.com/69023853a6b8fa97b90fd72d/6911dd6a49f6f0dabff0a498_logotipo_cataldo_siston.png" alt="Cataldo Siston Advogados" class="h-8 w-auto mb-2">
-                    </a>
-                    <p class="text-xs leading-relaxed mb-4">
-                        Leilões de imóveis e advocacia imobiliária<br>
-                        Av. Rio Branco, 156, Gr. 3336 a 3339 Centro<br>
-                        Rio de Janeiro - RJ - Brasil<br>
-                        +55 (21) 3173-3795<br>
-                        +55 (21) 97729-4848
-                    </p>
-                    </div>
 
                 <div>
-                    <h4 class="font-bold text-xs text-zinc-900 uppercase tracking-wider mb-6">Mapa do Site</h4>
-                    <ul class="space-y-2 text-xs">
-                        <li><a href="escritorio-imobiliario.html" class="hover:text-amber-600 transition-colors">Quem Somos</a></li>
-                        <li><a href="imoveis-rj.html" class="hover:text-amber-600 transition-colors">Imóveis em Leilão RJ</a></li>
-                        <li><a href="imoveis-sp.html" class="hover:text-amber-600 transition-colors">Imóveis em Leilão SP</a></li>
-                        <li><a href="#" class="hover:text-amber-600 transition-colors">Leilões da Caixa - RJ</a></li>
-                        <li><a href="#" class="hover:text-amber-600 transition-colors">Leilões da Caixa - SP</a></li>
-                        <li><a href="assessoria.html" class="hover:text-amber-600 transition-colors">Assessoria em leilões</a></li>
-                        <li><a href="direito-imobiliario.html" class="hover:text-amber-600 transition-colors">Direito Imobiliário</a></li>
-                        <li><a href="distrato-imobiliario.html" class="hover:text-amber-600 transition-colors">Distrato imobiliário</a></li>
-                        <li><a href="#" class="hover:text-amber-600 transition-colors">Direito civil</a></li>
-                        <li><a href="casos-reais.html" class="hover:text-amber-600 transition-colors">Casos Reais</a></li>
-                        <li><a href="blog.html" class="hover:text-amber-600 transition-colors">Blog</a></li>
-                        <li><a href="contato.html" class="hover:text-amber-600 transition-colors">Contato</a></li>
-                        <li><a href="#" class="hover:text-amber-600 transition-colors">Política de Privacidade</a></li>
-                    </ul>
-                            </div>
-
-                 <div>
-                    <h4 class="font-bold text-xs text-zinc-900 uppercase tracking-wider mb-6">Fale em Contato</h4>
-                    <p class="text-xs mb-4">Tire suas dúvidas ou siga-nos nas redes sociais</p>
-                    <a href="mailto:contato@cataldosiston.adv.com.br" class="text-xs font-bold text-zinc-900 hover:text-amber-600 mb-6 block">contato@cataldosiston-adv.com.br</a>
-                        <div class="flex gap-4">
-                         <a href="#" class="text-amber-600 hover:text-zinc-900 transition-colors"><i data-lucide="facebook" class="w-5 h-5"></i></a>
-                         <a href="#" class="text-amber-600 hover:text-zinc-900 transition-colors"><i data-lucide="instagram" class="w-5 h-5"></i></a>
-                         <a href="#" class="text-amber-600 hover:text-zinc-900 transition-colors"><i data-lucide="youtube" class="w-5 h-5"></i></a>
-                        </div>
+                    <h4 class="text-white font-medium mb-6 uppercase tracking-widest text-[10px]">Social</h4>
+                    <div class="flex gap-4">
+                        <a href="#" class="hover:text-amber-500 transition-colors"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+                        <a href="#" class="hover:text-amber-500 transition-colors"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+                        <a href="#" class="hover:text-amber-500 transition-colors"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
+                        <a href="#" class="hover:text-amber-500 transition-colors"><i data-lucide="youtube" class="w-4 h-4"></i></a>
                     </div>
                 </div>
 
-            <div class="border-t border-zinc-200 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-zinc-400">
-                <p>O conteúdo do texto desta página é de direito reservado do CATALDO SISTON ADVOGADOS. Sua reprodução, parcial ou total, mesmo citando nossos links, é proibida sem a autorização do autor. Crime de violação de direito autoral – artigo 184 do Código Penal – Lei 9610/98 - Lei de direitos autorais.</p>
+                 <div class="md:text-right flex flex-col justify-end">
+                    <p class="leading-relaxed text-[10px] opacity-60">© 2025 CATALDO SISTON ADVOGADOS. Todos os direitos reservados. OAB/RJ nº 153.146</p>
                 </div>
-            <div class="mt-4 text-[10px] text-zinc-400 text-center">
-                <p class="mb-2">CNPJ: 22437441000198 | Razão Social: CATALDO SISTON SOCIEDADE DE ADVOGADOS</p>
-                <p class="flex items-center justify-center gap-1">Conforme nossa <a href="#" class="underline">política de privacidade</a> este site faz uso de cookies. <button class="bg-amber-600 text-white px-2 py-0.5 rounded ml-2">Entendido</button></p>
             </div>
-                    </div>
+        </div>
     </footer>
 
     <script>
-        if (typeof lucide !== 'undefined') {
-            lucide.createIcons();
-        }
-
-        // Mobile Menu Toggle
-        document.addEventListener('DOMContentLoaded', function() {
-            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-            const mobileMenu = document.getElementById('mobileMenu');
-            if (!mobileMenuToggle || !mobileMenu) return;
-            
-            const menuIcon = mobileMenuToggle.querySelector('.mobile-menu-icon');
-            const closeIcon = mobileMenuToggle.querySelector('.mobile-menu-close');
-
-            mobileMenuToggle.addEventListener('click', function() {
-                const isOpen = mobileMenu.classList.contains('opacity-100');
-                
-                if (isOpen) {
-                    // Close menu
-                    mobileMenu.classList.remove('opacity-100', 'visible', 'translate-y-0');
-                    mobileMenu.classList.add('opacity-0', 'invisible', '-translate-y-4');
-                    menuIcon.classList.remove('hidden');
-                    closeIcon.classList.add('hidden');
-                } else {
-                    // Open menu
-                    mobileMenu.classList.remove('opacity-0', 'invisible', '-translate-y-4');
-                    mobileMenu.classList.add('opacity-100', 'visible', 'translate-y-0');
-                    menuIcon.classList.add('hidden');
-                    closeIcon.classList.remove('hidden');
-                }
-            });
-
-            // Close menu when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!mobileMenuToggle.contains(e.target) && !mobileMenu.contains(e.target)) {
-                    mobileMenu.classList.remove('opacity-100', 'visible', 'translate-y-0');
-                    mobileMenu.classList.add('opacity-0', 'invisible', '-translate-y-4');
-                    menuIcon.classList.remove('hidden');
-                    closeIcon.classList.add('hidden');
-                }
-            });
-        });
+        lucide.createIcons();
     </script>
-
-</body></html>
+</body>
+</html>
