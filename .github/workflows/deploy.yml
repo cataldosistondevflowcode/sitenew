@@ -31,6 +31,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Backup index.html estático
+        run: |
+          if [ -f dist/index.html ]; then
+            cp dist/index.html dist/index.html.backup
+          fi
+
       - name: Build
         run: npm run build
         env:
@@ -39,6 +45,12 @@ jobs:
           # VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
           # VITE_WEBFLOW_API_TOKEN: ${{ secrets.VITE_WEBFLOW_API_TOKEN }}
           NODE_ENV: production
+
+      - name: Restaurar index.html estático
+        run: |
+          if [ -f dist/index.html.backup ]; then
+            mv dist/index.html.backup dist/index.html
+          fi
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
