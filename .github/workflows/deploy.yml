@@ -28,29 +28,12 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Backup index.html estático
+      - name: Verificar dist/
         run: |
-          if [ -f dist/index.html ]; then
-            cp dist/index.html dist/index.html.backup
-          fi
-
-      - name: Build
-        run: npm run build
-        env:
-          # Adicione aqui suas variáveis de ambiente se necessário
-          # VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          # VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-          # VITE_WEBFLOW_API_TOKEN: ${{ secrets.VITE_WEBFLOW_API_TOKEN }}
-          NODE_ENV: production
-
-      - name: Restaurar index.html estático
-        run: |
-          if [ -f dist/index.html.backup ]; then
-            mv dist/index.html.backup dist/index.html
-          fi
+          echo "Arquivos no dist/:"
+          ls -la dist/ | head -20
+          echo "Total de arquivos HTML:"
+          ls -1 dist/*.html | wc -l
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
