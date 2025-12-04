@@ -11,7 +11,8 @@ const distDir = path.resolve(rootDir, 'dist');
 const htmlFiles = [
   'imoveis-rj.html',
   'imovel.html',
-  'assessoria.html'
+  'assessoria.html',
+  'blog.html'
 ];
 
 // Criar diretório dist se não existir
@@ -31,6 +32,11 @@ htmlFiles.forEach(file => {
     console.warn(`⚠️  Arquivo não encontrado: ${file}`);
   }
 });
+
+// Criar arquivo .nojekyll para o GitHub Pages não processar com Jekyll
+const nojekyllPath = path.join(distDir, '.nojekyll');
+fs.writeFileSync(nojekyllPath, '');
+console.log('✅ Arquivo .nojekyll criado!');
 
 console.log('✅ Arquivos HTML copiados com sucesso!');
 
