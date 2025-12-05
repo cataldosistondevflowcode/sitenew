@@ -2124,19 +2124,13 @@
         ]);
         console.log('✅ Dados do Supabase inicializados');
         
-        // Event listener para mudança de cidade no quick select (após popular)
-        setTimeout(() => {
-            const cityQuickSelect = document.getElementById('filter-city-quick');
-            if (cityQuickSelect) {
-                // Remover listener anterior se existir
-                const newCityQuickSelect = cityQuickSelect.cloneNode(true);
-                cityQuickSelect.parentNode.replaceChild(newCityQuickSelect, cityQuickSelect);
-                
-                newCityQuickSelect.addEventListener('change', (e) => {
-                    populateNeighborhoodsQuick(e.target.value);
-                });
-            }
-        }, 100);
+        // Event listener para mudança de cidade no quick select
+        const cityQuickSelect = document.getElementById('filter-city-quick');
+        if (cityQuickSelect) {
+            cityQuickSelect.addEventListener('change', function(e) {
+                populateNeighborhoodsQuick(e.target.value);
+            });
+        }
     }
 
     // ============================================
