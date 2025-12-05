@@ -1346,7 +1346,17 @@
                     .not('cidade', 'is', null)
                     .range(from, to);
                 
-                if (error) throw error;
+                if (error) {
+                    console.error('❌ Erro na query de cidades:', error);
+                    throw error;
+                }
+                
+                if (!data || data.length === 0) {
+                    hasMore = false;
+                    break;
+                }
+                
+                console.log(`📊 Página ${page + 1}: ${data.length} registros de cidades`);
                 
                 data.forEach(item => {
                     if (item.cidade && item.cidade.trim() !== '') {
@@ -1386,6 +1396,8 @@
                 
                 if (page > 50) break; // Limite de segurança
             }
+            
+            console.log(`📊 Total de cidades únicas encontradas: ${Object.keys(cityCount).length}`);
             
             // Estruturar dados agrupados por região
             const citiesByRegionArray = {};
