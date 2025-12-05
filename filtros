@@ -1,946 +1,1439 @@
-# Sistema de Filtros Completo - Documentação Técnica
+# 📘 Código Completo - Sistema de Filtros com View `leiloes_imoveis_com_zona`
 
-## 📋 Visão Geral
-
-Este documento explica **exatamente** como funciona o sistema de filtros de imóveis em leilão. O sistema usa **Supabase** como banco de dados e **React Router** para gerenciar filtros na URL.
-
-**Volume de dados:** ~16.000 imóveis  
-**Tecnologias:** React, TypeScript, Supabase (PostgreSQL), React Router
+Este documento contém **todo o código necessário** para implementar o sistema completo de filtros usando a view `leiloes_imoveis_com_zona` do Supabase.
 
 ---
 
-## 🏗️ Arquitetura do Sistema
+## 📋 Índice
 
-```
-┌─────────────────┐
-│   URL Params    │ ← Usuário acessa URL com filtros
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│ useFilterParams │ ← Hook lê filtros da URL
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│  Estado Filters │ ← Filtros aplicados no estado
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│  Supabase Query │ ← Query construída com filtros
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│  Resultados     │ ← 40 itens por página
-└─────────────────┘
-```
+1. [Estrutura de Arquivos](#1-estrutura-de-arquivos)
+2. [Hook de Filtros (useFilterParams)](#2-hook-de-filtros-usefilterparams)
+3. [Utilitários (stringUtils)](#3-utilitários-stringutils)
+4. [Componente Principal com Filtros](#4-componente-principal-com-filtros)
+5. [Configurações e Constantes](#5-configurações-e-constantes)
 
 ---
 
-## 📦 Estrutura de Arquivos Necessários
+## 1. Estrutura de Arquivos
 
 ```
 src/
 ├── hooks/
 │   └── useFilterParams.tsx      # Hook para gerenciar filtros na URL
-├── integrations/
-│   └── supabase/
-│       └── client.ts             # Cliente do Supabase
-└── utils/
-    └── stringUtils.ts            # Utilitários (sanitização, escape SQL)
+├── utils/
+│   └── stringUtils.ts            # Utilitários (sanitização, escape SQL)
+└── pages/
+    └── Index.tsx                 # Página principal com filtros
 ```
 
 ---
 
-## 🔧 Arquivo 1: Hook de Filtros (`useFilterParams.tsx`)
+## 2. Hook de Filtros (`useFilterParams.tsx`)
 
-### Função Principal
-
-Este hook gerencia a sincronização entre **URL** e **estado dos filtros**.
+**Arquivo:** `src/hooks/useFilterParams.tsx`
 
 ```typescript
 import { useSearchParams } from 'react-router-dom';
 import { useCallback } from 'react';
 
+// Interface para os filtros base
 export interface FilterParams {
-  city?: string;                    // Cidade única ou múltiplas (separadas por vírgula)
-  type?: string;                    // Tipo de imóvel único ou múltiplos
-  neighborhood?: string;            // Bairro único ou múltiplos
-  location?: string;                // Busca livre em endereço/bairro/cidade
-  keyword?: string;                 // Busca em título/descrição
-  hasSecondAuction?: boolean;       // Apenas com segundo leilão
-  priceRange?: { min?: number; max?: number; };
-  priceRanges?: string[];           // Labels das faixas selecionadas
-  financiamento?: boolean;          // Aceita financiamento
-  fgts?: boolean;                   // Aceita FGTS
-  parcelamento?: boolean;           // Permite parcelamento
-  auctionType?: string;             // Tipo de leilão (Judicial, Extrajudicial, etc.)
-  neighborhoods?: string[];         // Array de bairros
-  cities?: string[];                // Array de cidades
-  dataFimSegundoLeilao?: string;    // Data final (ISO)
-  zone?: string;                    // Zona única
-  zones?: string[];                 // Múltiplas zonas
+  city?: string;
+  type?: string;
+  neighborhood?: string;
+  location?: string;
+  keyword?: string;
+  hasSecondAuction?: boolean;
+  priceRange?: {
+    min?: number;
+    max?: number;
+  };
+  priceRanges?: string[]; // Para múltiplas faixas de preço selecionadas
+  financiamento?: boolean;
+  fgts?: boolean;
+  parcelamento?: boolean;
+  auctionType?: string;
+  neighborhoods?: string[]; // Para múltiplos bairros
+  cities?: string[]; // Para múltiplas cidades
+  dataFimSegundoLeilao?: string; // Data final do filtro de data de encerramento do segundo leilão
+  zone?: string; // Para zonas (ex: "Zona Sul (Rio de Janeiro)")
+  zones?: string[]; // Para múltiplas zonas (ex: ["Zona Sul (Rio de Janeiro)", "Zona Norte (Rio de Janeiro)"])
+}
+
+// Tipos para as faixas de preço
+export interface PriceRange {
+  label: string;
+  min?: number;
+  max?: number;
+}
+
+// Tipos para o tipo selecionado
+export interface SelectedType {
+  label: string;
+  icon: JSX.Element;
+  originalValue?: string;
 }
 
 export const useFilterParams = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // CONVERTE URL → OBJETO FILTROS
+  // Função para converter params da URL para objeto de filtros
   const parseFiltersFromURL = useCallback((): FilterParams => {
     const filters: FilterParams = {};
     
-    // Lê cada parâmetro da URL e converte para o objeto
+    // Leitura direta e simples
     const city = searchParams.get('cidade');
     if (city) filters.city = city;
-    
-    // ... (lê todos os outros parâmetros)
-    
+
+    const type = searchParams.get('tipo');
+    if (type) filters.type = type;
+
+    const neighborhood = searchParams.get('bairro');
+    if (neighborhood) filters.neighborhood = neighborhood;
+
+    const location = searchParams.get('localizacao');
+    if (location) filters.location = location;
+
+    const keyword = searchParams.get('palavra_chave');
+    if (keyword) filters.keyword = keyword;
+
+    const auctionType = searchParams.get('tipo_leilao');
+    if (auctionType) filters.auctionType = auctionType;
+
+    // Parâmetros booleanos
+    const hasSecondAuction = searchParams.get('segundo_leilao');
+    if (hasSecondAuction === 'true') filters.hasSecondAuction = true;
+
+    const financiamento = searchParams.get('financiamento');
+    if (financiamento === 'true') filters.financiamento = true;
+
+    const fgts = searchParams.get('fgts');
+    if (fgts === 'true') filters.fgts = true;
+
+    const parcelamento = searchParams.get('parcelamento');
+    if (parcelamento === 'true') filters.parcelamento = true;
+
+    // Faixa de preço
+    const minPrice = searchParams.get('preco_min');
+    const maxPrice = searchParams.get('preco_max');
+    if (minPrice || maxPrice) {
+      filters.priceRange = {};
+      if (minPrice) filters.priceRange.min = parseInt(minPrice);
+      if (maxPrice) filters.priceRange.max = parseInt(maxPrice);
+    }
+
+    // Filtro de data de encerramento do segundo leilão
+    const dataFimSegundoLeilao = searchParams.get('data_fim_segundo_leilao');
+    if (dataFimSegundoLeilao) filters.dataFimSegundoLeilao = dataFimSegundoLeilao;
+
+    // Múltiplas faixas de preço selecionadas
+    const priceRanges = searchParams.get('faixas_preco');
+    if (priceRanges) {
+      filters.priceRanges = priceRanges.split(',').map(r => r.trim()).filter(Boolean);
+    }
+
+    // Arrays para múltiplos valores (usando vírgula simples)
+    const neighborhoods = searchParams.get('bairros');
+    if (neighborhoods) {
+      filters.neighborhoods = neighborhoods.split(',').map(n => n.trim()).filter(Boolean);
+    }
+
+    const cities = searchParams.get('cidades');
+    if (cities) {
+      filters.cities = cities.split(',').map(c => c.trim()).filter(Boolean);
+    }
+
+    // Parâmetro de zona
+    const zone = searchParams.get('zona');
+    if (zone) {
+      filters.zone = zone;
+    }
+
+    // Parâmetro de múltiplas zonas
+    const zones = searchParams.get('zonas');
+    if (zones) {
+      filters.zones = zones.split(',').map(z => z.trim()).filter(Boolean);
+    }
+
     return filters;
   }, [searchParams]);
 
-  // CONVERTE OBJETO FILTROS → URL
+  // Função para atualizar a URL com os filtros
   const updateURL = useCallback((filters: FilterParams) => {
     const newParams = new URLSearchParams();
     
+    // Adicionar parâmetros de forma direta
     if (filters.city) newParams.set('cidade', filters.city);
-    // ... (adiciona todos os outros parâmetros)
-    
+    if (filters.type) newParams.set('tipo', filters.type);
+    if (filters.neighborhood) newParams.set('bairro', filters.neighborhood);
+    if (filters.location) newParams.set('localizacao', filters.location);
+    if (filters.keyword) newParams.set('palavra_chave', filters.keyword);
+    if (filters.auctionType) newParams.set('tipo_leilao', filters.auctionType);
+
+    // Adicionar parâmetros booleanos
+    if (filters.hasSecondAuction) newParams.set('segundo_leilao', 'true');
+    if (filters.financiamento) newParams.set('financiamento', 'true');
+    if (filters.fgts) newParams.set('fgts', 'true');
+    if (filters.parcelamento) newParams.set('parcelamento', 'true');
+
+    // Adicionar faixa de preço
+    if (filters.priceRange?.min) newParams.set('preco_min', filters.priceRange.min.toString());
+    if (filters.priceRange?.max) newParams.set('preco_max', filters.priceRange.max.toString());
+
+    // Adicionar filtro de data de encerramento do segundo leilão
+    if (filters.dataFimSegundoLeilao) newParams.set('data_fim_segundo_leilao', filters.dataFimSegundoLeilao);
+
+    // Adicionar múltiplas faixas de preço
+    if (filters.priceRanges && filters.priceRanges.length > 0) {
+      newParams.set('faixas_preco', filters.priceRanges.join(','));
+    }
+
+    // Adicionar arrays (vírgula simples)
+    if (filters.neighborhoods && filters.neighborhoods.length > 0) {
+      newParams.set('bairros', filters.neighborhoods.join(','));
+    }
+    if (filters.cities && filters.cities.length > 0) {
+      newParams.set('cidades', filters.cities.join(','));
+    }
+
+    // Adicionar parâmetro de zona
+    if (filters.zone) {
+      newParams.set('zona', filters.zone);
+    }
+
+    // Adicionar parâmetro de múltiplas zonas
+    if (filters.zones && filters.zones.length > 0) {
+      newParams.set('zonas', filters.zones.join(','));
+    }
+
     setSearchParams(newParams, { replace: true });
   }, [setSearchParams]);
 
+  // Função para limpar todos os filtros da URL
+  const clearFiltersFromURL = useCallback(() => {
+    setSearchParams({}, { replace: true });
+  }, [setSearchParams]);
+
+  // Função para obter URL shareável atual
+  const getShareableURL = useCallback(() => {
+    const currentURL = window.location.href;
+    return currentURL;
+  }, []);
+
+  // Função para criar URL shareável com filtros específicos
+  const createShareableURL = useCallback((filters: FilterParams) => {
+    const newParams = new URLSearchParams();
+    
+    // USAR EXATAMENTE A MESMA LÓGICA que updateURL
+    if (filters.city) newParams.set('cidade', filters.city);
+    if (filters.type) newParams.set('tipo', filters.type);
+    if (filters.neighborhood) newParams.set('bairro', filters.neighborhood);
+    if (filters.location) newParams.set('localizacao', filters.location);
+    if (filters.keyword) newParams.set('palavra_chave', filters.keyword);
+    if (filters.auctionType) newParams.set('tipo_leilao', filters.auctionType);
+
+    if (filters.hasSecondAuction) newParams.set('segundo_leilao', 'true');
+    if (filters.financiamento) newParams.set('financiamento', 'true');
+    if (filters.fgts) newParams.set('fgts', 'true');
+    if (filters.parcelamento) newParams.set('parcelamento', 'true');
+
+    if (filters.priceRange?.min) newParams.set('preco_min', filters.priceRange.min.toString());
+    if (filters.priceRange?.max) newParams.set('preco_max', filters.priceRange.max.toString());
+
+    if (filters.dataFimSegundoLeilao) newParams.set('data_fim_segundo_leilao', filters.dataFimSegundoLeilao);
+
+    if (filters.priceRanges && filters.priceRanges.length > 0) {
+      newParams.set('faixas_preco', filters.priceRanges.join(','));
+    }
+
+    if (filters.neighborhoods && filters.neighborhoods.length > 0) {
+      newParams.set('bairros', filters.neighborhoods.join(','));
+    }
+    if (filters.cities && filters.cities.length > 0) {
+      newParams.set('cidades', filters.cities.join(','));
+    }
+
+    // Adicionar parâmetro de zona
+    if (filters.zone) {
+      newParams.set('zona', filters.zone);
+    }
+
+    // Adicionar parâmetro de múltiplas zonas
+    if (filters.zones && filters.zones.length > 0) {
+      newParams.set('zonas', filters.zones.join(','));
+    }
+
+    const baseURL = window.location.origin + window.location.pathname;
+    return newParams.toString() ? `${baseURL}?${newParams.toString()}` : baseURL;
+  }, []);
+
   return {
-    parseFiltersFromURL,  // URL → Filtros
-    updateURL,             // Filtros → URL
-    clearFiltersFromURL,    // Limpar URL
-    getShareableURL,       // Obter URL atual
-    createShareableURL      // Criar URL com filtros
+    parseFiltersFromURL,
+    updateURL,
+    clearFiltersFromURL,
+    getShareableURL,
+    createShareableURL,
+    searchParams
   };
 };
 ```
 
-### Como Funciona
-
-1. **parseFiltersFromURL()**: Lê `?cidade=Rio&tipo=Apartamento` da URL e retorna `{ city: "Rio", type: "Apartamento" }`
-2. **updateURL()**: Recebe `{ city: "Rio" }` e atualiza a URL para `?cidade=Rio`
-3. **Sincronização**: Sempre que filtros mudam, a URL é atualizada (e vice-versa)
-
 ---
 
-## 🔧 Arquivo 2: Cliente Supabase (`client.ts`)
+## 3. Utilitários (`stringUtils.ts`)
+
+**Arquivo:** `src/utils/stringUtils.ts`
 
 ```typescript
-import { createClient } from '@supabase/supabase-js';
-
-const SUPABASE_URL = "https://seu-projeto.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "sua-chave-publica";
-
-export const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
-```
-
-**Função:** Cria conexão com o banco de dados Supabase.
-
----
-
-## 🔧 Arquivo 3: Utilitários (`stringUtils.ts`)
-
-### Funções de Segurança
-
-```typescript
-// ESCAPA caracteres especiais do SQL para prevenir SQL Injection
-export const escapeSqlLike = (str: string): string => {
+// Função para remover acentos e normalizar strings para busca
+export const normalizeString = (str: string): string => {
   return str
-    .replace(/\\/g, '\\\\')  // Escapa \
-    .replace(/%/g, '\\%')    // Escapa %
-    .replace(/_/g, '\\_')    // Escapa _
-    .replace(/'/g, "''");    // Escapa '
-};
-
-// REMOVE caracteres problemáticos antes de buscar
-export const sanitizeSearchInput = (str: string): string => {
-  return str
-    .replace(/[,;]/g, '')  // Remove vírgulas e ponto e vírgula
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // Remove acentos
+    .replace(/[^\w\s]/g, '') // Remove caracteres especiais exceto espaços
     .trim();
 };
-```
 
-**Por que são necessárias?**
-- **escapeSqlLike**: Previne SQL Injection em buscas com `ILIKE`
-- **sanitizeSearchInput**: Remove caracteres que podem quebrar a query
+// Função para verificar se uma string contém outra de forma flexível
+export const flexibleIncludes = (text: string, search: string): boolean => {
+  if (!search.trim()) return true;
+  
+  const normalizedText = normalizeString(text);
+  const normalizedSearch = normalizeString(search);
+  
+  return normalizedText.includes(normalizedSearch);
+};
+
+// Função para busca ainda mais flexível que permite palavras em qualquer ordem
+export const flexibleSearch = (text: string, search: string): boolean => {
+  if (!search.trim()) return true;
+  
+  const normalizedText = normalizeString(text);
+  const searchWords = normalizeString(search).split(/\s+/);
+  
+  // Verifica se todas as palavras da busca estão presentes no texto
+  return searchWords.every(word => normalizedText.includes(word));
+};
+
+// Função para formatar valores monetários em Real
+export const formatCurrency = (value: number): string => {
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+  }).format(value);
+};
+
+// Função para escapar caracteres especiais em consultas SQL ilike
+export const escapeSqlLike = (str: string): string => {
+  if (!str) return '';
+  
+  // Escapar caracteres especiais do SQL LIKE
+  return str
+    .replace(/\\/g, '\\\\')  // Escapar barras invertidas primeiro
+    .replace(/%/g, '\\%')    // Escapar percentuais
+    .replace(/_/g, '\\_')    // Escapar underscores
+    .replace(/'/g, "''");    // Escapar aspas simples (duplicar)
+};
+
+// Função para sanitizar entrada de busca, removendo caracteres problemáticos
+export const sanitizeSearchInput = (str: string): string => {
+  if (!str) return '';
+  
+  // Remover caracteres que podem causar problemas em consultas SQL
+  return str
+    .replace(/[,;]/g, '')  // Remover vírgulas e ponto e vírgula
+    .trim();               // Remover espaços extras
+};
+```
 
 ---
 
-## 🎯 Arquivo 4: Lógica de Busca (Exemplo Completo)
+## 4. Componente Principal com Filtros
 
-### Fluxo Completo de uma Busca
+**Arquivo:** `src/pages/Index.tsx`
+
+Este é o componente completo com todos os filtros e front-end. O código é muito extenso, então vou criar em partes:
+
+### 4.1. Imports e Interfaces
 
 ```typescript
-import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { useFilterParams, FilterParams } from '@/hooks/useFilterParams';
-import { escapeSqlLike, sanitizeSearchInput } from '@/utils/stringUtils';
+import { CookieBar } from "@/components/CookieBar";
+import { SocialBar } from "@/components/SocialBar";
+import { Header } from "@/components/Header";
+import { HeroSection } from "@/components/HeroSection";
+import { PropertyCard } from "@/components/PropertyCard";
+import { PropertyPagination } from "@/components/PropertyPagination";
+import { FeaturedVideos } from "@/components/FeaturedVideos";
+import { SuccessCases } from "@/components/SuccessCases";
+import { ArticlesSection } from "@/components/articles";
+import { VideoPlayerContainer } from "@/components/video";
+import { TestimonialsSection } from "@/components/testimonials";
+import { NewsletterBottomSection } from "@/components/NewsletterBottomSection";
+import { Footer } from "@/components/Footer";
+import OpportunityPopup from "@/components/OpportunityPopup";
+import { Search, MessageCircle, Filter, X, MapPin, ChevronDown, Home, Building, Tractor, Trees, FileText, Globe, DollarSign, CalendarIcon, Car, SquareStack, Warehouse, Gavel, Mail } from "lucide-react";
+import { WhatsAppIcon } from "@/components/icons";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { flexibleSearch, escapeSqlLike, sanitizeSearchInput } from "@/utils/stringUtils";
+import { useFilterParams, FilterParams } from "@/hooks/useFilterParams";
+import { executeWhatsAppAction, initializeWhatsAppScript } from "@/utils/whatsappScript";
+import { SEO } from "@/components/SEO";
+
+// Interface para os dados dos imóveis
+interface Property {
+  id: number;
+  titulo_propriedade: string;
+  endereco: string;
+  bairro: string;
+  cidade: string;
+  estado: string;
+  data_leilao_1: string;
+  data_leilao_2: string;
+  leilao_1: number;
+  leilao_2: number;
+  area_displayable?: string;
+  parkingSpots?: string;
+  imagem: string;
+  descricao?: string;
+  tipo_leilao?: string;
+  fgts?: boolean;
+  financiamento?: boolean;
+  parcelamento?: boolean;
+  zona?: string; // Campo de zona da view
+}
+
+// Interface para os filtros
+interface Filters {
+  city?: string;
+  type?: string;
+  neighborhood?: string;
+  location?: string;
+  keyword?: string;
+  hasSecondAuction?: boolean;
+  priceRange?: {
+    min?: number;
+    max?: number;
+  };
+  priceRanges?: string[];
+  auctionType?: string;
+  financiamento?: boolean;
+  fgts?: boolean;
+  parcelamento?: boolean;
+  dataFimSegundoLeilao?: string;
+  zone?: string;
+  zones?: string[];
+}
+
+// Interface para as faixas de preço
+interface PriceRange {
+  label: string;
+  min?: number;
+  max?: number;
+}
+
+// Interface para o tipo selecionado
+interface SelectedType {
+  label: string;
+  icon: JSX.Element;
+  originalValue?: string;
+}
 
 const ITEMS_PER_PAGE = 40;
+```
 
-export const PropertyList = () => {
-  const [properties, setProperties] = useState([]);
-  const [filters, setFilters] = useState<FilterParams>({});
+### 4.2. Constantes de Faixas de Preço e Tipos de Leilão
+
+```typescript
+// Faixas de preço disponíveis
+const priceRanges: PriceRange[] = [
+  { label: 'Todos os preços' },
+  { label: 'Até R$ 300k', max: 300000 },
+  { label: 'R$ 300k a R$ 500k', min: 300000, max: 500000 },
+  { label: 'R$ 500k a R$ 750k', min: 500000, max: 750000 },
+  { label: 'R$ 750k a R$ 1M', min: 750000, max: 1000000 },
+  { label: 'R$ 1M a R$ 1.5M', min: 1000000, max: 1500000 },
+  { label: 'R$ 1.5M a R$ 2M', min: 1500000, max: 2000000 },
+  { label: 'Acima de R$ 2M', min: 2000000 }
+];
+
+const AUCTION_TYPE_JUDICIAL = "JUDICIAL";
+const AUCTION_TYPE_EXTRAJUDICIAL = "EXTRAJUDICIAL";
+const AUCTION_TYPE_EXTRAJUDICIAL_FINANCIAMENTO = "EXTRAJUDICIAL FINANCIÁVEL";
+```
+
+### 4.3. Componente Principal - Estados e Hooks
+
+```typescript
+const Index = () => {
+  // Estados para os imóveis e paginação
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
   const [filtersLoaded, setFiltersLoaded] = useState(false);
 
-  const { parseFiltersFromURL, updateURL } = useFilterParams();
+  // Estados para os filtros
+  const [filters, setFilters] = useState<Filters>({});
+  const [selectedType, setSelectedType] = useState<SelectedType>({ label: "Todos os imóveis", icon: <Globe className="h-4 w-4" /> });
+  const [selectedTypes, setSelectedTypes] = useState<SelectedType[]>([]);
+  const [selectedCity, setSelectedCity] = useState("Selecione a cidade");
+  const [selectedCityName, setSelectedCityName] = useState("");
+  const [selectedCities, setSelectedCities] = useState<string[]>([]);
+  const [selectedNeighborhood, setSelectedNeighborhood] = useState("Selecione o bairro");
+  const [selectedNeighborhoods, setSelectedNeighborhoods] = useState<string[]>([]);
+  const [selectedPriceRange, setSelectedPriceRange] = useState<PriceRange>({ label: "Todos os preços" });
+  const [selectedPriceRanges, setSelectedPriceRanges] = useState<PriceRange[]>([]);
+  const [selectedAuctionType, setSelectedAuctionType] = useState("Todos os tipos de leilão");
+  const [selectedAuctionTypes, setSelectedAuctionTypes] = useState<string[]>([]);
+  const [locationInput, setLocationInput] = useState("");
+  const [keywordInput, setKeywordInput] = useState("");
+  const [filterSecondAuction, setFilterSecondAuction] = useState(false);
+  const [dataFimSegundoLeilao, setDataFimSegundoLeilao] = useState("");
 
-  // PASSO 1: Carregar filtros da URL ao montar
+  // Estados para os menus dropdown
+  const [showTypeMenu, setShowTypeMenu] = useState(false);
+  const [showCityMenu, setShowCityMenu] = useState(false);
+  const [showNeighborhoodMenu, setShowNeighborhoodMenu] = useState(false);
+  const [showPriceMenu, setShowPriceMenu] = useState(false);
+  const [showAuctionTypeMenu, setShowAuctionTypeMenu] = useState(false);
+  const [citySearchTerm, setCitySearchTerm] = useState("");
+  const [neighborhoodSearchTerm, setNeighborhoodSearchTerm] = useState("");
+
+  // Estados para dados do banco
+  const [rjCities, setRjCities] = useState<Array<{ city: string; count: number }>>([]);
+  const [propertyTypes, setPropertyTypes] = useState<Array<{ type: string; count: number }>>([]);
+  const [rjNeighborhoods, setRjNeighborhoods] = useState<any>([]);
+  const [zones, setZones] = useState<string[]>([]); // Zonas disponíveis da view
+
+  // Estados para mobile
+  const [isMobile, setIsMobile] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+
+  // Hook para gerenciar sincronização com URL
+  const { parseFiltersFromURL, updateURL, clearFiltersFromURL } = useFilterParams();
+
+  // Carregar script do WhatsApp automaticamente
+  useEffect(() => {
+    initializeWhatsAppScript();
+  }, []);
+```
+
+### 4.4. Carregar Cidades, Tipos e Zonas da View
+
+```typescript
+  // Carregar as cidades do estado RJ da view
+  useEffect(() => {
+    const fetchRjCities = async () => {
+      try {
+        const cityCount: Record<string, number> = {};
+        
+        // Buscar todos os registros com paginação da VIEW
+        let page = 0;
+        const pageSize = 1000;
+        let hasMore = true;
+        
+        while (hasMore) {
+          const from = page * pageSize;
+          const to = from + pageSize - 1;
+          
+          const { data, error, count } = await supabase
+            .from('leiloes_imoveis_com_zona') // ⬅️ USAR A VIEW
+            .select('cidade', { count: 'exact' })
+            .eq('estado', 'RJ')
+            .gte('leilao_1', 75000)
+            .order('cidade')
+            .not('cidade', 'is', null)
+            .range(from, to);
+          
+          if (error) throw error;
+          
+          data.forEach(item => {
+            if (item.cidade && item.cidade.trim() !== '') {
+              cityCount[item.cidade] = (cityCount[item.cidade] || 0) + 1;
+            }
+          });
+          
+          hasMore = data.length === pageSize;
+          page++;
+          
+          if (page > 50) break;
+        }
+        
+        const citiesArray = Object.keys(cityCount)
+          .map(city => ({
+            city,
+            count: cityCount[city]
+          }))
+          .sort((a, b) => {
+            if (b.count !== a.count) {
+              return b.count - a.count;
+            }
+            return a.city.localeCompare(b.city, 'pt-BR');
+          });
+        
+        setRjCities(citiesArray);
+      } catch (err) {
+        console.error('Erro ao buscar cidades do RJ:', err);
+      }
+    };
+
+    // Buscar tipos de propriedade da VIEW
+    const fetchPropertyTypes = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('leiloes_imoveis_com_zona') // ⬅️ USAR A VIEW
+          .select('tipo_propriedade')
+          .eq('estado', 'RJ')
+          .gte('leilao_1', 75000)
+          .not('tipo_propriedade', 'is', null);
+          
+        if (error) throw error;
+        
+        const typeCount: Record<string, number> = {};
+        data.forEach(item => {
+          if (item.tipo_propriedade && item.tipo_propriedade.trim() !== '') {
+            typeCount[item.tipo_propriedade] = (typeCount[item.tipo_propriedade] || 0) + 1;
+          }
+        });
+        
+        const typesArray = Object.keys(typeCount)
+          .map(type => ({
+            type,
+            count: typeCount[type]
+          }))
+          .sort((a, b) => a.type.localeCompare(b.type, 'pt-BR'));
+        
+        setPropertyTypes(typesArray);
+      } catch (err) {
+        console.error('Erro ao buscar tipos de propriedade:', err);
+      }
+    };
+
+    // Buscar zonas disponíveis da VIEW
+    const fetchZones = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('leiloes_imoveis_com_zona') // ⬅️ USAR A VIEW
+          .select('zona')
+          .eq('estado', 'RJ')
+          .gte('leilao_1', 75000)
+          .not('zona', 'is', null);
+          
+        if (error) throw error;
+        
+        // Obter zonas únicas
+        const uniqueZones = [...new Set(data.map(item => item.zona).filter(Boolean))];
+        setZones(uniqueZones.sort());
+      } catch (err) {
+        console.error('Erro ao buscar zonas:', err);
+      }
+    };
+
+    fetchRjCities();
+    fetchPropertyTypes();
+    fetchZones();
+  }, []);
+```
+
+### 4.5. Carregar Filtros da URL
+
+```typescript
+  // Carregar filtros da URL quando a página carrega
   useEffect(() => {
     const urlFilters = parseFiltersFromURL();
-    setFilters(urlFilters);
+    if (Object.keys(urlFilters).length > 0) {
+      // Sincronizar estados visuais com os filtros da URL
+      if (urlFilters.city) {
+        const cities = urlFilters.city.split(',');
+        if (cities.length > 1) {
+          setSelectedCities(cities);
+          setSelectedCity(`${cities.length} cidades selecionadas`);
+        } else {
+          setSelectedCity(cities[0]);
+        }
+      }
+      
+      if (urlFilters.type) {
+        const types = urlFilters.type.split(',');
+        if (types.length > 1) {
+          const typeObjects = types.map(type => ({ 
+            label: type, 
+            icon: <Home className="h-4 w-4" />,
+            originalValue: type 
+          }));
+          setSelectedTypes(typeObjects);
+          setSelectedType({ label: `${types.length} tipos selecionados`, icon: <Home className="h-4 w-4" /> });
+        } else {
+          setSelectedType({ label: types[0], icon: <Home className="h-4 w-4" />, originalValue: types[0] });
+        }
+      }
+      
+      // ⬇️ FILTRO DE ZONA - DIRETO DA VIEW ⬇️
+      if (urlFilters.zones && urlFilters.zones.length > 0) {
+        // Múltiplas zonas selecionadas
+        setSelectedNeighborhood(`${urlFilters.zones.length} zonas selecionadas`);
+      } else if (urlFilters.zone) {
+        // Uma zona selecionada
+        setSelectedNeighborhood(`${urlFilters.zone} (todos)`);
+      } else if (urlFilters.neighborhood) {
+        const neighborhoods = urlFilters.neighborhood.split(',');
+        if (neighborhoods.length > 1) {
+          setSelectedNeighborhoods(neighborhoods);
+          setSelectedNeighborhood(`${neighborhoods.length} bairros selecionados`);
+        } else {
+          setSelectedNeighborhood(neighborhoods[0]);
+        }
+      }
+      
+      // Inicializar múltiplas faixas de preço se existirem na URL
+      if (urlFilters.priceRanges && urlFilters.priceRanges.length > 0) {
+        const rangeObjects: PriceRange[] = [];
+        urlFilters.priceRanges.forEach(rangeLabel => {
+          const matchedRange = priceRanges.find(r => r.label === rangeLabel);
+          if (matchedRange) {
+            rangeObjects.push(matchedRange);
+          }
+        });
+        if (rangeObjects.length > 0) {
+          setSelectedPriceRanges(rangeObjects);
+          if (rangeObjects.length === 1) {
+            setSelectedPriceRange(rangeObjects[0]);
+          } else {
+            setSelectedPriceRange({ label: `${rangeObjects.length} faixas selecionadas` });
+          }
+        }
+      } else if (urlFilters.priceRange) {
+        const range = urlFilters.priceRange;
+        const matchedRange = priceRanges.find(r => r.min === range.min && r.max === range.max);
+        if (matchedRange) {
+          setSelectedPriceRange(matchedRange);
+          setSelectedPriceRanges([matchedRange]);
+        }
+      }
+      
+      if (urlFilters.auctionType) {
+        setSelectedAuctionType(urlFilters.auctionType);
+        
+        if (urlFilters.auctionType === "EXTRAJUDICIAL_COMPOSTO") {
+          setSelectedAuctionTypes([AUCTION_TYPE_EXTRAJUDICIAL, AUCTION_TYPE_EXTRAJUDICIAL_FINANCIAMENTO]);
+        } else if (urlFilters.auctionType === "EXTRAJUDICIAL_CUSTOM") {
+          if (urlFilters.financiamento === true) {
+            setSelectedAuctionTypes([AUCTION_TYPE_EXTRAJUDICIAL_FINANCIAMENTO]);
+          } else {
+            setSelectedAuctionTypes([AUCTION_TYPE_EXTRAJUDICIAL]);
+          }
+        } else if (urlFilters.auctionType === "Judicial") {
+          setSelectedAuctionTypes([AUCTION_TYPE_JUDICIAL]);
+        }
+      }
+      
+      if (urlFilters.hasSecondAuction) {
+        setFilterSecondAuction(true);
+      }
+      
+      if (urlFilters.location) {
+        setLocationInput(urlFilters.location);
+      }
+      
+      if (urlFilters.keyword) {
+        setKeywordInput(urlFilters.keyword);
+      }
+      
+      if (urlFilters.dataFimSegundoLeilao) {
+        setDataFimSegundoLeilao(urlFilters.dataFimSegundoLeilao);
+      }
+      
+      // Aplicar os filtros vindos da URL
+      if (urlFilters.auctionType === "EXTRAJUDICIAL_COMPOSTO") {
+        const correctedFilters = { ...urlFilters, financiamento: undefined };
+        setFilters(correctedFilters);
+      } else {
+        setFilters(urlFilters);
+      }
+    }
     setFiltersLoaded(true);
   }, []);
+```
 
-  // PASSO 2: Buscar imóveis quando filtros ou página mudarem
+### 4.6. Query Principal - Buscar Imóveis da VIEW
+
+```typescript
+  // Carregar os imóveis do Supabase com filtros - USANDO A VIEW
   useEffect(() => {
     if (!filtersLoaded) return;
     
     const fetchProperties = async () => {
-      // PASSO 3: Criar query base
-      let query = supabase
-        .from('leiloes_imoveis_com_zona')
-        .select('*', { count: 'exact' })
-        .eq('estado', 'RJ')           // Filtro base: apenas RJ
-        .gte('leilao_1', 75000);      // Filtro base: mínimo R$ 75k
-
-      // PASSO 4: Aplicar filtros sequencialmente
+      setLoading(true);
+      setError(null);
       
-      // FILTRO 1: Cidade
-      if (filters.city) {
-        const cidades = filters.city.split(',');
-        if (cidades.length > 1) {
-          query = query.in('cidade', cidades);  // Múltiplas cidades
-        } else {
-          query = query.eq('cidade', filters.city);  // Uma cidade
+      try {
+        // ⬇️ QUERY BASE - USANDO A VIEW leiloes_imoveis_com_zona ⬇️
+        let query = supabase
+          .from('leiloes_imoveis_com_zona') // ⬅️ VIEW COM ZONA
+          .select('*', { count: 'exact' })
+          .eq('estado', 'RJ')
+          .gte('leilao_1', 75000);
+          
+        // FILTRO DE CIDADE
+        if (filters.city) {
+          const cidades = filters.city.split(',').map(c => c.trim()).filter(Boolean);
+          if (cidades.length > 1) {
+            query = query.in('cidade', cidades);
+          } else {
+            query = query.eq('cidade', filters.city);
+          }
         }
-      }
-
-      // FILTRO 2: Tipo de imóvel
-      if (filters.type) {
-        const tipos = filters.type.split(',');
-        if (tipos.length > 1) {
-          query = query.in('tipo_propriedade', tipos);
-        } else {
-          query = query.eq('tipo_propriedade', filters.type);
+        
+        // FILTRO DE TIPO
+        if (filters.type && filters.type !== "Todos os imóveis") {
+          const tipos = filters.type.split(',').map(t => t.trim()).filter(Boolean);
+          if (tipos.length > 1) {
+            query = query.in('tipo_propriedade', tipos);
+          } else {
+            query = query.eq('tipo_propriedade', filters.type);
+          }
         }
-      }
-
-      // FILTRO 3: Bairro
-      if (filters.neighborhood) {
-        const bairros = filters.neighborhood.split(',');
-        if (bairros.length > 1) {
-          query = query.in('bairro', bairros);
-        } else {
-          query = query.eq('bairro', filters.neighborhood);
+        
+        // ⬇️ FILTRO DE ZONA - DIRETO DA VIEW (SEM EXPANDIR PARA BAIRROS) ⬇️
+        if (filters.zones && filters.zones.length > 0) {
+          // Múltiplas zonas: filtro IN direto no campo zona
+          query = query.in('zona', filters.zones);
+        } else if (filters.zone) {
+          // Uma zona: filtro EQ direto no campo zona
+          query = query.eq('zona', filters.zone);
+        } else if (filters.neighborhood) {
+          // Bairros individuais (quando não é zona completa)
+          const bairros = filters.neighborhood.split(',').map(b => b.trim()).filter(Boolean);
+          if (bairros.length > 1) {
+            query = query.in('bairro', bairros);
+          } else {
+            query = query.eq('bairro', filters.neighborhood);
+          }
         }
-      }
-
-      // FILTRO 4: Localização (busca OR em 3 campos)
-      if (filters.location) {
-        const sanitized = sanitizeSearchInput(filters.location);
-        const escaped = escapeSqlLike(sanitized);
-        // Busca em endereco OU bairro OU cidade
-        query = query.or(
-          `endereco.ilike.%${escaped}%,` +
-          `bairro.ilike.%${escaped}%,` +
-          `cidade.ilike.%${escaped}%`
-        );
-      }
-
-      // FILTRO 5: Palavra-chave (busca OR em 2 campos)
-      if (filters.keyword) {
-        const sanitized = sanitizeSearchInput(filters.keyword);
-        const escaped = escapeSqlLike(sanitized);
-        // Busca em título OU descrição
-        query = query.or(
-          `titulo_propriedade.ilike.%${escaped}%,` +
-          `descricao.ilike.%${escaped}%`
-        );
-      }
-
-      // FILTRO 6: Segundo leilão
-      if (filters.hasSecondAuction) {
-        // Apenas imóveis que TÊM segundo leilão (não é null)
-        query = query
-          .not('data_leilao_2', 'is', null)
-          .not('leilao_2', 'is', null);
-      }
-
-      // FILTRO 7: Faixa de preço
-      if (filters.priceRange) {
-        if (filters.priceRange.min !== undefined) {
-          query = query.gte('leilao_1', filters.priceRange.min);  // >= min
+        
+        // FILTRO DE LOCALIZAÇÃO (busca livre)
+        if (filters.location) {
+          const sanitized = sanitizeSearchInput(filters.location);
+          const escaped = escapeSqlLike(sanitized);
+          query = query.or(
+            `endereco.ilike.%${escaped}%,` +
+            `bairro.ilike.%${escaped}%,` +
+            `cidade.ilike.%${escaped}%`
+          );
         }
-        if (filters.priceRange.max !== undefined) {
-          query = query.lte('leilao_1', filters.priceRange.max);  // <= max
+        
+        // FILTRO DE PALAVRA-CHAVE
+        if (filters.keyword) {
+          const sanitized = sanitizeSearchInput(filters.keyword);
+          const escaped = escapeSqlLike(sanitized);
+          query = query.or(
+            `titulo_propriedade.ilike.%${escaped}%,` +
+            `descricao.ilike.%${escaped}%`
+          );
         }
-      }
-
-      // FILTRO 8: Tipo de leilão (lógica especial)
-      if (filters.auctionType) {
-        if (filters.auctionType === "EXTRAJUDICIAL_CUSTOM") {
-          // Todos os extrajudiciais (não é Judicial nem Outros)
+        
+        // FILTRO DE SEGUNDO LEILÃO
+        if (filters.hasSecondAuction) {
           query = query
-            .neq('tipo_leilao', 'Judicial')
-            .neq('tipo_leilao', 'Outros');
-        } else if (filters.auctionType === "Judicial") {
-          // Judicial OU Outros
-          query = query.in('tipo_leilao', ['Judicial', 'Outros']);
-        } else {
-          // Tipo específico
-          query = query.eq('tipo_leilao', filters.auctionType);
+            .not('data_leilao_2', 'is', null)
+            .not('leilao_2', 'is', null);
         }
+        
+        // FILTRO DE PREÇO
+        if (filters.priceRange) {
+          if (filters.priceRange.min !== undefined) {
+            query = query.gte('leilao_1', filters.priceRange.min);
+          }
+          if (filters.priceRange.max !== undefined) {
+            query = query.lte('leilao_1', filters.priceRange.max);
+          }
+        }
+        
+        // FILTRO DE TIPO DE LEILÃO
+        if (filters.auctionType) {
+          if (filters.auctionType === "EXTRAJUDICIAL_CUSTOM") {
+            query = query
+              .neq('tipo_leilao', 'Judicial')
+              .neq('tipo_leilao', 'Outros');
+          } else if (filters.auctionType === "EXTRAJUDICIAL_COMPOSTO") {
+            query = query
+              .neq('tipo_leilao', 'Judicial')
+              .neq('tipo_leilao', 'Outros');
+          } else if (filters.auctionType === "Judicial") {
+            query = query.in('tipo_leilao', ['Judicial', 'Outros']);
+          } else {
+            query = query.eq('tipo_leilao', filters.auctionType);
+          }
+        }
+        
+        // FILTROS DE CARACTERÍSTICAS
+        if (filters.financiamento === true) {
+          query = query.eq('financiamento', true);
+        }
+        if (filters.fgts === true) {
+          query = query.eq('fgts', true);
+        }
+        if (filters.parcelamento === true) {
+          query = query.eq('parcelamento', true);
+        }
+        
+        // FILTRO DE DATA FINAL DO SEGUNDO LEILÃO
+        if (filters.dataFimSegundoLeilao) {
+          query = query.lte('data_leilao_2', filters.dataFimSegundoLeilao);
+        }
+        
+        // Obter a data atual para comparação
+        const currentDateForFilter = new Date();
+        
+        let countQuery = query;
+        
+        // Adicionar filtro de data para considerar apenas leilões futuros
+        if (!filters.dataFimSegundoLeilao) {
+          countQuery = countQuery.or(
+            `data_leilao_1.is.null,` +
+            `data_leilao_1.gte.${currentDateForFilter.toISOString()},` +
+            `data_leilao_2.gte.${currentDateForFilter.toISOString()}`
+          );
+        }
+        
+        // Obter a contagem total
+        const countResult = await countQuery;
+        
+        if (countResult.error) {
+          throw countResult.error;
+        }
+
+        const total = countResult.count || 0;
+        setTotalCount(total);
+        setTotalPages(Math.ceil(total / ITEMS_PER_PAGE));
+
+        // Busca a página atual
+        const from = (currentPage - 1) * ITEMS_PER_PAGE;
+        const to = from + ITEMS_PER_PAGE - 1;
+
+        // Aplicar o mesmo filtro de data na query principal
+        if (!filters.dataFimSegundoLeilao) {
+          query = query.or(
+            `data_leilao_1.is.null,` +
+            `data_leilao_1.gte.${currentDateForFilter.toISOString()},` +
+            `data_leilao_2.gte.${currentDateForFilter.toISOString()}`
+          );
+        }
+
+        const { data, error } = await query
+          .range(from, to)
+          .order('data_leilao_1', { ascending: true });
+
+        if (error) {
+          throw error;
+        }
+
+        // Transforma os dados no formato esperado
+        const formattedProperties = data
+          .map(item => {
+            let data_leilao_1_final = item.data_leilao_1;
+            if (!item.data_leilao_1) {
+              const futureDate = new Date();
+              futureDate.setDate(futureDate.getDate() + 15);
+              data_leilao_1_final = futureDate.toISOString();
+            }
+            
+            const data_leilao_2 = item.data_leilao_2 || data_leilao_1_final;
+            const leilao_2 = item.leilao_2 || item.leilao_1;
+
+            return {
+              id: item.id,
+              titulo_propriedade: item.titulo_propriedade || `Leilão ${item.tipo_propriedade || 'Imóvel'} - ${item.cidade}/${item.estado}`,
+              endereco: item.endereco || '',
+              bairro: item.bairro || '',
+              cidade: item.cidade || '',
+              estado: item.estado || '',
+              data_leilao_1: formatDate(data_leilao_1_final),
+              data_leilao_2: formatDate(data_leilao_2),
+              leilao_1: item.leilao_1 || 0,
+              leilao_2: leilao_2 || 0,
+              area_displayable: 'Área não informada',
+              imagem: item.imagem || 'https://kmiblhbe.manus.space/imovel_sao_goncalo.jpeg',
+              descricao: item.descricao,
+              data_leilao_1_original: data_leilao_1_final,
+              tipo_leilao: item.tipo_leilao,
+              fgts: item.fgts,
+              financiamento: item.financiamento,
+              parcelamento: item.parcelamento,
+              zona: item.zona // Campo zona da view
+            };
+          })
+          .sort((a, b) => {
+            if (!a.data_leilao_1_original) return 1;
+            if (!b.data_leilao_1_original) return -1;
+            
+            const dateA = new Date(a.data_leilao_1_original);
+            const dateB = new Date(b.data_leilao_1_original);
+            return dateA.getTime() - dateB.getTime();
+          });
+
+        setProperties(formattedProperties);
+
+      } catch (err) {
+        console.error('Erro ao buscar imóveis:', err);
+        setError('Não foi possível carregar os imóveis. Tente novamente mais tarde.');
+      } finally {
+        setLoading(false);
       }
-
-      // FILTRO 9: Financiamento
-      if (filters.financiamento === true) {
-        query = query.eq('financiamento', true);
-      }
-
-      // FILTRO 10: FGTS
-      if (filters.fgts === true) {
-        query = query.eq('fgts', true);
-      }
-
-      // FILTRO 11: Parcelamento
-      if (filters.parcelamento === true) {
-        query = query.eq('parcelamento', true);
-      }
-
-      // FILTRO 12: Data final do segundo leilão
-      if (filters.dataFimSegundoLeilao) {
-        query = query.lte('data_leilao_2', filters.dataFimSegundoLeilao);
-      }
-
-      // FILTRO 13: Apenas leilões futuros (automático)
-      const currentDate = new Date();
-      let countQuery = query;
-      if (!filters.dataFimSegundoLeilao) {
-        // Inclui se: data_leilao_1 é null OU >= hoje OU data_leilao_2 >= hoje
-        countQuery = countQuery.or(
-          `data_leilao_1.is.null,` +
-          `data_leilao_1.gte.${currentDate.toISOString()},` +
-          `data_leilao_2.gte.${currentDate.toISOString()}`
-        );
-      }
-
-      // PASSO 5: Obter contagem total (para paginação)
-      const countResult = await countQuery;
-      const total = countResult.count || 0;
-      const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
-
-      // PASSO 6: Aplicar paginação
-      const from = (currentPage - 1) * ITEMS_PER_PAGE;
-      const to = from + ITEMS_PER_PAGE - 1;
-
-      // Aplicar filtro de data na query principal
-      if (!filters.dataFimSegundoLeilao) {
-        query = query.or(
-          `data_leilao_1.is.null,` +
-          `data_leilao_1.gte.${currentDate.toISOString()},` +
-          `data_leilao_2.gte.${currentDate.toISOString()}`
-        );
-      }
-
-      // PASSO 7: Executar query final
-      const { data, error } = await query
-        .range(from, to)                           // Paginação
-        .order('data_leilao_1', { ascending: true }); // Ordenar por data
-
-      if (error) throw error;
-
-      // PASSO 8: Formatar e exibir resultados
-      setProperties(data || []);
     };
 
     fetchProperties();
   }, [currentPage, filters, filtersLoaded]);
 
-  // Função para aplicar novos filtros
-  const applyFilters = (newFilters: FilterParams) => {
-    setFilters(newFilters);
-    updateURL(newFilters);  // Atualiza URL
-    setCurrentPage(1);       // Volta para primeira página
+  // Função para formatar datas
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return '';
+    
+    try {
+      const datePart = dateString.split('T')[0];
+      const [year, month, day] = datePart.split('-');
+      const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+      return date.toLocaleDateString('pt-BR');
+    } catch (e) {
+      console.error('Erro ao formatar data:', e);
+      return '';
+    }
   };
 
-  return (
-    <div>
-      {/* Seus componentes de filtro aqui */}
-      {/* Lista de imóveis */}
-      {/* Paginação */}
-    </div>
-  );
+  // Função para formatar valores monetários
+  const formatCurrency = (value?: number) => {
+    if (!value && value !== 0) return '';
+    return value.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    });
+  };
+```
+
+### 4.7. Função para Aplicar Filtros
+
+```typescript
+  // Função para aplicar filtros
+  const applyFilters = () => {
+    const newFilters: Filters = {};
+    
+    // Cidade
+    if (selectedCities.length > 0 && selectedCities[0] !== "TODO_RJ_STATE") {
+      newFilters.city = selectedCities.join(',');
+    } else if (selectedCity && selectedCity !== "Selecione a cidade" && selectedCity !== "Todas cidades do RJ") {
+      const cityName = selectedCity.split(" (")[0];
+      newFilters.city = cityName;
+    }
+    
+    // Tipo
+    if (selectedTypes.length > 0) {
+      const typeValues = selectedTypes.map(type => type.originalValue || type.label.split(" (")[0]);
+      newFilters.type = typeValues.join(',');
+    } else if (selectedType && selectedType.label !== "Todos os imóveis" && !selectedType.label.includes("tipos selecionados")) {
+      newFilters.type = selectedType.originalValue || selectedType.label.split(" (")[0];
+    }
+    
+    // ⬇️ ZONA - DIRETO DA VIEW (SEM EXPANDIR) ⬇️
+    // Verificar se há zona selecionada (prioridade sobre bairros individuais)
+    const isZoneSelected = selectedNeighborhood && selectedNeighborhood.includes(" (todos)");
+    if (isZoneSelected) {
+      // Extrair o nome da zona
+      const zoneName = selectedNeighborhood.replace(" (todos)", "");
+      newFilters.zone = zoneName;
+    } else if (selectedNeighborhoods.length > 0) {
+      // Se há bairros selecionados, verificar se formam uma zona completa
+      // Buscar zonas que contêm todos os bairros selecionados
+      // (Esta lógica pode ser simplificada se você tiver uma tabela de mapeamento)
+      // Por enquanto, usar bairros individuais
+      newFilters.neighborhood = selectedNeighborhoods.join(',');
+    } else if (selectedNeighborhood && selectedNeighborhood !== "Selecione o bairro") {
+      const neighborhoodName = selectedNeighborhood.split(" (")[0];
+      newFilters.neighborhood = neighborhoodName;
+    }
+    
+    // Localização
+    if (locationInput) {
+      newFilters.location = locationInput;
+    }
+    
+    // Palavra-chave
+    if (keywordInput) {
+      newFilters.keyword = keywordInput;
+    }
+    
+    // Segundo leilão
+    if (filterSecondAuction) {
+      newFilters.hasSecondAuction = true;
+    }
+    
+    // Data final do segundo leilão
+    if (dataFimSegundoLeilao) {
+      newFilters.dataFimSegundoLeilao = dataFimSegundoLeilao;
+    }
+    
+    // Faixa de preço
+    if (selectedPriceRanges.length > 0) {
+      const allMins = selectedPriceRanges.map(range => range.min ?? 0);
+      const allMaxs = selectedPriceRanges.filter(range => range.max !== undefined).map(range => range.max!);
+      
+      newFilters.priceRange = {
+        min: Math.min(...allMins),
+        max: allMaxs.length > 0 ? Math.max(...allMaxs) : undefined
+      };
+    } else if (selectedPriceRange && selectedPriceRange.label !== "Todos os preços" && !selectedPriceRange.label.includes("faixas selecionadas")) {
+      newFilters.priceRange = {
+        min: selectedPriceRange.min,
+        max: selectedPriceRange.max
+      };
+    }
+    
+    // Tipo de leilão
+    if (selectedAuctionTypes.length > 0) {
+      let hasJudicial = selectedAuctionTypes.includes(AUCTION_TYPE_JUDICIAL);
+      let hasExtrajudicial = selectedAuctionTypes.includes(AUCTION_TYPE_EXTRAJUDICIAL);
+      let hasExtrajudicialFinanciamento = selectedAuctionTypes.includes(AUCTION_TYPE_EXTRAJUDICIAL_FINANCIAMENTO);
+      
+      if (hasExtrajudicial && hasExtrajudicialFinanciamento) {
+        newFilters.auctionType = "EXTRAJUDICIAL_COMPOSTO";
+        newFilters.financiamento = undefined;
+      } else if (hasJudicial) {
+        newFilters.auctionType = "Judicial";
+        newFilters.financiamento = undefined;
+      } else if (hasExtrajudicialFinanciamento) {
+        newFilters.auctionType = "EXTRAJUDICIAL_CUSTOM";
+        newFilters.financiamento = true;
+      } else if (hasExtrajudicial) {
+        newFilters.auctionType = "EXTRAJUDICIAL_CUSTOM";
+        newFilters.financiamento = undefined;
+      }
+    } else if (selectedAuctionType && selectedAuctionType !== "Todos os tipos de leilão" && !selectedAuctionType.includes("modalidades selecionadas")) {
+      if (selectedAuctionType === AUCTION_TYPE_JUDICIAL) {
+        newFilters.auctionType = "Judicial";
+      } else if (selectedAuctionType === AUCTION_TYPE_EXTRAJUDICIAL_FINANCIAMENTO) {
+        newFilters.auctionType = "EXTRAJUDICIAL_CUSTOM";
+        newFilters.financiamento = true;
+      } else if (selectedAuctionType === AUCTION_TYPE_EXTRAJUDICIAL) {
+        newFilters.auctionType = "EXTRAJUDICIAL_CUSTOM";
+      }
+    }
+    
+    // Múltiplas faixas de preço
+    if (selectedPriceRanges.length > 0) {
+      newFilters.priceRanges = selectedPriceRanges.map(range => range.label);
+    }
+    
+    // Aplicar filtros
+    setFilters(newFilters);
+    
+    // Atualizar URL com os filtros aplicados
+    updateURL(newFilters);
+    
+    // Resetar para a primeira página quando aplicar filtros
+    setCurrentPage(1);
+    
+    // Notificação
+    toast.success('Filtros aplicados com sucesso!');
+    
+    // Fechar painel de filtros no mobile
+    if (isMobile) {
+      setIsFilterOpen(false);
+    }
+  };
+```
+
+### 4.8. Função para Buscar Bairros por Cidade (da VIEW)
+
+```typescript
+  // Função para buscar bairros por cidade da VIEW
+  const fetchNeighborhoodsByCity = async (cityName: string) => {
+    if (!cityName) return;
+    try {
+      const { data, error } = await supabase
+        .from('leiloes_imoveis_com_zona') // ⬅️ USAR A VIEW
+        .select('bairro, zona') // Buscar bairro E zona
+        .eq('estado', 'RJ')
+        .gte('leilao_1', 75000)
+        .eq('cidade', cityName)
+        .order('bairro')
+        .not('bairro', 'is', null);
+        
+      if (error) throw error;
+      
+      const neighborhoodCount: Record<string, number> = {};
+      const neighborhoodsByZone: Record<string, string[]> = {};
+      
+      data.forEach(item => {
+        if (item.bairro && item.bairro.trim() !== '') {
+          neighborhoodCount[item.bairro] = (neighborhoodCount[item.bairro] || 0) + 1;
+          
+          // Agrupar por zona se houver
+          if (item.zona) {
+            if (!neighborhoodsByZone[item.zona]) {
+              neighborhoodsByZone[item.zona] = [];
+            }
+            if (!neighborhoodsByZone[item.zona].includes(item.bairro)) {
+              neighborhoodsByZone[item.zona].push(item.bairro);
+            }
+          }
+        }
+      });
+      
+      // Se for Rio de Janeiro, agrupar por zona
+      if (cityName.toLowerCase() === 'rio de janeiro') {
+        const bairrosAgrupados: Record<string, { neighborhood: string, count: number }[]> = {};
+        
+        // Agrupar bairros por zona
+        Object.keys(neighborhoodsByZone).forEach(zona => {
+          bairrosAgrupados[zona] = neighborhoodsByZone[zona].map(bairro => ({
+            neighborhood: bairro,
+            count: neighborhoodCount[bairro] || 0
+          }));
+        });
+        
+        // Adicionar bairros sem zona em "Outros"
+        Object.keys(neighborhoodCount).forEach(bairro => {
+          let foundInZone = false;
+          Object.values(neighborhoodsByZone).forEach(zoneBairros => {
+            if (zoneBairros.includes(bairro)) {
+              foundInZone = true;
+            }
+          });
+          
+          if (!foundInZone) {
+            if (!bairrosAgrupados['Outros']) bairrosAgrupados['Outros'] = [];
+            bairrosAgrupados['Outros'].push({ 
+              neighborhood: bairro, 
+              count: neighborhoodCount[bairro] 
+            });
+          }
+        });
+        
+        setRjNeighborhoods(bairrosAgrupados);
+      } else {
+        // Para outras cidades, lista simples
+        const neighborhoodsArray = Object.keys(neighborhoodCount)
+          .filter(neighborhood => neighborhood.trim() !== '')
+          .map(neighborhood => ({
+            neighborhood,
+            count: neighborhoodCount[neighborhood]
+          }))
+          .sort((a, b) => {
+            if (b.count !== a.count) {
+              return b.count - a.count;
+            }
+            return a.neighborhood.localeCompare(b.neighborhood, 'pt-BR');
+          });
+        setRjNeighborhoods(neighborhoodsArray);
+      }
+    } catch (err) {
+      console.error(`Erro ao buscar bairros de ${cityName}:`, err);
+    }
+  };
+```
+
+### 4.9. Funções de Seleção de Zona
+
+```typescript
+  // Função para selecionar zona (direto da view)
+  const selectZone = (zone: string) => {
+    setSelectedNeighborhood(`${zone} (todos)`);
+    setSelectedNeighborhoods([]); // Não precisa expandir bairros
+    setShowNeighborhoodMenu(false);
+    
+    // Aplicar filtros imediatamente com a zona
+    const newFilters: Filters = {
+      zone: zone
+    };
+    
+    // Manter outros filtros existentes
+    if (selectedCities.length > 0 && selectedCities[0] !== "TODO_RJ_STATE") {
+      newFilters.city = selectedCities.join(',');
+    }
+    
+    if (selectedTypes.length > 0) {
+      const typeValues = selectedTypes.map(type => type.originalValue || type.label.split(" (")[0]);
+      newFilters.type = typeValues.join(',');
+    }
+    
+    if (locationInput) {
+      newFilters.location = locationInput;
+    }
+    
+    if (keywordInput) {
+      newFilters.keyword = keywordInput;
+    }
+    
+    if (filterSecondAuction) {
+      newFilters.hasSecondAuction = true;
+    }
+    
+    if (selectedPriceRange && selectedPriceRange.label !== "Todos os preços") {
+      newFilters.priceRange = {
+        min: selectedPriceRange.min,
+        max: selectedPriceRange.max
+      };
+    }
+    
+    updateURL(newFilters);
+    setFilters(newFilters);
+    setCurrentPage(1);
+  };
+
+  // Função para toggle de zona (múltipla seleção)
+  const toggleZone = (zone: string) => {
+    // Verificar se a zona já está selecionada
+    const isZoneSelected = filters.zones?.includes(zone) || filters.zone === zone;
+    
+    if (isZoneSelected) {
+      // Remover zona
+      if (filters.zones && filters.zones.length > 1) {
+        const newZones = filters.zones.filter(z => z !== zone);
+        if (newZones.length === 1) {
+          setFilters({ ...filters, zones: undefined, zone: newZones[0] });
+        } else {
+          setFilters({ ...filters, zones: newZones });
+        }
+      } else {
+        setFilters({ ...filters, zone: undefined, zones: undefined });
+        setSelectedNeighborhood("Selecione o bairro");
+      }
+    } else {
+      // Adicionar zona
+      if (filters.zone) {
+        // Se já tem uma zona, converter para array
+        setFilters({ ...filters, zone: undefined, zones: [filters.zone, zone] });
+      } else if (filters.zones) {
+        // Se já tem múltiplas zonas, adicionar mais uma
+        setFilters({ ...filters, zones: [...filters.zones, zone] });
+      } else {
+        // Primeira zona
+        setFilters({ ...filters, zone });
+      }
+      
+      setSelectedNeighborhood(`${zone} (todos)`);
+    }
+    
+    updateURL(filters);
+    setCurrentPage(1);
+  };
+```
+
+### 4.10. Front-end dos Filtros (JSX)
+
+O front-end completo está no arquivo `Index.tsx` original. As principais seções são:
+
+1. **Dropdown de Tipo de Imóvel** - Múltipla seleção com checkboxes
+2. **Dropdown de Cidades** - Múltipla seleção, agrupado por região
+3. **Dropdown de Bairros** - Múltipla seleção, agrupado por zona (quando Rio de Janeiro)
+4. **Dropdown de Faixas de Preço** - Múltipla seleção
+5. **Dropdown de Modalidade de Leilão** - Múltipla seleção
+6. **Campo de Data de Encerramento** - Input date
+7. **Campo de Busca Rápida** - Input text
+8. **Botões de Buscar e Limpar**
+
+---
+
+## 5. Configurações e Constantes
+
+### 5.1. Faixas de Preço
+
+```typescript
+const priceRanges: PriceRange[] = [
+  { label: 'Todos os preços' },
+  { label: 'Até R$ 300k', max: 300000 },
+  { label: 'R$ 300k a R$ 500k', min: 300000, max: 500000 },
+  { label: 'R$ 500k a R$ 750k', min: 500000, max: 750000 },
+  { label: 'R$ 750k a R$ 1M', min: 750000, max: 1000000 },
+  { label: 'R$ 1M a R$ 1.5M', min: 1000000, max: 1500000 },
+  { label: 'R$ 1.5M a R$ 2M', min: 1500000, max: 2000000 },
+  { label: 'Acima de R$ 2M', min: 2000000 }
+];
+```
+
+### 5.2. Tipos de Leilão
+
+```typescript
+const AUCTION_TYPE_JUDICIAL = "JUDICIAL";
+const AUCTION_TYPE_EXTRAJUDICIAL = "EXTRAJUDICIAL";
+const AUCTION_TYPE_EXTRAJUDICIAL_FINANCIAMENTO = "EXTRAJUDICIAL FINANCIÁVEL";
+```
+
+---
+
+## 🔑 Diferenças Principais - View `leiloes_imoveis_com_zona`
+
+### 1. Tabela/View Usada
+
+**Antes:**
+```typescript
+.from('leiloes_imoveis')
+```
+
+**Agora:**
+```typescript
+.from('leiloes_imoveis_com_zona') // ⬅️ VIEW COM ZONA
+```
+
+### 2. Filtro de Zona
+
+**Antes:** Expandia zona para lista de bairros
+```typescript
+if (filters.zone) {
+  const bairrosDaZona = bairrosPorZonaRJ[filters.zone] || [];
+  query = query.in('bairro', bairrosDaZona);
+}
+```
+
+**Agora:** Filtro direto no campo `zona` da view
+```typescript
+if (filters.zone) {
+  query = query.eq('zona', filters.zone);
+}
+```
+
+### 3. Buscar Zonas Disponíveis
+
+**Novo:** Buscar zonas diretamente da view
+```typescript
+const fetchZones = async () => {
+  const { data, error } = await supabase
+    .from('leiloes_imoveis_com_zona')
+    .select('zona')
+    .eq('estado', 'RJ')
+    .gte('leilao_1', 75000)
+    .not('zona', 'is', null);
+    
+  const uniqueZones = [...new Set(data.map(item => item.zona).filter(Boolean))];
+  setZones(uniqueZones.sort());
 };
 ```
 
 ---
 
-## 📊 Mapeamento: URL ↔ Filtros ↔ Query SQL
+## 📝 Resumo das Mudanças
 
-### Exemplo 1: URL Simples
+1. ✅ **Todas as queries** usam `leiloes_imoveis_com_zona` em vez de `leiloes_imoveis`
+2. ✅ **Filtro de zona** usa campo `zona` diretamente (não expande para bairros)
+3. ✅ **Busca de zonas** vem diretamente da view
+4. ✅ **Front-end** permanece igual (dropdowns, múltipla seleção, etc.)
+5. ✅ **Slugs na URL** funcionam igual (parâmetros: `?zona=Zona Sul (Rio de Janeiro)`)
 
-**URL:** `?cidade=Rio de Janeiro&tipo=Apartamento`
+---
 
-**Filtros (objeto):**
-```typescript
-{
-  city: "Rio de Janeiro",
-  type: "Apartamento"
-}
+## 🎯 Exemplo de URL com Filtros
+
 ```
-
-**Query SQL gerada:**
-```sql
-SELECT * FROM leiloes_imoveis_com_zona
-WHERE estado = 'RJ'
-  AND leilao_1 >= 75000
-  AND cidade = 'Rio de Janeiro'
-  AND tipo_propriedade = 'Apartamento'
-  AND (data_leilao_1 IS NULL OR data_leilao_1 >= NOW() OR data_leilao_2 >= NOW())
-ORDER BY data_leilao_1 ASC
-LIMIT 40 OFFSET 0;
-```
-
-### Exemplo 2: Múltiplos Valores
-
-**URL:** `?cidades=Rio de Janeiro,Niterói&tipo=Casa,Apartamento`
-
-**Filtros:**
-```typescript
-{
-  cities: ["Rio de Janeiro", "Niterói"],
-  type: "Casa,Apartamento"
-}
-```
-
-**Query SQL:**
-```sql
-WHERE cidade IN ('Rio de Janeiro', 'Niterói')
-  AND tipo_propriedade IN ('Casa', 'Apartamento')
-```
-
-### Exemplo 3: Busca com OR
-
-**URL:** `?localizacao=Ipanema&palavra_chave=mar`
-
-**Filtros:**
-```typescript
-{
-  location: "Ipanema",
-  keyword: "mar"
-}
-```
-
-**Query SQL:**
-```sql
-WHERE (endereco ILIKE '%Ipanema%' OR bairro ILIKE '%Ipanema%' OR cidade ILIKE '%Ipanema%')
-  AND (titulo_propriedade ILIKE '%mar%' OR descricao ILIKE '%mar%')
-```
-
-### Exemplo 4: Filtros Booleanos
-
-**URL:** `?financiamento=true&fgts=true&preco_min=200000&preco_max=500000`
-
-**Filtros:**
-```typescript
-{
-  financiamento: true,
-  fgts: true,
-  priceRange: { min: 200000, max: 500000 }
-}
-```
-
-**Query SQL:**
-```sql
-WHERE financiamento = true
-  AND fgts = true
-  AND leilao_1 >= 200000
-  AND leilao_1 <= 500000
+/?cidade=Rio de Janeiro&zona=Zona Sul (Rio de Janeiro)&tipo=Apartamento&preco_min=300000&preco_max=1000000&financiamento=true
 ```
 
 ---
 
-## 🔍 Detalhamento de Cada Filtro
-
-### 1. Filtro de Cidade
-
-**Como funciona:**
-- Se uma cidade: `query.eq('cidade', 'Rio de Janeiro')`
-- Se múltiplas: `query.in('cidade', ['Rio', 'Niterói'])`
-
-**URL:** `?cidade=Rio de Janeiro` ou `?cidades=Rio de Janeiro,Niterói`
-
-**Campo no banco:** `cidade` (text)
-
----
-
-### 2. Filtro de Tipo de Imóvel
-
-**Como funciona:**
-- Se um tipo: `query.eq('tipo_propriedade', 'Apartamento')`
-- Se múltiplos: `query.in('tipo_propriedade', ['Casa', 'Apartamento'])`
-
-**URL:** `?tipo=Apartamento` ou `?tipo=Casa,Apartamento`
-
-**Campo no banco:** `tipo_propriedade` (text)
-
-**Valores comuns:** "Apartamento", "Casa", "Terreno", "Sala Comercial"
-
----
-
-### 3. Filtro de Bairro
-
-**Como funciona:**
-- Se um bairro: `query.eq('bairro', 'Copacabana')`
-- Se múltiplos: `query.in('bairro', ['Copacabana', 'Ipanema'])`
-
-**URL:** `?bairro=Copacabana` ou `?bairros=Copacabana,Ipanema`
-
-**Campo no banco:** `bairro` (text)
-
----
-
-### 4. Filtro de Zona
-
-**Como funciona:**
-- Expande zona para lista de bairros
-- Exemplo: "Zona Sul" → ['Copacabana', 'Ipanema', 'Leblon', ...]
-- Aplica: `query.in('bairro', bairrosDaZona)`
-
-**URL:** `?zona=Zona Sul (Rio de Janeiro)`
-
-**Campo no banco:** `bairro` (expandido)
-
-**Zonas disponíveis (RJ):**
-- Zona Sul, Zona Norte, Zona Oeste, Zona Central
-- Baixada Fluminense
-- Regiões de Niterói
-- Áreas especiais (Grande Tijuca, Grande Méier, etc.)
-
----
-
-### 5. Filtro de Localização (Busca Livre)
-
-**Como funciona:**
-- Busca case-insensitive em 3 campos (OR)
-- Query: `query.or('endereco.ilike.%termo%,bairro.ilike.%termo%,cidade.ilike.%termo%')`
-- Termo é sanitizado e escapado
-
-**URL:** `?localizacao=Ipanema`
-
-**Campos no banco:** `endereco`, `bairro`, `cidade`
-
-**Exemplo:** Busca "Ipanema" encontra:
-- Endereço: "Rua Ipanema, 123"
-- Bairro: "Ipanema"
-- Cidade: "Ipanema"
-
----
-
-### 6. Filtro de Palavra-chave
-
-**Como funciona:**
-- Busca case-insensitive em 2 campos (OR)
-- Query: `query.or('titulo_propriedade.ilike.%termo%,descricao.ilike.%termo%')`
-- Termo é sanitizado e escapado
-
-**URL:** `?palavra_chave=mar`
-
-**Campos no banco:** `titulo_propriedade`, `descricao`
-
-**Exemplo:** Busca "mar" encontra:
-- Título: "Apartamento com vista para o mar"
-- Descrição: "Localizado próximo ao mar"
-
----
-
-### 7. Filtro de Faixa de Preço
-
-**Como funciona:**
-- `min`: `query.gte('leilao_1', min)` (maior ou igual)
-- `max`: `query.lte('leilao_1', max)` (menor ou igual)
-- Se ambos: aplica os dois (AND)
-
-**URL:** `?preco_min=200000&preco_max=500000`
-
-**Campo no banco:** `leilao_1` (number)
-
-**Valor mínimo obrigatório:** R$ 75.000 (sempre aplicado)
-
----
-
-### 8. Filtro de Tipo de Leilão
-
-**Como funciona:**
-- **"Judicial"**: `query.in('tipo_leilao', ['Judicial', 'Outros'])`
-- **"EXTRAJUDICIAL_CUSTOM"**: `query.neq('tipo_leilao', 'Judicial').neq('tipo_leilao', 'Outros')`
-- **Outros**: `query.eq('tipo_leilao', valor)`
-
-**URL:** `?tipo_leilao=Judicial` ou `?tipo_leilao=EXTRAJUDICIAL_CUSTOM`
-
-**Campo no banco:** `tipo_leilao` (text)
-
-**Valores:** "Judicial", "Extrajudicial", "Outros", "CAIXA"
-
----
-
-### 9. Filtro de Segundo Leilão
-
-**Como funciona:**
-- Apenas imóveis que TÊM segundo leilão definido
-- Query: `query.not('data_leilao_2', 'is', null).not('leilao_2', 'is', null)`
-
-**URL:** `?segundo_leilao=true`
-
-**Campos no banco:** `data_leilao_2`, `leilao_2`
-
----
-
-### 10. Filtro de Financiamento
-
-**Como funciona:**
-- `query.eq('financiamento', true)`
-
-**URL:** `?financiamento=true`
-
-**Campo no banco:** `financiamento` (boolean)
-
----
-
-### 11. Filtro de FGTS
-
-**Como funciona:**
-- `query.eq('fgts', true)`
-
-**URL:** `?fgts=true`
-
-**Campo no banco:** `fgts` (boolean)
-
----
-
-### 12. Filtro de Parcelamento
-
-**Como funciona:**
-- `query.eq('parcelamento', true)`
-
-**URL:** `?parcelamento=true`
-
-**Campo no banco:** `parcelamento` (boolean)
-
----
-
-### 13. Filtro de Data Final do Segundo Leilão
-
-**Como funciona:**
-- `query.lte('data_leilao_2', data)` (menor ou igual)
-- Se não houver segundo leilão, usa primeiro como fallback
-
-**URL:** `?data_fim_segundo_leilao=2024-12-31`
-
-**Campo no banco:** `data_leilao_2` (date/timestamp)
-
----
-
-### 14. Filtro Automático: Apenas Leilões Futuros
-
-**Como funciona:**
-- Aplicado automaticamente (exceto se `dataFimSegundoLeilao` estiver definido)
-- Query: `query.or('data_leilao_1.is.null,data_leilao_1.gte.hoje,data_leilao_2.gte.hoje')`
-- Inclui leilões sem data (null) ou com data futura
-
-**Não precisa ser passado na URL** - é automático
-
----
-
-## 🔄 Fluxo Completo de uma Busca
-
-### Cenário: Usuário busca "Apartamentos em Copacabana até R$ 500k"
-
-1. **Usuário preenche filtros na interface**
-   ```typescript
-   {
-     type: "Apartamento",
-     neighborhood: "Copacabana",
-     priceRange: { max: 500000 }
-   }
-   ```
-
-2. **Sistema atualiza URL**
-   ```
-   ?tipo=Apartamento&bairro=Copacabana&preco_max=500000
-   ```
-
-3. **Hook lê URL e converte para filtros**
-   ```typescript
-   const filters = parseFiltersFromURL();
-   // { type: "Apartamento", neighborhood: "Copacabana", priceRange: { max: 500000 } }
-   ```
-
-4. **Estado é atualizado**
-   ```typescript
-   setFilters(filters);
-   ```
-
-5. **useEffect detecta mudança e busca dados**
-   ```typescript
-   useEffect(() => {
-     fetchProperties();
-   }, [filters]);
-   ```
-
-6. **Query é construída sequencialmente**
-   ```typescript
-   let query = supabase.from('leiloes_imoveis_com_zona')
-     .eq('estado', 'RJ')
-     .gte('leilao_1', 75000)
-     .eq('tipo_propriedade', 'Apartamento')
-     .eq('bairro', 'Copacabana')
-     .lte('leilao_1', 500000)
-     .or('data_leilao_1.is.null,data_leilao_1.gte.hoje,data_leilao_2.gte.hoje');
-   ```
-
-7. **Contagem total é obtida**
-   ```typescript
-   const countResult = await query.select('*', { count: 'exact' });
-   // Exemplo: 150 imóveis encontrados
-   ```
-
-8. **Paginação é aplicada**
-   ```typescript
-   const from = (currentPage - 1) * 40;  // 0
-   const to = from + 40 - 1;            // 39
-   query = query.range(from, to);
-   ```
-
-9. **Query final é executada**
-   ```typescript
-   const { data } = await query.order('data_leilao_1', { ascending: true });
-   // Retorna 40 imóveis (página 1)
-   ```
-
-10. **Resultados são formatados e exibidos**
-    ```typescript
-    setProperties(formattedProperties);
-    setTotalCount(150);
-    setTotalPages(4); // 150 / 40 = 3.75 → 4 páginas
-    ```
-
----
-
-## 📄 Estrutura da Tabela no Banco
-
-### View: `leiloes_imoveis_com_zona`
-
-| Campo | Tipo | Descrição | Usado em |
-|-------|------|-----------|----------|
-| `id` | number | ID único | Identificação |
-| `titulo_propriedade` | string | Título | Filtro keyword |
-| `endereco` | string | Endereço completo | Filtro location |
-| `bairro` | string | Bairro | Filtros neighborhood, zone, location |
-| `cidade` | string | Cidade | Filtros city, location |
-| `estado` | string | Estado (RJ/SP) | Filtro base |
-| `data_leilao_1` | date | Data do 1º leilão | Filtro data futura, ordenação |
-| `data_leilao_2` | date | Data do 2º leilão | Filtros hasSecondAuction, dataFimSegundoLeilao |
-| `leilao_1` | number | Valor do 1º leilão | Filtros priceRange, valor mínimo |
-| `leilao_2` | number | Valor do 2º leilão | Filtro hasSecondAuction |
-| `tipo_propriedade` | string | Tipo (Casa, Apartamento, etc.) | Filtro type |
-| `tipo_leilao` | string | Judicial, Extrajudicial, etc. | Filtro auctionType |
-| `descricao` | text | Descrição do imóvel | Filtro keyword |
-| `imagem` | string | URL da imagem | Exibição |
-| `financiamento` | boolean | Aceita financiamento | Filtro financiamento |
-| `fgts` | boolean | Aceita FGTS | Filtro fgts |
-| `parcelamento` | boolean | Permite parcelamento | Filtro parcelamento |
-
----
-
-## 🎯 Parâmetros da URL (Mapeamento Completo)
-
-| Parâmetro URL | Campo Filtro | Tipo | Exemplo |
-|--------------|--------------|------|---------|
-| `cidade` | `city` | string | `?cidade=Rio de Janeiro` |
-| `cidades` | `cities` | string[] | `?cidades=Rio,Niterói` |
-| `bairro` | `neighborhood` | string | `?bairro=Copacabana` |
-| `bairros` | `neighborhoods` | string[] | `?bairros=Copacabana,Ipanema` |
-| `zona` | `zone` | string | `?zona=Zona Sul (Rio de Janeiro)` |
-| `zonas` | `zones` | string[] | `?zonas=Zona Sul,Zona Norte` |
-| `localizacao` | `location` | string | `?localizacao=Ipanema` |
-| `tipo` | `type` | string | `?tipo=Apartamento` |
-| `palavra_chave` | `keyword` | string | `?palavra_chave=mar` |
-| `preco_min` | `priceRange.min` | number | `?preco_min=200000` |
-| `preco_max` | `priceRange.max` | number | `?preco_max=500000` |
-| `faixas_preco` | `priceRanges` | string[] | `?faixas_preco=Até 300k,300k-500k` |
-| `tipo_leilao` | `auctionType` | string | `?tipo_leilao=Judicial` |
-| `segundo_leilao` | `hasSecondAuction` | boolean | `?segundo_leilao=true` |
-| `financiamento` | `financiamento` | boolean | `?financiamento=true` |
-| `fgts` | `fgts` | boolean | `?fgts=true` |
-| `parcelamento` | `parcelamento` | boolean | `?parcelamento=true` |
-| `data_fim_segundo_leilao` | `dataFimSegundoLeilao` | string (ISO) | `?data_fim_segundo_leilao=2024-12-31` |
-
----
-
-## 🔐 Segurança
-
-### 1. Sanitização de Inputs
-
-**Problema:** Usuário pode digitar caracteres perigosos
-```typescript
-// ❌ PERIGOSO
-const location = "'; DROP TABLE leiloes_imoveis; --";
-
-// ✅ SEGURO
-const sanitized = sanitizeSearchInput(location);
-// Remove vírgulas, ponto e vírgula, espaços extras
-```
-
-### 2. Escape SQL
-
-**Problema:** Caracteres especiais do SQL podem quebrar a query
-```typescript
-// ❌ PERIGOSO
-const termo = "50% desconto";
-query.ilike(`%${termo}%`);  // % é caractere especial!
-
-// ✅ SEGURO
-const escaped = escapeSqlLike(termo);  // "50\% desconto"
-query.ilike(`%${escaped}%`);
-```
-
-### 3. Validação de Tipos
-
-**Problema:** Valores numéricos podem ser inválidos
-```typescript
-// ✅ SEGURO
-const minPrice = searchParams.get('preco_min');
-if (minPrice) {
-  const parsed = parseInt(minPrice);
-  if (!isNaN(parsed)) {
-    filters.priceRange.min = parsed;
-  }
-}
-```
-
----
-
-## ⚡ Performance
-
-### Otimizações Implementadas
-
-1. **Filtros no servidor** (não no cliente)
-   - Banco processa 16k itens em <1 segundo
-   - Apenas 40 itens são retornados por página
-
-2. **Paginação eficiente**
-   - `LIMIT 40 OFFSET 0` - busca apenas o necessário
-   - Não carrega todos os 16k itens
-
-3. **Contagem separada**
-   - Contagem total sem buscar dados
-   - `select('*', { count: 'exact' })`
-
-4. **Índices no banco** (recomendado)
-   ```sql
-   CREATE INDEX idx_cidade ON leiloes_imoveis(cidade);
-   CREATE INDEX idx_bairro ON leiloes_imoveis(bairro);
-   CREATE INDEX idx_tipo_propriedade ON leiloes_imoveis(tipo_propriedade);
-   CREATE INDEX idx_leilao_1 ON leiloes_imoveis(leilao_1);
-   CREATE INDEX idx_data_leilao_1 ON leiloes_imoveis(data_leilao_1);
-   ```
-
----
-
-## 🐛 Troubleshooting
-
-### Problema: Filtros não funcionam
-
-**Causa:** Filtros não estão sendo aplicados na query
-
-**Solução:**
-```typescript
-// Verificar se filtros estão sendo lidos
-console.log('Filtros:', filters);
-
-// Verificar se query está sendo construída
-console.log('Query:', query);
-```
-
-### Problema: Busca muito lenta
-
-**Causa:** Falta de índices no banco
-
-**Solução:** Criar índices nos campos filtrados (veja seção Performance)
-
-### Problema: SQL Injection
-
-**Causa:** Não está usando `escapeSqlLike` e `sanitizeSearchInput`
-
-**Solução:** Sempre sanitizar e escapar inputs de busca
-
-### Problema: Paginação incorreta
-
-**Causa:** Contagem total não está sendo calculada
-
-**Solução:** Verificar se `count: 'exact'` está na query
-
----
-
-## 📚 Resumo Executivo
-
-### O que o sistema faz:
-
-1. **Lê filtros da URL** → Converte para objeto
-2. **Aplica filtros na query** → Constrói query SQL
-3. **Executa no Supabase** → Retorna resultados
-4. **Formata dados** → Exibe na interface
-5. **Atualiza URL** → Permite compartilhamento
-
-### Tecnologias:
-
-- **React** + **TypeScript** (frontend)
-- **Supabase** (PostgreSQL) (backend)
-- **React Router** (gerenciamento de URL)
-
-### Volume:
-
-- **16.000 imóveis** no banco
-- **40 itens por página**
-- **<1 segundo** de resposta
-
-### Filtros disponíveis:
-
-- Localização (cidade, bairro, zona, busca livre)
-- Tipo de imóvel
-- Preço (faixa)
-- Tipo de leilão
-- Características (financiamento, FGTS, parcelamento)
-- Data (segundo leilão, leilões futuros)
-- Busca por texto (título, descrição)
-
----
-
-## ✅ Checklist de Implementação
-
-- [ ] Instalar `@supabase/supabase-js` e `react-router-dom`
-- [ ] Criar `useFilterParams.tsx`
-- [ ] Criar `client.ts` com credenciais do Supabase
-- [ ] Criar `stringUtils.ts`
-- [ ] Implementar lógica de busca (exemplo completo)
-- [ ] Criar componentes de filtro na UI
-- [ ] Testar cada filtro individualmente
-- [ ] Testar múltiplos filtros combinados
-- [ ] Testar paginação
-- [ ] Testar URLs compartilháveis
-- [ ] Adicionar índices no banco (opcional, mas recomendado)
-
----
-
-**Fim da Documentação**
-
-Este documento contém **tudo** que você precisa saber sobre o sistema de filtros. Qualquer dúvida, consulte a seção específica acima.
+**Pronto!** Agora você tem todo o código necessário para implementar o sistema de filtros usando a view `leiloes_imoveis_com_zona`. 🚀
 
