@@ -1417,9 +1417,12 @@
                 });
             
             citiesCache = { grouped: citiesByRegionArray, flat: citiesArray };
+            
+            console.log(`✅ Cidades carregadas: ${citiesArray.length} total, ${Object.keys(citiesByRegionArray).length} regiões`);
+            
             return { grouped: citiesByRegionArray, flat: citiesArray };
         } catch (err) {
-            console.error(`Erro ao buscar cidades do ${state}:`, err);
+            console.error(`❌ Erro ao buscar cidades do ${state}:`, err);
             return { grouped: {}, flat: [] };
         }
     }
@@ -2123,12 +2126,36 @@
         const select = document.getElementById('filter-city-quick');
         if (!select) return;
         
+        // Mostrar loading
+        select.innerHTML = '<option value="">Carregando cidades...</option>';
+        select.disabled = true;
+        
         try {
+            console.log(`🔄 Carregando cidades para estado: ${CURRENT_STATE}`);
             const citiesData = await fetchCitiesByState(CURRENT_STATE);
+            
+            if (!citiesData) {
+                console.error('❌ Nenhum dado retornado de fetchCitiesByState');
+                select.innerHTML = '<option value="">Erro ao carregar cidades</option>';
+                select.disabled = false;
+                return;
+            }
+            
             select.innerHTML = '<option value="" selected disabled>Selecione a cidade</option>';
+            select.disabled = false;
+            
+            // Verificar se temos dados agrupados
+            const hasGrouped = citiesData.grouped && Object.keys(citiesData.grouped).length > 0;
+            const hasFlat = citiesData.flat && citiesData.flat.length > 0;
+            
+            if (!hasGrouped && !hasFlat) {
+                console.warn('⚠️ Nenhuma cidade encontrada');
+                select.innerHTML = '<option value="">Nenhuma cidade encontrada</option>';
+                return;
+            }
             
             // Se tiver dados agrupados, usar estrutura com optgroup
-            if (citiesData.grouped && Object.keys(citiesData.grouped).length > 0) {
+            if (hasGrouped) {
                 // Ordem de exibição das regiões
                 const regionOrder = ['Região Metropolitana', 'Região dos Lagos', 'Vale do Paraíba', 'Serra', 'Outras Regiões'];
                 
@@ -2159,7 +2186,7 @@
                 
                 // Adicionar outras regiões que não estão na ordem
                 Object.keys(citiesData.grouped).forEach(region => {
-                    if (!regionOrder.includes(region) && citiesData.grouped[region].length > 0) {
+                    if (!regionOrder.includes(region) && citiesData.grouped[region] && citiesData.grouped[region].length > 0) {
                         const optgroup = document.createElement('optgroup');
                         optgroup.label = region;
                         
@@ -2176,20 +2203,20 @@
                 
                 const totalCities = citiesData.flat ? citiesData.flat.length : 0;
                 console.log(`✅ ${totalCities} cidades carregadas em ${Object.keys(citiesData.grouped).length} regiões`);
-            } else {
+            } else if (hasFlat) {
                 // Fallback: usar lista simples
-                const cities = citiesData.flat || [];
-                cities.forEach(item => {
+                citiesData.flat.forEach(item => {
                     const option = document.createElement('option');
                     option.value = item.city;
                     option.textContent = `${item.city} (${item.count})`;
                     select.appendChild(option);
                 });
-                console.log(`✅ ${cities.length} cidades carregadas no quick`);
+                console.log(`✅ ${citiesData.flat.length} cidades carregadas no quick`);
             }
         } catch (error) {
             console.error('❌ Erro ao popular cidades quick:', error);
             select.innerHTML = '<option value="">Erro ao carregar cidades</option>';
+            select.disabled = false;
         }
     }
     
