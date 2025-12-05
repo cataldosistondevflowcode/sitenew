@@ -1276,6 +1276,13 @@
 
     // Atualiza URL com filtros
     function updateURL(filters) {
+        // Se houver um slug de região, usar ele na URL ao invés de query params
+        if (filters.regionSlug) {
+            const newUrl = `/${filters.regionSlug}`;
+            window.history.replaceState({}, '', newUrl);
+            return;
+        }
+        
         const params = new URLSearchParams();
         
         if (filters.city) params.set('cidade', filters.city);
@@ -1318,6 +1325,7 @@
     let propertyTypesCache = null;
     let zonesCache = null;
     let neighborhoodsCache = {};
+    let citiesByRegionCache = null; // Cache para cidades agrupadas por região
     
     // Buscar cidades filtradas por estado, agrupadas por região
     async function fetchCitiesByState(state) {
@@ -2171,6 +2179,15 @@
                 // Ordem de exibição das regiões
                 const regionOrder = ['Região Metropolitana', 'Região dos Lagos', 'Vale do Paraíba', 'Serra', 'Outras Regiões'];
                 
+                // Mapeamento de regiões para slugs
+                const regionSlugs = {
+                    'Região Metropolitana': 'regiao-metropolitana-rj',
+                    'Região dos Lagos': 'regiao-dos-lagos-rj',
+                    'Vale do Paraíba': 'vale-do-paraiba-rj',
+                    'Serra': 'serra-rj',
+                    'Outras Regiões': 'outras-regioes-rj'
+                };
+                
                 // Adicionar opção "Todas as cidades"
                 const allOption = document.createElement('option');
                 allOption.value = '';
@@ -2182,6 +2199,17 @@
                 // Adicionar regiões na ordem definida
                 regionOrder.forEach(region => {
                     if (citiesData.grouped[region] && citiesData.grouped[region].length > 0) {
+                        // Adicionar opção para selecionar toda a região
+                        const regionOption = document.createElement('option');
+                        regionOption.value = `region:${regionSlugs[region] || region.toLowerCase().replace(/\s+/g, '-')}`;
+                        regionOption.textContent = `📍 ${region}`;
+                        regionOption.style.fontWeight = 'bold';
+                        regionOption.style.color = '#d97706'; // amber-600
+                        regionOption.dataset.region = region;
+                        regionOption.dataset.regionSlug = regionSlugs[region] || region.toLowerCase().replace(/\s+/g, '-');
+                        select.appendChild(regionOption);
+                        
+                        // Adicionar optgroup com as cidades da região
                         const optgroup = document.createElement('optgroup');
                         optgroup.label = region;
                         
@@ -2199,6 +2227,18 @@
                 // Adicionar outras regiões que não estão na ordem
                 Object.keys(citiesData.grouped).forEach(region => {
                     if (!regionOrder.includes(region) && citiesData.grouped[region] && citiesData.grouped[region].length > 0) {
+                        // Adicionar opção para selecionar toda a região
+                        const regionOption = document.createElement('option');
+                        const regionSlug = region.toLowerCase().replace(/\s+/g, '-') + '-rj';
+                        regionOption.value = `region:${regionSlug}`;
+                        regionOption.textContent = `📍 ${region}`;
+                        regionOption.style.fontWeight = 'bold';
+                        regionOption.style.color = '#d97706'; // amber-600
+                        regionOption.dataset.region = region;
+                        regionOption.dataset.regionSlug = regionSlug;
+                        select.appendChild(regionOption);
+                        
+                        // Adicionar optgroup com as cidades da região
                         const optgroup = document.createElement('optgroup');
                         optgroup.label = region;
                         
@@ -2212,6 +2252,9 @@
                         select.appendChild(optgroup);
                     }
                 });
+                
+                // Armazenar dados agrupados em cache para uso posterior
+                citiesByRegionCache = citiesData.grouped;
                 
                 const totalCities = citiesData.flat ? citiesData.flat.length : 0;
                 console.log(`✅ ${totalCities} cidades carregadas em ${Object.keys(citiesData.grouped).length} regiões`);
@@ -2333,8 +2376,36 @@
         // Event listener para mudança de cidade no quick select
         const cityQuickSelect = document.getElementById('filter-city-quick');
         if (cityQuickSelect) {
-            cityQuickSelect.addEventListener('change', function(e) {
-                populateNeighborhoodsQuick(e.target.value);
+            cityQuickSelect.addEventListener('change', async function(e) {
+                const selectedValue = e.target.value;
+                
+                // Verificar se é uma seleção de região (começa com "region:")
+                if (selectedValue && selectedValue.startsWith('region:')) {
+                    const regionSlug = selectedValue.replace('region:', '');
+                    const selectedOption = e.target.options[e.target.selectedIndex];
+                    const regionName = selectedOption.dataset.region;
+                    
+                    if (regionName && citiesByRegionCache && citiesByRegionCache[regionName]) {
+                        // Obter todas as cidades da região
+                        const citiesInRegion = citiesByRegionCache[regionName].map(item => item.city);
+                        
+                        // Atualizar filtros com todas as cidades da região
+                        const filters = parseFiltersFromURL();
+                        filters.cities = citiesInRegion;
+                        filters.regionSlug = regionSlug;
+                        
+                        // Atualizar URL com o slug da região
+                        updateURL(filters);
+                        
+                        // Recarregar propriedades com o filtro de cidades
+                        await fetchProperties(filters);
+                        
+                        console.log(`✅ Região "${regionName}" selecionada: ${citiesInRegion.length} cidades`);
+                    }
+                } else {
+                    // Seleção normal de cidade
+                    populateNeighborhoodsQuick(selectedValue);
+                }
             });
         }
     }
