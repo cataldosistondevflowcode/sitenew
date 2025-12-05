@@ -661,8 +661,12 @@
             lucide.createIcons();
         }
 
-        // Nota: A implementação completa será feita quando necessário
-        // Por enquanto, o HTML está estático
+        // Carregar lista de posts quando a página carregar
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', populateBlogList);
+        } else {
+            populateBlogList();
+        }
     </script>
 </body>
 </html>
