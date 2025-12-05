@@ -1206,6 +1206,29 @@
         const params = new URLSearchParams(window.location.search);
         const filters = {};
         
+        // Verificar se há um slug de região no pathname
+        const pathname = window.location.pathname;
+        const regionSlugMatch = pathname.match(/\/(regiao-metropolitana-rj|regiao-dos-lagos-rj|vale-do-paraiba-rj|serra-rj|outras-regioes-rj)/);
+        if (regionSlugMatch) {
+            const regionSlug = regionSlugMatch[1];
+            filters.regionSlug = regionSlug;
+            
+            // Mapear slug para nome da região
+            const slugToRegion = {
+                'regiao-metropolitana-rj': 'Região Metropolitana',
+                'regiao-dos-lagos-rj': 'Região dos Lagos',
+                'vale-do-paraiba-rj': 'Vale do Paraíba',
+                'serra-rj': 'Serra',
+                'outras-regioes-rj': 'Outras Regiões'
+            };
+            
+            const regionName = slugToRegion[regionSlug];
+            if (regionName && citiesByRegionCache && citiesByRegionCache[regionName]) {
+                // Obter todas as cidades da região
+                filters.cities = citiesByRegionCache[regionName].map(item => item.city);
+            }
+        }
+        
         const cidade = params.get('cidade');
         if (cidade) filters.city = cidade;
         
@@ -2428,15 +2451,23 @@
         }
         
         const cityQuickSelect = document.getElementById('filter-city-quick');
-        if (cityQuickSelect && filters.city) {
-            cityQuickSelect.value = filters.city;
-            // Carregar bairros quando cidade for selecionada
-            populateNeighborhoodsQuick(filters.city).then(() => {
-                const neighborhoodQuickSelect = document.getElementById('filter-neighborhood-quick');
-                if (neighborhoodQuickSelect && filters.neighborhood) {
-                    neighborhoodQuickSelect.value = filters.neighborhood;
+        if (cityQuickSelect) {
+            // Se houver um slug de região, selecionar a opção da região
+            if (filters.regionSlug) {
+                const regionOption = cityQuickSelect.querySelector(`option[value="region:${filters.regionSlug}"]`);
+                if (regionOption) {
+                    cityQuickSelect.value = `region:${filters.regionSlug}`;
                 }
-            });
+            } else if (filters.city) {
+                cityQuickSelect.value = filters.city;
+                // Carregar bairros quando cidade for selecionada
+                populateNeighborhoodsQuick(filters.city).then(() => {
+                    const neighborhoodQuickSelect = document.getElementById('filter-neighborhood-quick');
+                    if (neighborhoodQuickSelect && filters.neighborhood) {
+                        neighborhoodQuickSelect.value = filters.neighborhood;
+                    }
+                });
+            }
         }
         
         const neighborhoodQuickSelect = document.getElementById('filter-neighborhood-quick');
