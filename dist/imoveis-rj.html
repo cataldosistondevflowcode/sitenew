@@ -1505,30 +1505,53 @@
                 return neighborhoodsCache[cacheKey];
             }
             
-            let query = supabase
-                .from(TABLE_NAME)
-                .select('bairro, zona')
-                .eq('estado', state)
-                .gte('leilao_1', 75000)
-                .not('bairro', 'is', null);
+            // Buscar todos os bairros com paginação
+            let allData = [];
+            let page = 0;
+            const pageSize = 1000;
+            let hasMore = true;
             
-            if (cityName) {
-                query = query.eq('cidade', cityName);
+            while (hasMore) {
+                const from = page * pageSize;
+                const to = from + pageSize - 1;
+                
+                let query = supabase
+                    .from(TABLE_NAME)
+                    .select('bairro, zona')
+                    .eq('estado', state)
+                    .gte('leilao_1', 75000)
+                    .not('bairro', 'is', null)
+                    .order('bairro')
+                    .range(from, to);
+                
+                if (cityName) {
+                    query = query.eq('cidade', cityName);
+                }
+                
+                const { data, error } = await query;
+                
+                if (error) {
+                    console.error('❌ Erro na query de bairros:', error);
+                    throw error;
+                }
+                
+                if (data && data.length > 0) {
+                    allData = allData.concat(data);
+                }
+                
+                hasMore = data && data.length === pageSize;
+                page++;
+                
+                if (page > 50) break; // Limite de segurança
             }
             
-            const { data, error } = await query;
-            
-            if (error) {
-                console.error('❌ Erro na query de bairros:', error);
-                throw error;
-            }
-            
-            if (!data || data.length === 0) {
+            if (!allData || allData.length === 0) {
                 console.warn(`⚠️ Nenhum dado retornado para bairros - Estado: ${state}, Cidade: ${cityName || 'Todas'}`);
                 return [];
             }
             
-            console.log(`📊 ${data.length} registros retornados do Supabase para bairros`);
+            console.log(`📊 ${allData.length} registros retornados do Supabase para bairros`);
+            const data = allData;
             
             const neighborhoodCount = {};
             const neighborhoodsByZone = {};
