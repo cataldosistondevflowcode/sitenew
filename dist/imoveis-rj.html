@@ -326,12 +326,7 @@
                 <div>
                     <label class="block text-xs font-bold text-zinc-800 uppercase tracking-wider mb-2">Tipo de Imóvel</label>
                     <select id="filter-type" multiple class="w-full px-4 py-2 text-sm border border-zinc-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 min-h-[42px]">
-                        <option value="Apartamento">Apartamento</option>
-                        <option value="Casa">Casa</option>
-                        <option value="Terreno">Terreno</option>
-                        <option value="Sala Comercial">Sala Comercial</option>
-                        <option value="Loja">Loja</option>
-                        <option value="Galpão">Galpão</option>
+                        <option value="" disabled>Carregando tipos...</option>
                     </select>
                     <p class="text-[10px] text-zinc-400 mt-1">Mantenha Ctrl/Cmd pressionado para selecionar múltiplos</p>
                 </div>
@@ -339,14 +334,10 @@
                 <!-- Zona -->
                 <div>
                     <label class="block text-xs font-bold text-zinc-800 uppercase tracking-wider mb-2">Zona</label>
-                    <select id="filter-zone" class="w-full px-4 py-2 text-sm border border-zinc-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
-                        <option value="">Todas as zonas</option>
-                        <option value="Zona Sul (Rio de Janeiro)">Zona Sul</option>
-                        <option value="Zona Norte (Rio de Janeiro)">Zona Norte</option>
-                        <option value="Zona Oeste (Rio de Janeiro)">Zona Oeste</option>
-                        <option value="Zona Central (Rio de Janeiro)">Zona Central</option>
-                        <option value="Baixada Fluminense">Baixada Fluminense</option>
+                    <select id="filter-zone" multiple class="w-full px-4 py-2 text-sm border border-zinc-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 min-h-[42px]">
+                        <option value="" disabled>Carregando zonas...</option>
                     </select>
+                    <p class="text-[10px] text-zinc-400 mt-1">Mantenha Ctrl/Cmd pressionado para selecionar múltiplas zonas</p>
                 </div>
 
                 <!-- Palavra-chave -->
@@ -1051,10 +1042,12 @@
         </div>
         
         <div class="border-t border-zinc-200 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-zinc-400">
-            <p>O conteúdo do texto desta página é de direito reservado do CATALDO SISTON ADVOGADOS. Sua reprodução, parcial ou total, mesmo citando nossos links, é proibida sem a autorização do autor. Crime de violação de direito autoral – artigo 184 do Código Penal – Lei 9610/98 - Lei de direitos autorais.</p>
+            <div class="flex flex-col gap-2">
+                <p>O conteúdo do texto desta página é de direito reservado do CATALDO SISTON ADVOGADOS. Sua reprodução, parcial ou total, mesmo citando nossos links, é proibida sem a autorização do autor. Crime de violação de direito autoral – artigo 184 do Código Penal – Lei 9610/98 - Lei de direitos autorais.</p>
+                <p>CNPJ: 22437441000198 | Razão Social: CATALDO SISTON SOCIEDADE DE ADVOGADOS</p>
             </div>
+        </div>
         <div class="mt-4 text-[10px] text-zinc-400 text-center">
-            <p class="mb-2">CNPJ: 22437441000198 | Razão Social: CATALDO SISTON SOCIEDADE DE ADVOGADOS</p>
             <p class="flex items-center justify-center gap-1">Conforme nossa <a href="#" class="underline">política de privacidade</a> este site faz uso de cookies. <button class="bg-amber-600 text-white px-2 py-0.5 rounded ml-2">Entendido</button></p>
         </div>
     </div>
@@ -1093,6 +1086,7 @@
     
     // Escapa caracteres especiais do SQL
     function escapeSqlLike(str) {
+        if (!str) return '';
         return str
             .replace(/\\/g, '\\\\')
             .replace(/%/g, '\\%')
@@ -1102,7 +1096,35 @@
 
     // Remove caracteres problemáticos
     function sanitizeSearchInput(str) {
+        if (!str) return '';
         return str.replace(/[,;]/g, '').trim();
+    }
+
+    // Normaliza string para busca (remove acentos, caracteres especiais)
+    function normalizeString(str) {
+        if (!str) return '';
+        return str
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '') // Remove acentos
+            .replace(/[^\w\s]/g, '') // Remove caracteres especiais exceto espaços
+            .trim();
+    }
+
+    // Verifica se uma string contém outra de forma flexível
+    function flexibleIncludes(text, search) {
+        if (!search || !search.trim()) return true;
+        const normalizedText = normalizeString(text);
+        const normalizedSearch = normalizeString(search);
+        return normalizedText.includes(normalizedSearch);
+    }
+
+    // Busca flexível que permite palavras em qualquer ordem
+    function flexibleSearch(text, search) {
+        if (!search || !search.trim()) return true;
+        const normalizedText = normalizeString(text);
+        const searchWords = normalizeString(search).split(/\s+/);
+        return searchWords.every(word => normalizedText.includes(word));
     }
 
     // Parse filtros da URL
@@ -1151,6 +1173,12 @@
             }
         }
         
+        // Múltiplas faixas de preço
+        const faixas_preco = params.get('faixas_preco');
+        if (faixas_preco) {
+            filters.priceRanges = faixas_preco.split(',').map(r => r.trim()).filter(Boolean);
+        }
+        
         const tipo_leilao = params.get('tipo_leilao');
         if (tipo_leilao) filters.auctionType = tipo_leilao;
         
@@ -1187,6 +1215,9 @@
         if (filters.keyword) params.set('palavra_chave', filters.keyword);
         if (filters.priceRange?.min !== undefined) params.set('preco_min', filters.priceRange.min.toString());
         if (filters.priceRange?.max !== undefined) params.set('preco_max', filters.priceRange.max.toString());
+        if (filters.priceRanges && filters.priceRanges.length > 0) {
+            params.set('faixas_preco', filters.priceRanges.join(','));
+        }
         if (filters.auctionType) params.set('tipo_leilao', filters.auctionType);
         if (filters.hasSecondAuction) params.set('segundo_leilao', 'true');
         if (filters.financiamento) params.set('financiamento', 'true');
@@ -1201,6 +1232,251 @@
         window.history.replaceState({}, '', newUrl);
     }
 
+    // ============================================
+    // CARREGAMENTO DE DADOS DO SUPABASE (POR ESTADO)
+    // ============================================
+    
+    // Estado atual (RJ para este arquivo)
+    const CURRENT_STATE = 'RJ';
+    
+    // Cache de dados carregados
+    let citiesCache = null;
+    let propertyTypesCache = null;
+    let zonesCache = null;
+    let neighborhoodsCache = {};
+    
+    // Buscar cidades filtradas por estado
+    async function fetchCitiesByState(state) {
+        try {
+            if (!supabase) {
+                console.error('❌ Supabase não está disponível');
+                return [];
+            }
+            
+            const cityCount = {};
+            let page = 0;
+            const pageSize = 1000;
+            let hasMore = true;
+            
+            while (hasMore) {
+                const from = page * pageSize;
+                const to = from + pageSize - 1;
+                
+                const { data, error } = await supabase
+                    .from(TABLE_NAME)
+                    .select('cidade', { count: 'exact' })
+                    .eq('estado', state)
+                    .gte('leilao_1', 75000)
+                    .order('cidade')
+                    .not('cidade', 'is', null)
+                    .range(from, to);
+                
+                if (error) throw error;
+                
+                data.forEach(item => {
+                    if (item.cidade && item.cidade.trim() !== '') {
+                        cityCount[item.cidade] = (cityCount[item.cidade] || 0) + 1;
+                    }
+                });
+                
+                hasMore = data.length === pageSize;
+                page++;
+                
+                if (page > 50) break; // Limite de segurança
+            }
+            
+            const citiesArray = Object.keys(cityCount)
+                .map(city => ({
+                    city,
+                    count: cityCount[city]
+                }))
+                .sort((a, b) => {
+                    if (b.count !== a.count) {
+                        return b.count - a.count;
+                    }
+                    return a.city.localeCompare(b.city, 'pt-BR');
+                });
+            
+            citiesCache = citiesArray;
+            return citiesArray;
+        } catch (err) {
+            console.error(`Erro ao buscar cidades do ${state}:`, err);
+            return [];
+        }
+    }
+    
+    // Buscar tipos de propriedade filtrados por estado
+    async function fetchPropertyTypesByState(state) {
+        try {
+            if (!supabase) {
+                console.error('❌ Supabase não está disponível');
+                return [];
+            }
+            
+            const { data, error } = await supabase
+                .from(TABLE_NAME)
+                .select('tipo_propriedade')
+                .eq('estado', state)
+                .gte('leilao_1', 75000)
+                .not('tipo_propriedade', 'is', null);
+            
+            if (error) throw error;
+            
+            const typeCount = {};
+            data.forEach(item => {
+                if (item.tipo_propriedade && item.tipo_propriedade.trim() !== '') {
+                    typeCount[item.tipo_propriedade] = (typeCount[item.tipo_propriedade] || 0) + 1;
+                }
+            });
+            
+            const typesArray = Object.keys(typeCount)
+                .map(type => ({
+                    type,
+                    count: typeCount[type]
+                }))
+                .sort((a, b) => a.type.localeCompare(b.type, 'pt-BR'));
+            
+            propertyTypesCache = typesArray;
+            return typesArray;
+        } catch (err) {
+            console.error(`Erro ao buscar tipos de propriedade do ${state}:`, err);
+            return [];
+        }
+    }
+    
+    // Buscar zonas disponíveis filtradas por estado
+    async function fetchZonesByState(state) {
+        try {
+            if (!supabase) {
+                console.error('❌ Supabase não está disponível');
+                return [];
+            }
+            
+            const { data, error } = await supabase
+                .from(TABLE_NAME)
+                .select('zona')
+                .eq('estado', state)
+                .gte('leilao_1', 75000)
+                .not('zona', 'is', null);
+            
+            if (error) throw error;
+            
+            // Obter zonas únicas
+            const uniqueZones = [...new Set(data.map(item => item.zona).filter(Boolean))];
+            const sortedZones = uniqueZones.sort();
+            
+            zonesCache = sortedZones;
+            return sortedZones;
+        } catch (err) {
+            console.error(`Erro ao buscar zonas do ${state}:`, err);
+            return [];
+        }
+    }
+    
+    // Buscar bairros filtrados por estado (e opcionalmente por cidade)
+    async function fetchNeighborhoodsByState(state, cityName = null) {
+        try {
+            if (!supabase) {
+                console.error('❌ Supabase não está disponível');
+                return [];
+            }
+            
+            const cacheKey = cityName ? `${state}_${cityName}` : state;
+            if (neighborhoodsCache[cacheKey]) {
+                return neighborhoodsCache[cacheKey];
+            }
+            
+            let query = supabase
+                .from(TABLE_NAME)
+                .select('bairro, zona')
+                .eq('estado', state)
+                .gte('leilao_1', 75000)
+                .order('bairro')
+                .not('bairro', 'is', null);
+            
+            if (cityName) {
+                query = query.eq('cidade', cityName);
+            }
+            
+            const { data, error } = await query;
+            
+            if (error) throw error;
+            
+            const neighborhoodCount = {};
+            const neighborhoodsByZone = {};
+            
+            data.forEach(item => {
+                if (item.bairro && item.bairro.trim() !== '') {
+                    neighborhoodCount[item.bairro] = (neighborhoodCount[item.bairro] || 0) + 1;
+                    
+                    // Agrupar por zona se houver
+                    if (item.zona) {
+                        if (!neighborhoodsByZone[item.zona]) {
+                            neighborhoodsByZone[item.zona] = [];
+                        }
+                        if (!neighborhoodsByZone[item.zona].includes(item.bairro)) {
+                            neighborhoodsByZone[item.zona].push(item.bairro);
+                        }
+                    }
+                }
+            });
+            
+            // Se for Rio de Janeiro, agrupar por zona
+            if (state === 'RJ' && cityName && cityName.toLowerCase() === 'rio de janeiro') {
+                const bairrosAgrupados = {};
+                
+                // Agrupar bairros por zona
+                Object.keys(neighborhoodsByZone).forEach(zona => {
+                    bairrosAgrupados[zona] = neighborhoodsByZone[zona].map(bairro => ({
+                        neighborhood: bairro,
+                        count: neighborhoodCount[bairro] || 0
+                    }));
+                });
+                
+                // Adicionar bairros sem zona em "Outros"
+                Object.keys(neighborhoodCount).forEach(bairro => {
+                    let foundInZone = false;
+                    Object.values(neighborhoodsByZone).forEach(zoneBairros => {
+                        if (zoneBairros.includes(bairro)) {
+                            foundInZone = true;
+                        }
+                    });
+                    
+                    if (!foundInZone) {
+                        if (!bairrosAgrupados['Outros']) bairrosAgrupados['Outros'] = [];
+                        bairrosAgrupados['Outros'].push({ 
+                            neighborhood: bairro, 
+                            count: neighborhoodCount[bairro] 
+                        });
+                    }
+                });
+                
+                neighborhoodsCache[cacheKey] = bairrosAgrupados;
+                return bairrosAgrupados;
+            } else {
+                // Para outras cidades, lista simples
+                const neighborhoodsArray = Object.keys(neighborhoodCount)
+                    .filter(neighborhood => neighborhood.trim() !== '')
+                    .map(neighborhood => ({
+                        neighborhood,
+                        count: neighborhoodCount[neighborhood]
+                    }))
+                    .sort((a, b) => {
+                        if (b.count !== a.count) {
+                            return b.count - a.count;
+                        }
+                        return a.neighborhood.localeCompare(b.neighborhood, 'pt-BR');
+                    });
+                
+                neighborhoodsCache[cacheKey] = neighborhoodsArray;
+                return neighborhoodsArray;
+            }
+        } catch (err) {
+            console.error(`Erro ao buscar bairros do ${state}${cityName ? ` - ${cityName}` : ''}:`, err);
+            return [];
+        }
+    }
+    
     // ============================================
     // FUNÇÕES DE FORMATAÇÃO
     // ============================================
@@ -1271,8 +1547,15 @@
                 }
             }
 
-            // FILTRO 3: Bairro
-            if (filters.neighborhood) {
+            // FILTRO 3: Zona (prioridade sobre bairros)
+            if (filters.zones && filters.zones.length > 0) {
+                // Múltiplas zonas: filtro IN direto no campo zona
+                query = query.in('zona', filters.zones);
+            } else if (filters.zone) {
+                // Uma zona: filtro EQ direto no campo zona
+                query = query.eq('zona', filters.zone);
+            } else if (filters.neighborhood) {
+                // Bairros individuais (quando não é zona completa)
                 const bairros = filters.neighborhood.split(',');
                 if (bairros.length > 1) {
                     query = query.in('bairro', bairros);
@@ -1324,6 +1607,10 @@
             // FILTRO 8: Tipo de leilão
             if (filters.auctionType) {
                 if (filters.auctionType === "EXTRAJUDICIAL_CUSTOM") {
+                    query = query
+                        .neq('tipo_leilao', 'Judicial')
+                        .neq('tipo_leilao', 'Outros');
+                } else if (filters.auctionType === "EXTRAJUDICIAL_COMPOSTO") {
                     query = query
                         .neq('tipo_leilao', 'Judicial')
                         .neq('tipo_leilao', 'Outros');
@@ -1621,6 +1908,66 @@
     }
 
     // ============================================
+    // POPULAR DROPDOWNS COM DADOS DO SUPABASE
+    // ============================================
+    
+    // Popular dropdown de tipos de imóvel
+    async function populatePropertyTypes() {
+        const select = document.getElementById('filter-type');
+        if (!select) return;
+        
+        try {
+            const types = await fetchPropertyTypesByState(CURRENT_STATE);
+            select.innerHTML = '<option value="">Todos os tipos</option>';
+            
+            types.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.type;
+                option.textContent = `${item.type} (${item.count})`;
+                select.appendChild(option);
+            });
+            
+            console.log(`✅ ${types.length} tipos de imóvel carregados`);
+        } catch (error) {
+            console.error('❌ Erro ao popular tipos:', error);
+            select.innerHTML = '<option value="">Erro ao carregar tipos</option>';
+        }
+    }
+    
+    // Popular dropdown de zonas
+    async function populateZones() {
+        const select = document.getElementById('filter-zone');
+        if (!select) return;
+        
+        try {
+            const zones = await fetchZonesByState(CURRENT_STATE);
+            select.innerHTML = '<option value="">Todas as zonas</option>';
+            
+            zones.forEach(zone => {
+                const option = document.createElement('option');
+                option.value = zone;
+                option.textContent = zone;
+                select.appendChild(option);
+            });
+            
+            console.log(`✅ ${zones.length} zonas carregadas`);
+        } catch (error) {
+            console.error('❌ Erro ao popular zonas:', error);
+            select.innerHTML = '<option value="">Erro ao carregar zonas</option>';
+        }
+    }
+    
+    // Inicializar dados do Supabase
+    async function initializeSupabaseData() {
+        console.log('🔄 Inicializando dados do Supabase...');
+        await Promise.all([
+            populatePropertyTypes(),
+            populateZones()
+        ]);
+        console.log('✅ Dados do Supabase inicializados');
+    }
+    
+    // ============================================
     // EVENT LISTENERS E INICIALIZAÇÃO
     // ============================================
     
@@ -1767,10 +2114,24 @@
             });
         }
 
-        // Zona
+        // Zona (múltipla seleção)
         const zoneSelect = document.getElementById('filter-zone');
-        if (zoneSelect && filters.zone) {
-            zoneSelect.value = filters.zone;
+        if (zoneSelect) {
+            // Limpar seleções anteriores
+            Array.from(zoneSelect.options).forEach(option => {
+                option.selected = false;
+            });
+            
+            // Selecionar zonas da URL
+            if (filters.zones && filters.zones.length > 0) {
+                filters.zones.forEach(zone => {
+                    const option = Array.from(zoneSelect.options).find(opt => opt.value === zone);
+                    if (option) option.selected = true;
+                });
+            } else if (filters.zone) {
+                const option = Array.from(zoneSelect.options).find(opt => opt.value === filters.zone);
+                if (option) option.selected = true;
+            }
         }
 
         // Palavra-chave (modal e busca rápida)
@@ -1859,10 +2220,17 @@
             }
         }
 
-        // Zona
+        // Zona (múltipla seleção)
         const zoneSelect = document.getElementById('filter-zone');
-        if (zoneSelect && zoneSelect.value) {
-            filters.zone = zoneSelect.value;
+        if (zoneSelect) {
+            const selectedZones = Array.from(zoneSelect.selectedOptions)
+                .map(option => option.value)
+                .filter(value => value !== '');
+            if (selectedZones.length > 1) {
+                filters.zones = selectedZones;
+            } else if (selectedZones.length === 1) {
+                filters.zone = selectedZones[0];
+            }
         }
 
         // Palavra-chave
@@ -1988,8 +2356,19 @@
         // Limpar todos os campos do modal
         document.getElementById('filter-city').value = '';
         document.getElementById('filter-neighborhood').value = '';
-        document.getElementById('filter-type').selectedIndex = -1;
-        document.getElementById('filter-zone').value = '';
+        // Limpar seleções múltiplas
+        const typeSelect = document.getElementById('filter-type');
+        if (typeSelect) {
+            Array.from(typeSelect.options).forEach(option => {
+                option.selected = false;
+            });
+        }
+        const zoneSelect = document.getElementById('filter-zone');
+        if (zoneSelect) {
+            Array.from(zoneSelect.options).forEach(option => {
+                option.selected = false;
+            });
+        }
         document.getElementById('filter-keyword').value = '';
         document.getElementById('filter-price-min').value = '';
         document.getElementById('filter-price-max-modal').value = '';
@@ -2066,12 +2445,14 @@
         }
     }
 
-    function init() {
+    async function init() {
         const gridContainer = document.querySelector('.grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-3.xl\\:grid-cols-4');
         if (gridContainer && !gridContainer.id) {
             gridContainer.id = 'properties-grid';
         }
 
+        // Inicializar dados do Supabase primeiro
+        await initializeSupabaseData();
         initFilters();
         populatePropertiesGrid(1);
     }
