@@ -5,12 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && node scripts/copy-html.js",
+    "build": "vite build && node scripts/copy-html.js && node scripts/inject-webflow-config.js",
     "preview": "vite preview",
     "serve": "node server.js",
     "generate-webflow-types": "tsx src/scripts/generate-webflow-types.ts",
     "test-webflow": "tsx src/scripts/test-webflow-connection.ts",
-    "inject-supabase": "node scripts/inject-supabase-config.js"
+    "inject-supabase": "node scripts/inject-supabase-config.js",
+    "inject-webflow": "node scripts/inject-webflow-config.js"
   },
   "dependencies": {
     "@radix-ui/react-toast": "^1.2.15",

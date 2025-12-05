@@ -1,6 +1,8 @@
 <html lang="pt-BR" class="scroll-smooth"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="webflow-api-token" content="1a479f9b19f7b02182e1316007b62d4a4aeda6093de25677fb5207a75e226109">
+    <meta name="webflow-collection-id" content="69258d404822f7b278633cb8">
     <title>Imóveis em Leilão | Cataldo Siston Advogados</title>
     <link rel="icon" type="image/png" href="https://cdn.prod.website-files.com/69023853a6b8fa97b90fd72d/69305cca9521a74c0198aa54_FAVICON.png">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -528,12 +530,16 @@
         // Configuração do Webflow
         const WEBFLOW_CONFIG = {
             isFileProtocol: window.location.protocol === 'file:',
-            proxyUrl: window.location.protocol === 'file:' 
-                ? 'https://api.webflow.com/v2' 
-                : (window.location.hostname === 'localhost' ? '/api/webflow' : null),
+            isLocalhost: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1',
+            // Em desenvolvimento, usa proxy do Vite. Em produção, usa API diretamente
+            apiBaseUrl: (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') 
+                ? '/api/webflow' 
+                : 'https://api.webflow.com/v2',
             apiToken: (() => {
+                // Tentar obter token de meta tag
                 const metaToken = document.querySelector('meta[name="webflow-api-token"]');
                 if (metaToken) return metaToken.getAttribute('content');
+                // Tentar obter de window (para desenvolvimento)
                 if (typeof window !== 'undefined' && window.WEBFLOW_API_TOKEN) {
                     return window.WEBFLOW_API_TOKEN;
                 }
@@ -544,19 +550,21 @@
         // Função para buscar dados do Webflow
         async function fetchWebflowData(endpoint) {
             try {
-                if (!WEBFLOW_CONFIG.proxyUrl) {
-                    console.log('🚫 Webflow API desabilitada');
-                    return { items: [] };
-                }
-
-                const url = `${WEBFLOW_CONFIG.proxyUrl}${endpoint}`;
+                const url = `${WEBFLOW_CONFIG.apiBaseUrl}${endpoint}`;
+                console.log('🔍 Buscando dados do Webflow:', url);
+                
                 const headers = {
                     'accept-version': '1.0.0',
                     'Content-Type': 'application/json',
                 };
                 
-                if (WEBFLOW_CONFIG.isFileProtocol && WEBFLOW_CONFIG.apiToken) {
+                // Adicionar token se disponível (necessário em produção)
+                if (WEBFLOW_CONFIG.apiToken) {
                     headers['Authorization'] = `Bearer ${WEBFLOW_CONFIG.apiToken}`;
+                    console.log('🔑 Token de autenticação adicionado');
+                } else if (!WEBFLOW_CONFIG.isLocalhost) {
+                    // Em produção sem token, pode falhar por CORS
+                    console.warn('⚠️ Token não encontrado. A requisição pode falhar por CORS em produção.');
                 }
                 
                 const response = await fetch(url, {
@@ -565,13 +573,17 @@
                 });
 
                 if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error(`❌ Erro HTTP ${response.status}:`, errorText);
                     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
 
                 const data = await response.json();
+                console.log('✅ Dados recebidos do Webflow:', data);
                 return data;
             } catch (error) {
                 console.error('❌ Erro ao buscar dados do Webflow:', error);
+                console.error('Detalhes:', error.message);
                 return { items: [] };
             }
         }
