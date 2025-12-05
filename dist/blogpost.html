@@ -520,8 +520,223 @@
     </footer>
 
     <script>
+        // ============================================
+        // CONFIGURAÇÃO WEBFLOW CMS
+        // ============================================
+        const WEBFLOW_BLOG_COLLECTION_ID = '69258d404822f7b278633cb8';
+        
+        // Configuração do Webflow
+        const WEBFLOW_CONFIG = {
+            isFileProtocol: window.location.protocol === 'file:',
+            proxyUrl: window.location.protocol === 'file:' 
+                ? 'https://api.webflow.com/v2' 
+                : (window.location.hostname === 'localhost' ? '/api/webflow' : null),
+            apiToken: (() => {
+                const metaToken = document.querySelector('meta[name="webflow-api-token"]');
+                if (metaToken) return metaToken.getAttribute('content');
+                if (typeof window !== 'undefined' && window.WEBFLOW_API_TOKEN) {
+                    return window.WEBFLOW_API_TOKEN;
+                }
+                return null;
+            })(),
+        };
+
+        // Função para buscar dados do Webflow
+        async function fetchWebflowData(endpoint) {
+            try {
+                if (!WEBFLOW_CONFIG.proxyUrl) {
+                    console.log('🚫 Webflow API desabilitada');
+                    return { items: [] };
+                }
+
+                const url = `${WEBFLOW_CONFIG.proxyUrl}${endpoint}`;
+                const headers = {
+                    'accept-version': '1.0.0',
+                    'Content-Type': 'application/json',
+                };
+                
+                if (WEBFLOW_CONFIG.isFileProtocol && WEBFLOW_CONFIG.apiToken) {
+                    headers['Authorization'] = `Bearer ${WEBFLOW_CONFIG.apiToken}`;
+                }
+                
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: headers,
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('❌ Erro ao buscar dados do Webflow:', error);
+                return { items: [] };
+            }
+        }
+
+        // Função para buscar post por slug
+        async function fetchBlogPostBySlug(slug) {
+            try {
+                const response = await fetchWebflowData(`/collections/${WEBFLOW_BLOG_COLLECTION_ID}/items?limit=100`);
+                const posts = response.items || [];
+                return posts.find(post => post.fieldData.slug === slug) || null;
+            } catch (error) {
+                console.error('❌ Erro ao buscar post por slug:', error);
+                return null;
+            }
+        }
+
+        // Função para formatar data
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            // Se for formato "2025-02-21", converter
+            if (dateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
+                const [year, month, day] = dateString.split('-');
+                const date = new Date(year, parseInt(month) - 1, day);
+                return date.toLocaleDateString('pt-BR', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+            }
+            const date = new Date(dateString);
+            return date.toLocaleDateString('pt-BR', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        // Função para calcular tempo de leitura
+        function calculateReadingTime(content) {
+            if (!content) return 0;
+            const text = content.replace(/<[^>]*>/g, '');
+            const words = text.split(/\s+/).length;
+            return Math.ceil(words / 200);
+        }
+
+        // Função para formatar nome do autor
+        function formatAuthorName(firstName, lastName) {
+            if (!firstName && !lastName) return 'Autor';
+            const first = (firstName || '').charAt(0).toUpperCase() + (firstName || '').slice(1).toLowerCase();
+            const last = (lastName || '').charAt(0).toUpperCase() + (lastName || '').slice(1).toLowerCase();
+            return `${first} ${last}`.trim();
+        }
+
+        // Função para popular o post individual
+        async function populateBlogPost() {
+            // Obter slug da URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const slug = urlParams.get('slug');
+            
+            if (!slug) {
+                console.warn('⚠️ Slug não fornecido na URL');
+                return;
+            }
+
+            try {
+                const post = await fetchBlogPostBySlug(slug);
+                
+                if (!post) {
+                    console.error('❌ Post não encontrado com slug:', slug);
+                    return;
+                }
+
+                const fieldData = post.fieldData;
+                
+                // Popular título
+                const titleEl = document.querySelector('h1');
+                if (titleEl && fieldData.name) {
+                    titleEl.textContent = fieldData.name;
+                }
+
+                // Popular data
+                const dateEl = document.querySelector('.flex.items-center.gap-2.text-zinc-500.text-xs');
+                if (dateEl && fieldData['data-de-publicacao']) {
+                    const dateSpan = dateEl.querySelector('span');
+                    if (dateSpan) {
+                        dateSpan.textContent = formatDate(fieldData['data-de-publicacao']);
+                    }
+                }
+
+                // Popular tempo de leitura
+                const readingTimeEls = document.querySelectorAll('.flex.items-center.gap-2.text-zinc-500.text-xs');
+                if (readingTimeEls.length > 1 && fieldData.conteudo) {
+                    const readingTime = calculateReadingTime(fieldData.conteudo);
+                    const readingTimeSpan = readingTimeEls[1].querySelector('span');
+                    if (readingTimeSpan) {
+                        readingTimeSpan.textContent = `${readingTime} min de leitura`;
+                    }
+                }
+
+                // Popular autor
+                const authorNameEl = document.querySelector('.text-zinc-200.text-xs.font-medium');
+                if (authorNameEl) {
+                    authorNameEl.textContent = formatAuthorName(
+                        fieldData['author-first-name'],
+                        fieldData['author-last-name']
+                    );
+                }
+
+                // Popular imagem destacada
+                const featuredImageEl = document.querySelector('article img');
+                if (featuredImageEl) {
+                    const imageUrl = fieldData['imagem-link'] || 
+                                   (fieldData['imagem-de-capa']?.url) ||
+                                   (fieldData['imagem-de-capa-importada']);
+                    if (imageUrl) {
+                        featuredImageEl.src = imageUrl;
+                        featuredImageEl.alt = fieldData.name || 'Imagem do post';
+                    }
+                }
+
+                // Popular conteúdo
+                const contentEl = document.querySelector('article.article-content');
+                if (contentEl && fieldData.conteudo) {
+                    // Encontrar onde inserir o conteúdo (após a imagem destacada)
+                    const featuredImageDiv = contentEl.querySelector('.mb-12.rounded-lg');
+                    if (featuredImageDiv) {
+                        // Remover conteúdo estático existente
+                        const staticContent = contentEl.querySelectorAll('p, h2, h3, blockquote, ul, div.bg-zinc-900');
+                        staticContent.forEach(el => {
+                            if (el !== featuredImageDiv && !el.closest('.mt-16')) {
+                                el.remove();
+                            }
+                        });
+                        
+                        // Inserir conteúdo do Webflow
+                        const contentDiv = document.createElement('div');
+                        contentDiv.innerHTML = fieldData.conteudo;
+                        contentDiv.className = 'article-content-body';
+                        featuredImageDiv.insertAdjacentElement('afterend', contentDiv);
+                    }
+                }
+
+                // Popular breadcrumb
+                const breadcrumbEl = document.querySelector('nav span.text-amber-600');
+                if (breadcrumbEl && fieldData.tag) {
+                    // Se houver tag/categoria, usar ela
+                    // Por enquanto, manter estático
+                }
+
+                console.log('✅ Post carregado com sucesso');
+            } catch (error) {
+                console.error('❌ Erro ao popular post:', error);
+            }
+        }
+
+        // Inicializar ícones
         if (typeof lucide !== 'undefined') {
             lucide.createIcons();
+        }
+
+        // Carregar post quando a página carregar
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', populateBlogPost);
+        } else {
+            populateBlogPost();
         }
 
         // Mobile Menu Toggle

@@ -561,9 +561,108 @@
     </footer>
 
     <script>
+        // ============================================
+        // CONFIGURAÇÃO WEBFLOW CMS
+        // ============================================
+        const WEBFLOW_BLOG_COLLECTION_ID = '69258d404822f7b278633cb8';
+        
+        // Configuração do Webflow (usando proxy do Vite em desenvolvimento)
+        const WEBFLOW_CONFIG = {
+            isFileProtocol: window.location.protocol === 'file:',
+            proxyUrl: window.location.protocol === 'file:' 
+                ? 'https://api.webflow.com/v2' 
+                : (window.location.hostname === 'localhost' ? '/api/webflow' : null),
+            apiToken: (() => {
+                const metaToken = document.querySelector('meta[name="webflow-api-token"]');
+                if (metaToken) return metaToken.getAttribute('content');
+                if (typeof window !== 'undefined' && window.WEBFLOW_API_TOKEN) {
+                    return window.WEBFLOW_API_TOKEN;
+                }
+                return null;
+            })(),
+        };
+
+        // Função para buscar dados do Webflow
+        async function fetchWebflowData(endpoint) {
+            try {
+                if (!WEBFLOW_CONFIG.proxyUrl) {
+                    console.log('🚫 Webflow API desabilitada');
+                    return { items: [] };
+                }
+
+                const url = `${WEBFLOW_CONFIG.proxyUrl}${endpoint}`;
+                const headers = {
+                    'accept-version': '1.0.0',
+                    'Content-Type': 'application/json',
+                };
+                
+                if (WEBFLOW_CONFIG.isFileProtocol && WEBFLOW_CONFIG.apiToken) {
+                    headers['Authorization'] = `Bearer ${WEBFLOW_CONFIG.apiToken}`;
+                }
+                
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: headers,
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('❌ Erro ao buscar dados do Webflow:', error);
+                return { items: [] };
+            }
+        }
+
+        // Função para buscar posts do blog
+        async function fetchBlogPosts() {
+            try {
+                const response = await fetchWebflowData(`/collections/${WEBFLOW_BLOG_COLLECTION_ID}/items?limit=100`);
+                return response.items || [];
+            } catch (error) {
+                console.error('❌ Erro ao buscar posts do blog:', error);
+                return [];
+            }
+        }
+
+        // Função para formatar data
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('pt-BR', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        // Função para calcular tempo de leitura (estimativa)
+        function calculateReadingTime(content) {
+            if (!content) return 0;
+            const text = content.replace(/<[^>]*>/g, ''); // Remove HTML tags
+            const words = text.split(/\s+/).length;
+            const readingTime = Math.ceil(words / 200); // 200 palavras por minuto
+            return readingTime;
+        }
+
+        // Função para formatar nome do autor
+        function formatAuthorName(firstName, lastName) {
+            if (!firstName && !lastName) return 'Autor';
+            const first = (firstName || '').charAt(0).toUpperCase() + (firstName || '').slice(1).toLowerCase();
+            const last = (lastName || '').charAt(0).toUpperCase() + (lastName || '').slice(1).toLowerCase();
+            return `${first} ${last}`.trim();
+        }
+
+        // Inicializar ícones
         if (typeof lucide !== 'undefined') {
             lucide.createIcons();
         }
+
+        // Nota: A implementação completa será feita quando necessário
+        // Por enquanto, o HTML está estático
     </script>
 </body>
 </html>
