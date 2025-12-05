@@ -1532,7 +1532,7 @@
                 
                 let query = supabase
                     .from(TABLE_NAME)
-                    .select('bairro, zona')
+                    .select('bairro, zone')
                     .eq('estado', state)
                     .gte('leilao_1', 75000)
                     .not('bairro', 'is', null)
