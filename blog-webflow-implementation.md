@@ -2,6 +2,21 @@
 
 ## Collection ID: `692c64760de964487f419b16`
 
+## Configuração do Ambiente
+
+As credenciais do Webflow estão configuradas no arquivo `.env`:
+
+```env
+VITE_WEBFLOW_API_TOKEN=1a479f9b19f7b02182e1316007b62d4a4aeda6093de25677fb5207a75e226109
+VITE_WEBFLOW_SITE_ID=69023853a6b8fa97b90fd72d
+VITE_WEBFLOW_PROPERTIES_COLLECTION_ID=69103abe35607f9876aac632
+```
+
+**Sugestão**: Adicionar também:
+```env
+VITE_WEBFLOW_BLOG_COLLECTION_ID=692c64760de964487f419b16
+```
+
 ## Mapeamento de Campos Proposto
 
 Baseado na análise dos arquivos `blog.html` e `blogpost.html`, aqui está a correspondência proposta:
