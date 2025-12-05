@@ -882,7 +882,7 @@
                 console.log('🔍 [SUPABASE] Tentando buscar por ID:', id);
                 
                 const { data: dataById, error: errorById } = await supabase
-                    .from('leiloes_imoveis')
+                    .from('leiloes_imoveis_com_zona')
                     .select('*')
                     .eq('id', id)
                     .single();
@@ -909,7 +909,7 @@
             // Se não encontrou por ID, buscar todos e comparar
             console.log('🔍 [SUPABASE] Buscando todos os imóveis para comparar slug...');
             const { data: allProperties, error } = await supabase
-                .from('leiloes_imoveis')
+                .from('leiloes_imoveis_com_zona')
                 .select('*')
                 .limit(1000); // Limite razoável
             
@@ -1252,7 +1252,7 @@
 
             // Buscar até 4 imóveis similares (mesmo tipo ou cidade)
             const { data: properties, error } = await supabase
-                .from('leiloes_imoveis')
+                .from('leiloes_imoveis_com_zona')
                 .select('*')
                 .limit(4);
             

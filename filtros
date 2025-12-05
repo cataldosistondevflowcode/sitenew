@@ -205,7 +205,7 @@ export const PropertyList = () => {
     const fetchProperties = async () => {
       // PASSO 3: Criar query base
       let query = supabase
-        .from('leiloes_imoveis')
+        .from('leiloes_imoveis_com_zona')
         .select('*', { count: 'exact' })
         .eq('estado', 'RJ')           // Filtro base: apenas RJ
         .gte('leilao_1', 75000);      // Filtro base: mínimo R$ 75k
@@ -398,7 +398,7 @@ export const PropertyList = () => {
 
 **Query SQL gerada:**
 ```sql
-SELECT * FROM leiloes_imoveis
+SELECT * FROM leiloes_imoveis_com_zona
 WHERE estado = 'RJ'
   AND leilao_1 >= 75000
   AND cidade = 'Rio de Janeiro'
@@ -697,7 +697,7 @@ WHERE financiamento = true
 
 6. **Query é construída sequencialmente**
    ```typescript
-   let query = supabase.from('leiloes_imoveis')
+   let query = supabase.from('leiloes_imoveis_com_zona')
      .eq('estado', 'RJ')
      .gte('leilao_1', 75000)
      .eq('tipo_propriedade', 'Apartamento')
@@ -736,7 +736,7 @@ WHERE financiamento = true
 
 ## 📄 Estrutura da Tabela no Banco
 
-### Tabela: `leiloes_imoveis`
+### View: `leiloes_imoveis_com_zona`
 
 | Campo | Tipo | Descrição | Usado em |
 |-------|------|-----------|----------|

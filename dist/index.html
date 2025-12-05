@@ -1423,7 +1423,7 @@
               console.log(`🔍 Buscando imóveis do Supabase, limite: ${limit}`);
 
               const { data: properties, error } = await supabase
-                  .from('leiloes_imoveis')
+                  .from('leiloes_imoveis_com_zona')
                   .select('*')
                   .limit(limit);
 
