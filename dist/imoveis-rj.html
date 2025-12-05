@@ -1319,7 +1319,7 @@
     let zonesCache = null;
     let neighborhoodsCache = {};
     
-    // Buscar cidades filtradas por estado
+    // Buscar cidades filtradas por estado, agrupadas por região
     async function fetchCitiesByState(state) {
         try {
             if (!supabase) {
@@ -1328,6 +1328,7 @@
             }
             
             const cityCount = {};
+            const citiesByRegion = {};
             let page = 0;
             const pageSize = 1000;
             let hasMore = true;
@@ -1338,7 +1339,7 @@
                 
                 const { data, error } = await supabase
                     .from(TABLE_NAME)
-                    .select('cidade', { count: 'exact' })
+                    .select('cidade, zona')
                     .eq('estado', state)
                     .gte('leilao_1', 75000)
                     .order('cidade')
@@ -1350,6 +1351,33 @@
                 data.forEach(item => {
                     if (item.cidade && item.cidade.trim() !== '') {
                         cityCount[item.cidade] = (cityCount[item.cidade] || 0) + 1;
+                        
+                        // Agrupar por região (usando zona como região)
+                        // Para RJ, definir regiões conhecidas
+                        let region = 'Outras Regiões';
+                        if (state === 'RJ') {
+                            const cidadeLower = item.cidade.toLowerCase();
+                            // Região Metropolitana
+                            if (['rio de janeiro', 'niterói', 'são gonçalo', 'duque de caxias', 'nova iguaçu', 
+                                 'campos dos goytacazes', 'petrópolis', 'volta redonda', 'macaé', 'cabo frio',
+                                 'angra dos reis', 'barra mansa', 'teresópolis', 'nova friburgo', 'barra do piraí'].includes(cidadeLower)) {
+                                region = 'Região Metropolitana';
+                            } else if (['campos dos goytacazes', 'macaé', 'cabo frio', 'búzios', 'arraial do cabo'].includes(cidadeLower)) {
+                                region = 'Região dos Lagos';
+                            } else if (['volta redonda', 'barra mansa', 'resende', 'barra do piraí'].includes(cidadeLower)) {
+                                region = 'Vale do Paraíba';
+                            } else if (['petrópolis', 'teresópolis', 'nova friburgo', 'três rios'].includes(cidadeLower)) {
+                                region = 'Serra';
+                            }
+                        }
+                        
+                        if (!citiesByRegion[region]) {
+                            citiesByRegion[region] = {};
+                        }
+                        if (!citiesByRegion[region][item.cidade]) {
+                            citiesByRegion[region][item.cidade] = 0;
+                        }
+                        citiesByRegion[region][item.cidade] += 1;
                     }
                 });
                 
@@ -1359,6 +1387,23 @@
                 if (page > 50) break; // Limite de segurança
             }
             
+            // Estruturar dados agrupados por região
+            const citiesByRegionArray = {};
+            Object.keys(citiesByRegion).forEach(region => {
+                citiesByRegionArray[region] = Object.keys(citiesByRegion[region])
+                    .map(city => ({
+                        city,
+                        count: citiesByRegion[region][city]
+                    }))
+                    .sort((a, b) => {
+                        if (b.count !== a.count) {
+                            return b.count - a.count;
+                        }
+                        return a.city.localeCompare(b.city, 'pt-BR');
+                    });
+            });
+            
+            // Também retornar array simples para compatibilidade
             const citiesArray = Object.keys(cityCount)
                 .map(city => ({
                     city,
@@ -1371,11 +1416,11 @@
                     return a.city.localeCompare(b.city, 'pt-BR');
                 });
             
-            citiesCache = citiesArray;
-            return citiesArray;
+            citiesCache = { grouped: citiesByRegionArray, flat: citiesArray };
+            return { grouped: citiesByRegionArray, flat: citiesArray };
         } catch (err) {
             console.error(`Erro ao buscar cidades do ${state}:`, err);
-            return [];
+            return { grouped: {}, flat: [] };
         }
     }
     
@@ -1465,7 +1510,6 @@
                 .select('bairro, zona')
                 .eq('estado', state)
                 .gte('leilao_1', 75000)
-                .order('bairro')
                 .not('bairro', 'is', null);
             
             if (cityName) {
@@ -1474,7 +1518,17 @@
             
             const { data, error } = await query;
             
-            if (error) throw error;
+            if (error) {
+                console.error('❌ Erro na query de bairros:', error);
+                throw error;
+            }
+            
+            if (!data || data.length === 0) {
+                console.warn(`⚠️ Nenhum dado retornado para bairros - Estado: ${state}, Cidade: ${cityName || 'Todas'}`);
+                return [];
+            }
+            
+            console.log(`📊 ${data.length} registros retornados do Supabase para bairros`);
             
             const neighborhoodCount = {};
             const neighborhoodsByZone = {};
@@ -1501,17 +1555,24 @@
                 
                 // Agrupar bairros por zona
                 Object.keys(neighborhoodsByZone).forEach(zona => {
-                    bairrosAgrupados[zona] = neighborhoodsByZone[zona].map(bairro => ({
-                        neighborhood: bairro,
-                        count: neighborhoodCount[bairro] || 0
-                    }));
+                    if (neighborhoodsByZone[zona] && neighborhoodsByZone[zona].length > 0) {
+                        bairrosAgrupados[zona] = neighborhoodsByZone[zona].map(bairro => ({
+                            neighborhood: bairro,
+                            count: neighborhoodCount[bairro] || 0
+                        })).sort((a, b) => {
+                            if (b.count !== a.count) {
+                                return b.count - a.count;
+                            }
+                            return a.neighborhood.localeCompare(b.neighborhood, 'pt-BR');
+                        });
+                    }
                 });
                 
                 // Adicionar bairros sem zona em "Outros"
                 Object.keys(neighborhoodCount).forEach(bairro => {
                     let foundInZone = false;
                     Object.values(neighborhoodsByZone).forEach(zoneBairros => {
-                        if (zoneBairros.includes(bairro)) {
+                        if (zoneBairros && zoneBairros.includes(bairro)) {
                             foundInZone = true;
                         }
                     });
@@ -1525,12 +1586,23 @@
                     }
                 });
                 
+                // Ordenar "Outros" se existir
+                if (bairrosAgrupados['Outros']) {
+                    bairrosAgrupados['Outros'].sort((a, b) => {
+                        if (b.count !== a.count) {
+                            return b.count - a.count;
+                        }
+                        return a.neighborhood.localeCompare(b.neighborhood, 'pt-BR');
+                    });
+                }
+                
                 neighborhoodsCache[cacheKey] = bairrosAgrupados;
+                console.log(`✅ Bairros agrupados por zona para ${cityName}:`, Object.keys(bairrosAgrupados));
                 return bairrosAgrupados;
             } else {
                 // Para outras cidades, lista simples
                 const neighborhoodsArray = Object.keys(neighborhoodCount)
-                    .filter(neighborhood => neighborhood.trim() !== '')
+                    .filter(neighborhood => neighborhood && neighborhood.trim() !== '')
                     .map(neighborhood => ({
                         neighborhood,
                         count: neighborhoodCount[neighborhood]
@@ -1543,6 +1615,7 @@
                     });
                 
                 neighborhoodsCache[cacheKey] = neighborhoodsArray;
+                console.log(`✅ ${neighborhoodsArray.length} bairros encontrados para ${cityName || 'todas as cidades'}`);
                 return neighborhoodsArray;
             }
         } catch (err) {
@@ -2022,23 +2095,75 @@
         }
     }
     
-    // Popular dropdown de cidades (quick)
+    // Popular dropdown de cidades (quick) com agrupamento por região
     async function populateCitiesQuick() {
         const select = document.getElementById('filter-city-quick');
         if (!select) return;
         
         try {
-            const cities = await fetchCitiesByState(CURRENT_STATE);
+            const citiesData = await fetchCitiesByState(CURRENT_STATE);
             select.innerHTML = '<option value="" selected disabled>Selecione a cidade</option>';
             
-            cities.forEach(item => {
-                const option = document.createElement('option');
-                option.value = item.city;
-                option.textContent = `${item.city} (${item.count})`;
-                select.appendChild(option);
-            });
-            
-            console.log(`✅ ${cities.length} cidades carregadas no quick`);
+            // Se tiver dados agrupados, usar estrutura com optgroup
+            if (citiesData.grouped && Object.keys(citiesData.grouped).length > 0) {
+                // Ordem de exibição das regiões
+                const regionOrder = ['Região Metropolitana', 'Região dos Lagos', 'Vale do Paraíba', 'Serra', 'Outras Regiões'];
+                
+                // Adicionar opção "Todas as cidades"
+                const allOption = document.createElement('option');
+                allOption.value = '';
+                allOption.textContent = 'Todas as cidades';
+                allOption.style.fontWeight = 'bold';
+                allOption.style.color = '#d97706'; // amber-600
+                select.appendChild(allOption);
+                
+                // Adicionar regiões na ordem definida
+                regionOrder.forEach(region => {
+                    if (citiesData.grouped[region] && citiesData.grouped[region].length > 0) {
+                        const optgroup = document.createElement('optgroup');
+                        optgroup.label = region;
+                        
+                        citiesData.grouped[region].forEach(item => {
+                            const option = document.createElement('option');
+                            option.value = item.city;
+                            option.textContent = `${item.city} (${item.count})`;
+                            optgroup.appendChild(option);
+                        });
+                        
+                        select.appendChild(optgroup);
+                    }
+                });
+                
+                // Adicionar outras regiões que não estão na ordem
+                Object.keys(citiesData.grouped).forEach(region => {
+                    if (!regionOrder.includes(region) && citiesData.grouped[region].length > 0) {
+                        const optgroup = document.createElement('optgroup');
+                        optgroup.label = region;
+                        
+                        citiesData.grouped[region].forEach(item => {
+                            const option = document.createElement('option');
+                            option.value = item.city;
+                            option.textContent = `${item.city} (${item.count})`;
+                            optgroup.appendChild(option);
+                        });
+                        
+                        select.appendChild(optgroup);
+                    }
+                });
+                
+                const totalCities = citiesData.flat ? citiesData.flat.length : 0;
+                console.log(`✅ ${totalCities} cidades carregadas em ${Object.keys(citiesData.grouped).length} regiões`);
+            } else {
+                // Fallback: usar lista simples
+                const cities = citiesData.flat || [];
+                cities.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.city;
+                    option.textContent = `${item.city} (${item.count})`;
+                    select.appendChild(option);
+                });
+                console.log(`✅ ${cities.length} cidades carregadas no quick`);
+            }
         } catch (error) {
             console.error('❌ Erro ao popular cidades quick:', error);
             select.innerHTML = '<option value="">Erro ao carregar cidades</option>';
@@ -2050,18 +2175,32 @@
         const select = document.getElementById('filter-neighborhood-quick');
         if (!select) return;
         
-        if (!cityName) {
+        if (!cityName || cityName === '') {
             select.innerHTML = '<option value="">Selecione o bairro</option>';
             select.disabled = true;
             return;
         }
         
+        // Mostrar loading
+        select.innerHTML = '<option value="">Carregando bairros...</option>';
+        select.disabled = true;
+        
         try {
+            console.log(`🔄 Carregando bairros para: ${cityName}`);
             const neighborhoods = await fetchNeighborhoodsByState(CURRENT_STATE, cityName);
+            
+            if (!neighborhoods || (Array.isArray(neighborhoods) && neighborhoods.length === 0) || 
+                (typeof neighborhoods === 'object' && Object.keys(neighborhoods).length === 0)) {
+                select.innerHTML = '<option value="">Nenhum bairro encontrado</option>';
+                select.disabled = false;
+                console.warn(`⚠️ Nenhum bairro encontrado para ${cityName}`);
+                return;
+            }
+            
             select.innerHTML = '<option value="">Todos os bairros</option>';
             select.disabled = false;
             
-            // Se for objeto (agrupado por zona), popular de forma diferente
+            // Se for objeto (agrupado por zona), popular com optgroup
             if (Array.isArray(neighborhoods)) {
                 neighborhoods.forEach(item => {
                     const option = document.createElement('option');
@@ -2069,25 +2208,30 @@
                     option.textContent = `${item.neighborhood} (${item.count})`;
                     select.appendChild(option);
                 });
-            } else {
+                console.log(`✅ ${neighborhoods.length} bairros carregados para ${cityName}`);
+            } else if (typeof neighborhoods === 'object') {
                 // Se for objeto agrupado por zona
-                Object.keys(neighborhoods).forEach(zona => {
-                    const optgroup = document.createElement('optgroup');
-                    optgroup.label = zona;
-                    neighborhoods[zona].forEach(item => {
-                        const option = document.createElement('option');
-                        option.value = item.neighborhood;
-                        option.textContent = `${item.neighborhood} (${item.count})`;
-                        optgroup.appendChild(option);
-                    });
-                    select.appendChild(optgroup);
+                const zonas = Object.keys(neighborhoods).sort();
+                zonas.forEach(zona => {
+                    if (neighborhoods[zona] && neighborhoods[zona].length > 0) {
+                        const optgroup = document.createElement('optgroup');
+                        optgroup.label = zona;
+                        neighborhoods[zona].forEach(item => {
+                            const option = document.createElement('option');
+                            option.value = item.neighborhood;
+                            option.textContent = `${item.neighborhood} (${item.count})`;
+                            optgroup.appendChild(option);
+                        });
+                        select.appendChild(optgroup);
+                    }
                 });
+                const totalBairros = zonas.reduce((sum, zona) => sum + (neighborhoods[zona]?.length || 0), 0);
+                console.log(`✅ ${totalBairros} bairros carregados em ${zonas.length} zonas para ${cityName}`);
             }
-            
-            console.log(`✅ Bairros carregados para ${cityName}`);
         } catch (error) {
             console.error('❌ Erro ao popular bairros quick:', error);
             select.innerHTML = '<option value="">Erro ao carregar bairros</option>';
+            select.disabled = false;
         }
     }
     
