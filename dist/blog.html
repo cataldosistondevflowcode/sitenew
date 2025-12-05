@@ -656,6 +656,98 @@
             return `${first} ${last}`.trim();
         }
 
+        // Função para popular a lista de posts no blog.html
+        async function populateBlogList() {
+            try {
+                const posts = await fetchBlogPosts();
+                
+                if (posts.length === 0) {
+                    console.warn('⚠️ Nenhum post encontrado');
+                    return;
+                }
+
+                // Ordenar por data de publicação (mais recente primeiro)
+                posts.sort((a, b) => {
+                    const dateA = new Date(a.fieldData['data-de-publicacao'] || a.lastPublished);
+                    const dateB = new Date(b.fieldData['data-de-publicacao'] || b.lastPublished);
+                    return dateB - dateA;
+                });
+
+                // Substituir o conteúdo estático do artigo principal por uma lista de posts
+                const articleEl = document.querySelector('article.col-span-12.lg\\:col-span-8');
+                if (!articleEl) {
+                    console.warn('⚠️ Container de posts não encontrado');
+                    return;
+                }
+
+                // Criar container de posts
+                const postsContainer = document.createElement('div');
+                postsContainer.className = 'space-y-8';
+                postsContainer.id = 'blog-posts-container';
+
+                posts.forEach(post => {
+                    const fieldData = post.fieldData;
+                    const slug = fieldData.slug || post.id;
+                    const title = fieldData.name || 'Sem título';
+                    const date = formatDate(fieldData['data-de-publicacao'] || fieldData.data || post.lastPublished);
+                    const imageUrl = fieldData['imagem-link'] || 
+                                   (fieldData['imagem-de-capa']?.url) ||
+                                   (fieldData['imagem-de-capa-importada']) ||
+                                   'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=1200';
+                    const authorName = formatAuthorName(
+                        fieldData['author-first-name'],
+                        fieldData['author-last-name']
+                    );
+                    const readingTime = calculateReadingTime(fieldData.conteudo || '');
+
+                    // Extrair excerpt do conteúdo (primeiros 150 caracteres)
+                    let excerpt = '';
+                    if (fieldData.conteudo) {
+                        const text = fieldData.conteudo.replace(/<[^>]*>/g, '').trim();
+                        excerpt = text.length > 150 ? text.substring(0, 150) + '...' : text;
+                    }
+
+                    const postCard = document.createElement('article');
+                    postCard.className = 'group cursor-pointer border-b border-zinc-800 pb-8';
+                    postCard.innerHTML = `
+                        <a href="blogpost.html?slug=${slug}" class="block">
+                            <div class="grid md:grid-cols-3 gap-6">
+                                <div class="overflow-hidden rounded border border-zinc-800 aspect-[16/9]">
+                                    <img src="${imageUrl}" alt="${title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80 group-hover:opacity-100">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <span class="text-amber-600 text-[10px] uppercase tracking-widest font-bold">Blog</span>
+                                        <span class="text-zinc-600 text-[10px]">${date}</span>
+                                        ${readingTime > 0 ? `<span class="text-zinc-600 text-[10px]">${readingTime} min de leitura</span>` : ''}
+                                    </div>
+                                    <h3 class="text-2xl font-serif text-white mb-3 group-hover:text-amber-500 transition-colors">${title}</h3>
+                                    ${excerpt ? `<p class="text-zinc-400 text-sm leading-relaxed mb-4">${excerpt}</p>` : ''}
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-zinc-500 text-xs">Por ${authorName}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    `;
+                    postsContainer.appendChild(postCard);
+                });
+
+                // Substituir conteúdo estático
+                articleEl.innerHTML = '';
+                articleEl.appendChild(postsContainer);
+
+                // Reinicializar ícones
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+
+                console.log(`✅ ${posts.length} posts carregados com sucesso`);
+            } catch (error) {
+                console.error('❌ Erro ao popular lista de posts:', error);
+            }
+        }
+
         // Inicializar ícones
         if (typeof lucide !== 'undefined') {
             lucide.createIcons();
