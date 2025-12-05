@@ -184,7 +184,7 @@
 
                 <!-- View: Map (Placeholder) -->
                 <div id="view-map" class="media-view w-full h-full hidden bg-zinc-100 relative">
-                     <iframe id="map-iframe" src="" width="100%" height="100%" style="border:0; filter: grayscale(100%);" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                     <iframe id="map-iframe" src="" width="100%" height="100%" style="border:0; filter: grayscale(100%);" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" frameborder="0"></iframe>
                 </div>
 
                 <!-- View: Street View (Placeholder) -->
@@ -1094,9 +1094,30 @@
             mainImage.alt = title;
         }
 
-        // Mapa - gerar URL do Google Maps automaticamente
+        // Mapa - usar campo maps da view do Supabase
         const mapIframe = document.getElementById('map-iframe');
-        if (enderecoCompleto) {
+        if (property.maps) {
+            // Se o campo maps já contém o iframe completo, extrair o src
+            if (property.maps.includes('src=')) {
+                // Extrair o src do iframe
+                const srcMatch = property.maps.match(/src=["']([^"']+)["']/);
+                if (srcMatch && srcMatch[1]) {
+                    mapIframe.src = srcMatch[1];
+                } else {
+                    // Se não conseguir extrair, tentar usar diretamente
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = property.maps;
+                    const iframe = tempDiv.querySelector('iframe');
+                    if (iframe && iframe.src) {
+                        mapIframe.src = iframe.src;
+                    }
+                }
+            } else {
+                // Se for apenas uma URL, usar diretamente
+                mapIframe.src = property.maps;
+            }
+        } else if (enderecoCompleto) {
+            // Fallback: gerar URL do Google Maps automaticamente
             const address = encodeURIComponent(enderecoCompleto);
             mapIframe.src = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6d-s6Ukk6Fh5FkE&q=${address}`;
         }
