@@ -1339,7 +1339,7 @@
                 
                 const { data, error } = await supabase
                     .from(TABLE_NAME)
-                    .select('cidade, zona')
+                    .select('cidade, zone')
                     .eq('estado', state)
                     .gte('leilao_1', 75000)
                     .order('cidade')
@@ -1488,15 +1488,15 @@
             
             const { data, error } = await supabase
                 .from(TABLE_NAME)
-                .select('zona')
+                .select('zone')
                 .eq('estado', state)
                 .gte('leilao_1', 75000)
-                .not('zona', 'is', null);
+                .not('zone', 'is', null);
             
             if (error) throw error;
             
             // Obter zonas únicas
-            const uniqueZones = [...new Set(data.map(item => item.zona).filter(Boolean))];
+            const uniqueZones = [...new Set(data.map(item => item.zone).filter(Boolean))];
             const sortedZones = uniqueZones.sort();
             
             zonesCache = sortedZones;
@@ -1576,12 +1576,12 @@
                     neighborhoodCount[item.bairro] = (neighborhoodCount[item.bairro] || 0) + 1;
                     
                     // Agrupar por zona se houver
-                    if (item.zona) {
-                        if (!neighborhoodsByZone[item.zona]) {
-                            neighborhoodsByZone[item.zona] = [];
+                    if (item.zone) {
+                        if (!neighborhoodsByZone[item.zone]) {
+                            neighborhoodsByZone[item.zone] = [];
                         }
-                        if (!neighborhoodsByZone[item.zona].includes(item.bairro)) {
-                            neighborhoodsByZone[item.zona].push(item.bairro);
+                        if (!neighborhoodsByZone[item.zone].includes(item.bairro)) {
+                            neighborhoodsByZone[item.zone].push(item.bairro);
                         }
                     }
                 }
@@ -1734,11 +1734,11 @@
 
             // FILTRO 3: Zona (prioridade sobre bairros)
             if (filters.zones && filters.zones.length > 0) {
-                // Múltiplas zonas: filtro IN direto no campo zona
-                query = query.in('zona', filters.zones);
+                // Múltiplas zonas: filtro IN direto no campo zone
+                query = query.in('zone', filters.zones);
             } else if (filters.zone) {
-                // Uma zona: filtro EQ direto no campo zona
-                query = query.eq('zona', filters.zone);
+                // Uma zona: filtro EQ direto no campo zone
+                query = query.eq('zone', filters.zone);
             } else if (filters.neighborhood) {
                 // Bairros individuais (quando não é zona completa)
                 const bairros = filters.neighborhood.split(',');
