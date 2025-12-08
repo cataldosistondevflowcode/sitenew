@@ -13,26 +13,32 @@ if (!fs.existsSync(distDir)) {
 }
 
 // IMPORTANTE: O Vite limpa o dist/ antes do build, então os arquivos HTML estáticos
-// precisam ser preservados. Este script garante que o .nojekyll existe.
-// Os arquivos HTML devem estar versionados no git e serão restaurados após o build.
+// precisam ser restaurados do git após o build.
 
 // Criar arquivo .nojekyll para o GitHub Pages não processar com Jekyll
 const nojekyllPath = path.join(distDir, '.nojekyll');
 fs.writeFileSync(nojekyllPath, '');
 console.log('✅ Arquivo .nojekyll criado!');
 
-// Verificar se os arquivos HTML importantes existem
-const importantFiles = [
+// Lista de arquivos HTML estáticos que devem estar no dist/
+const htmlFiles = [
   'blog.html',
   'blogpost.html',
   'imovel.html',
   'imoveis-rj.html',
   'imoveis-sp.html',
+  'assessoria.html',
+  'casos-reais.html',
+  'contato.html',
+  'direito-imobiliario.html',
+  'distrato-imobiliario.html',
+  'escritorio-imobiliario.html',
   'index.html'
 ];
 
+// Verificar quais arquivos estão faltando
 let missingFiles = [];
-importantFiles.forEach(file => {
+htmlFiles.forEach(file => {
   const filePath = path.join(distDir, file);
   if (!fs.existsSync(filePath)) {
     missingFiles.push(file);
@@ -41,8 +47,9 @@ importantFiles.forEach(file => {
 
 if (missingFiles.length > 0) {
   console.warn(`⚠️ Arquivos HTML não encontrados no dist/: ${missingFiles.join(', ')}`);
-  console.warn('⚠️ Certifique-se de que os arquivos estão versionados no git e serão restaurados após o build.');
+  console.warn('⚠️ Estes arquivos devem estar versionados no git em dist/');
+  console.warn('⚠️ Em produção (GitHub Actions), eles serão restaurados do git automaticamente.');
 } else {
-  console.log('✅ Todos os arquivos HTML importantes estão presentes no dist/');
+  console.log('✅ Todos os arquivos HTML estão presentes no dist/');
 }
 
