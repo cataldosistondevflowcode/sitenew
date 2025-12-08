@@ -40,14 +40,14 @@ jobs:
       - name: Restaurar arquivos HTML estáticos do git
         run: |
           echo "Restaurando arquivos HTML estáticos que foram deletados pelo build do Vite..."
-          # Lista de arquivos HTML estáticos (exceto index.html que é gerado pelo Vite)
-          HTML_FILES="blog.html blogpost.html imovel.html imoveis-rj.html imoveis-sp.html assessoria.html casos-reais.html contato.html direito-imobiliario.html distrato-imobiliario.html escritorio-imobiliario.html"
+          # Lista de TODOS os arquivos HTML estáticos (incluindo index.html se existir no git)
+          HTML_FILES="index.html blog.html blogpost.html imovel.html imoveis-rj.html imoveis-sp.html assessoria.html casos-reais.html contato.html direito-imobiliario.html distrato-imobiliario.html escritorio-imobiliario.html"
           for file in $HTML_FILES; do
             if git show HEAD:dist/$file >/dev/null 2>&1; then
               git checkout HEAD -- dist/$file
               echo "✅ Restaurado: dist/$file"
             else
-              echo "⚠️ Arquivo não encontrado no git: dist/$file"
+              echo "⚠️ Arquivo não encontrado no git: dist/$file (pode ser gerado pelo Vite)"
             fi
           done
           echo "✅ Arquivos HTML estáticos restaurados"
