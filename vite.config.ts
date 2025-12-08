@@ -12,14 +12,11 @@ const serveDistHtml = () => {
   return {
     name: 'serve-dist-html',
     configureServer(server) {
-      // Adicionar middleware no início da pilha para interceptar antes do Vite
-      const middleware = (req, res, next) => {
-        // Se for uma requisição para um arquivo HTML específico do dist/
-        if (req.url && (req.url === '/blog.html' || req.url.startsWith('/blogpost.html') || req.url.startsWith('/blog.html'))) {
-          const fileName = req.url.split('?')[0].replace(/^\//, ''); // Remove / e query params
-          const distPath = path.resolve(__dirname, 'dist', fileName);
+      server.middlewares.use((req, res, next) => {
+        // Se for uma requisição para um arquivo HTML que não existe na raiz
+        if (req.url && req.url.endsWith('.html') && !req.url.startsWith('/api/')) {
+          const distPath = path.resolve(__dirname, 'dist', req.url);
           if (fs.existsSync(distPath)) {
-            console.log(`📄 Servindo ${fileName} do dist/`);
             const content = fs.readFileSync(distPath, 'utf-8');
             res.setHeader('Content-Type', 'text/html');
             res.end(content);
@@ -27,10 +24,7 @@ const serveDistHtml = () => {
           }
         }
         next();
-      };
-      
-      // Adicionar no início da pilha de middlewares
-      server.middlewares.stack.unshift({ route: '', handle: middleware });
+      });
     },
   };
 };

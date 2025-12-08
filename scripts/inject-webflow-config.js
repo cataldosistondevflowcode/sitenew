@@ -14,10 +14,29 @@ const __dirname = dirname(__filename);
 
 dotenv.config();
 
-const htmlFiles = [
-    path.join(__dirname, '../dist/blog.html'),
-    path.join(__dirname, '../dist/blogpost.html'),
-];
+// Buscar todos os arquivos HTML no dist/
+const distDir = path.join(__dirname, '../dist');
+const htmlFiles = [];
+
+if (fs.existsSync(distDir)) {
+    const files = fs.readdirSync(distDir);
+    files.forEach(file => {
+        if (file.endsWith('.html')) {
+            htmlFiles.push(path.join(distDir, file));
+        }
+    });
+}
+
+// Garantir que blog.html e blogpost.html estão na lista
+const blogHtml = path.join(distDir, 'blog.html');
+const blogpostHtml = path.join(distDir, 'blogpost.html');
+
+if (fs.existsSync(blogHtml) && !htmlFiles.includes(blogHtml)) {
+    htmlFiles.push(blogHtml);
+}
+if (fs.existsSync(blogpostHtml) && !htmlFiles.includes(blogpostHtml)) {
+    htmlFiles.push(blogpostHtml);
+}
 
 const webflowToken = process.env.VITE_WEBFLOW_API_TOKEN || '';
 

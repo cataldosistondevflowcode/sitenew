@@ -592,24 +592,20 @@
         async function populateBlogList() {
             try {
                 console.log('🔄 Buscando posts do blog...');
-                
-                // Buscar o container primeiro
-                const articleEl = document.querySelector('#blog-posts-container') || document.querySelector('article.col-span-12.lg\\:col-span-8');
-                if (!articleEl) {
-                    console.warn('⚠️ Container de posts não encontrado');
-                    return;
-                }
-                
                 const posts = await fetchBlogPosts();
                 
                 if (posts.length === 0) {
                     console.warn('⚠️ Nenhum post encontrado');
-                    articleEl.innerHTML = `
-                        <div class="bg-zinc-900/50 border border-amber-600/30 rounded-lg p-8 text-center">
-                            <p class="text-amber-400 mb-2 font-medium">⚠️ Nenhum post encontrado</p>
-                            <p class="text-zinc-500 text-sm">Não foi possível carregar os posts do blog.</p>
-                        </div>
-                    `;
+                    // Mostrar mensagem para o usuário se estiver em produção
+                    const articleEl = document.querySelector('article.col-span-12.lg\\:col-span-8');
+                    if (articleEl && !WEBFLOW_CONFIG.isLocalhost) {
+                        articleEl.innerHTML = `
+                            <div class="bg-amber-50 border border-amber-200 rounded-lg p-6 text-center">
+                                <p class="text-amber-800 mb-2">⚠️ Não foi possível carregar os posts do blog.</p>
+                                <p class="text-amber-600 text-sm">Isso pode ser um problema de CORS em produção. Verifique o console para mais detalhes.</p>
+                            </div>
+                        `;
+                    }
                     return;
                 }
                 
