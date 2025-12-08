@@ -212,9 +212,9 @@
                 <p class="text-zinc-400 text-lg">
                     Artigos, análises e insights sobre direito imobiliário e leilões
                 </p>
-            </div>
-        </div>
-    </div>
+                        </div>
+                    </div>
+                </div>
 
     <!-- Main Content Area -->
     <main class="py-12 lg:py-20 bg-zinc-950">
@@ -247,7 +247,7 @@
                             <p class="text-zinc-400 text-sm">Carregando posts do blog...</p>
                             <p class="text-zinc-600 text-xs mt-2">Aguarde enquanto buscamos os posts do Webflow CMS</p>
                         </div>
-                    </div>
+                        </div>
                 </article>
 
                 <!-- Sidebar (Right) -->
@@ -491,10 +491,12 @@
         const WEBFLOW_CONFIG = {
             isFileProtocol: window.location.protocol === 'file:',
             isLocalhost: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1',
-            // Em desenvolvimento, usa proxy do Vite. Em produção, usa API diretamente
-            apiBaseUrl: (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') 
+            // Em desenvolvimento, usa proxy do Vite. Em produção (GitHub Pages), não há proxy disponível
+            proxyUrl: window.location.protocol === 'file:' 
+                ? 'https://api.webflow.com/v2' 
+                : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
                 ? '/api/webflow' 
-                : 'https://api.webflow.com/v2',
+                    : null), // null em produção = desabilitado por CORS
             apiToken: (() => {
                 // Tentar obter token de meta tag
                 const metaToken = document.querySelector('meta[name="webflow-api-token"]');
@@ -513,7 +515,14 @@
         // Função para buscar dados do Webflow
         async function fetchWebflowData(endpoint) {
             try {
-                const url = `${WEBFLOW_CONFIG.apiBaseUrl}${endpoint}`;
+                // Se não há proxyUrl configurado (GitHub Pages), não faz chamadas (CORS bloqueia)
+                if (!WEBFLOW_CONFIG.proxyUrl) {
+                    console.log('🚫 Webflow API desabilitada no GitHub Pages (CORS)');
+                    console.log('💡 Para funcionar em produção, é necessário um proxy/backend');
+                    return { items: [] };
+                }
+
+                const url = `${WEBFLOW_CONFIG.proxyUrl}${endpoint}`;
                 console.log('🔍 Buscando dados do Webflow:', url);
                 
                 const headers = {
@@ -521,10 +530,10 @@
                     'Content-Type': 'application/json',
                 };
                 
-                // Adicionar token se disponível (necessário em produção)
-                if (WEBFLOW_CONFIG.apiToken) {
+                // Se estiver usando API diretamente (file://), adiciona token se disponível
+                if (WEBFLOW_CONFIG.isFileProtocol && WEBFLOW_CONFIG.apiToken) {
                     headers['Authorization'] = `Bearer ${WEBFLOW_CONFIG.apiToken}`;
-                    console.log('🔑 Token de autenticação adicionado');
+                    console.log('🔑 Usando token de autenticação');
                 }
                 
                 const response = await fetch(url, {
