@@ -37,12 +37,20 @@ jobs:
           VITE_WEBFLOW_API_TOKEN: ${{ secrets.VITE_WEBFLOW_API_TOKEN }}
           VITE_WEBFLOW_SITE_ID: ${{ secrets.VITE_WEBFLOW_SITE_ID }}
 
+      - name: Restaurar arquivos HTML estáticos do git
+        run: |
+          echo "Restaurando arquivos HTML estáticos que foram deletados pelo build do Vite..."
+          git checkout HEAD -- dist/*.html 2>/dev/null || echo "Alguns arquivos HTML podem não existir no git ainda"
+          echo "✅ Arquivos HTML restaurados"
+
       - name: Verificar dist/
         run: |
           echo "Arquivos no dist/:"
           ls -la dist/ | head -20
           echo "Total de arquivos HTML:"
-          ls -1 dist/*.html | wc -l
+          ls -1 dist/*.html 2>/dev/null | wc -l
+          echo "Lista de arquivos HTML:"
+          ls -1 dist/*.html 2>/dev/null || echo "Nenhum arquivo HTML encontrado"
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
