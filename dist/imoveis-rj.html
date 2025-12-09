@@ -1444,7 +1444,7 @@
                 
                 let query = supabase
                     .from(TABLE_NAME)
-                    .select('bairro, zone')
+                    .select('bairro')
                     .eq('estado', state)
                     .gte('leilao_1', 75000)
                     .not('bairro', 'is', null)
@@ -1481,93 +1481,30 @@
             const data = allData;
             
             const neighborhoodCount = {};
-            const neighborhoodsByZone = {};
             
             data.forEach(item => {
                 if (item.bairro && item.bairro.trim() !== '') {
                     neighborhoodCount[item.bairro] = (neighborhoodCount[item.bairro] || 0) + 1;
-                    
-                    // Agrupar por zona se houver
-                    if (item.zone) {
-                        if (!neighborhoodsByZone[item.zone]) {
-                            neighborhoodsByZone[item.zone] = [];
-                        }
-                        if (!neighborhoodsByZone[item.zone].includes(item.bairro)) {
-                            neighborhoodsByZone[item.zone].push(item.bairro);
-                        }
-                    }
                 }
             });
             
-            // Se for Rio de Janeiro, agrupar por zona
-            if (state === 'RJ' && cityName && cityName.toLowerCase() === 'rio de janeiro') {
-                const bairrosAgrupados = {};
-                
-                // Agrupar bairros por zona
-                Object.keys(neighborhoodsByZone).forEach(zona => {
-                    if (neighborhoodsByZone[zona] && neighborhoodsByZone[zona].length > 0) {
-                        bairrosAgrupados[zona] = neighborhoodsByZone[zona].map(bairro => ({
-                            neighborhood: bairro,
-                            count: neighborhoodCount[bairro] || 0
-                        })).sort((a, b) => {
-                            if (b.count !== a.count) {
-                                return b.count - a.count;
-                            }
-                            return a.neighborhood.localeCompare(b.neighborhood, 'pt-BR');
-                        });
+            // Retornar lista simples de bairros
+            const neighborhoodsArray = Object.keys(neighborhoodCount)
+                .filter(neighborhood => neighborhood && neighborhood.trim() !== '')
+                .map(neighborhood => ({
+                    neighborhood,
+                    count: neighborhoodCount[neighborhood]
+                }))
+                .sort((a, b) => {
+                    if (b.count !== a.count) {
+                        return b.count - a.count;
                     }
+                    return a.neighborhood.localeCompare(b.neighborhood, 'pt-BR');
                 });
-                
-                // Adicionar bairros sem zona em "Outros"
-                Object.keys(neighborhoodCount).forEach(bairro => {
-                    let foundInZone = false;
-                    Object.values(neighborhoodsByZone).forEach(zoneBairros => {
-                        if (zoneBairros && zoneBairros.includes(bairro)) {
-                            foundInZone = true;
-                        }
-                    });
-                    
-                    if (!foundInZone) {
-                        if (!bairrosAgrupados['Outros']) bairrosAgrupados['Outros'] = [];
-                        bairrosAgrupados['Outros'].push({ 
-                            neighborhood: bairro, 
-                            count: neighborhoodCount[bairro] 
-                        });
-                    }
-                });
-                
-                // Ordenar "Outros" se existir
-                if (bairrosAgrupados['Outros']) {
-                    bairrosAgrupados['Outros'].sort((a, b) => {
-                        if (b.count !== a.count) {
-                            return b.count - a.count;
-                        }
-                        return a.neighborhood.localeCompare(b.neighborhood, 'pt-BR');
-                    });
-                }
-                
-                neighborhoodsCache[cacheKey] = bairrosAgrupados;
-                console.log(`✅ Bairros agrupados por zona para ${cityName}:`, Object.keys(bairrosAgrupados));
-                return bairrosAgrupados;
-            } else {
-                // Para outras cidades, lista simples
-                const neighborhoodsArray = Object.keys(neighborhoodCount)
-                    .filter(neighborhood => neighborhood && neighborhood.trim() !== '')
-                    .map(neighborhood => ({
-                        neighborhood,
-                        count: neighborhoodCount[neighborhood]
-                    }))
-                    .sort((a, b) => {
-                        if (b.count !== a.count) {
-                            return b.count - a.count;
-                        }
-                        return a.neighborhood.localeCompare(b.neighborhood, 'pt-BR');
-                    });
-                
-                neighborhoodsCache[cacheKey] = neighborhoodsArray;
-                console.log(`✅ ${neighborhoodsArray.length} bairros encontrados para ${cityName || 'todas as cidades'}`);
-                return neighborhoodsArray;
-            }
+            
+            neighborhoodsCache[cacheKey] = neighborhoodsArray;
+            console.log(`✅ ${neighborhoodsArray.length} bairros encontrados para ${cityName || 'todas as cidades'}`);
+            return neighborhoodsArray;
         } catch (err) {
             console.error(`Erro ao buscar bairros do ${state}${cityName ? ` - ${cityName}` : ''}:`, err);
             return [];
@@ -2209,8 +2146,8 @@
             select.innerHTML = '<option value="">Todos os bairros</option>';
             select.disabled = false;
             
-            // Se for objeto (agrupado por zona), popular com optgroup
-            if (Array.isArray(neighborhoods)) {
+            // Popular lista de bairros
+            if (Array.isArray(neighborhoods) && neighborhoods.length > 0) {
                 neighborhoods.forEach(item => {
                     const option = document.createElement('option');
                     option.value = item.neighborhood;
@@ -2218,24 +2155,9 @@
                     select.appendChild(option);
                 });
                 console.log(`✅ ${neighborhoods.length} bairros carregados para ${cityName}`);
-            } else if (typeof neighborhoods === 'object') {
-                // Se for objeto agrupado por zona
-                const zonas = Object.keys(neighborhoods).sort();
-                zonas.forEach(zona => {
-                    if (neighborhoods[zona] && neighborhoods[zona].length > 0) {
-                        const optgroup = document.createElement('optgroup');
-                        optgroup.label = zona;
-                        neighborhoods[zona].forEach(item => {
-                            const option = document.createElement('option');
-                            option.value = item.neighborhood;
-                            option.textContent = `${item.neighborhood} (${item.count})`;
-                            optgroup.appendChild(option);
-                        });
-                        select.appendChild(optgroup);
-                    }
-                });
-                const totalBairros = zonas.reduce((sum, zona) => sum + (neighborhoods[zona]?.length || 0), 0);
-                console.log(`✅ ${totalBairros} bairros carregados em ${zonas.length} zonas para ${cityName}`);
+            } else {
+                console.warn(`⚠️ Nenhum bairro encontrado ou formato inválido para ${cityName}`);
+                select.innerHTML = '<option value="">Nenhum bairro encontrado</option>';
             }
         } catch (error) {
             console.error('❌ Erro ao popular bairros quick:', error);
