@@ -1438,6 +1438,10 @@
             const pageSize = 1000;
             let hasMore = true;
             
+            console.log(`🔍 Buscando bairros - Estado: ${state}, Cidade: ${cityName || 'Todas'}`);
+            console.log(`🔍 Tabela/VIEW: ${TABLE_NAME}`);
+            console.log(`🔍 Query será: SELECT bairro FROM ${TABLE_NAME} WHERE estado = '${state}' AND leilao_1 >= 75000${cityName ? ` AND cidade = '${cityName}'` : ''} AND bairro IS NOT NULL`);
+            
             while (hasMore) {
                 const from = page * pageSize;
                 const to = from + pageSize - 1;
@@ -1453,14 +1457,19 @@
                 
                 if (cityName) {
                     query = query.eq('cidade', cityName);
+                    console.log(`🔍 Filtrando por cidade: "${cityName}"`);
                 }
                 
+                console.log(`🔍 Executando query - Página ${page + 1}, Range: ${from} a ${to}`);
                 const { data, error } = await query;
                 
                 if (error) {
                     console.error('❌ Erro na query de bairros:', error);
+                    console.error('❌ Detalhes do erro:', JSON.stringify(error, null, 2));
                     throw error;
                 }
+                
+                console.log(`🔍 Query executada - Retornou ${data ? data.length : 0} registros`);
                 
                 if (data && data.length > 0) {
                     allData = allData.concat(data);
