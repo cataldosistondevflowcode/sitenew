@@ -24,21 +24,83 @@
   status = 200
   force = true
 
-# Servir arquivos HTML estáticos diretamente
-[[redirects]]
-  from = "/*.html"
-  to = "/:splat.html"
-  status = 200
-  force = true
-
-# Proxy para Webflow API via Netlify Function
+# Proxy para Webflow API via Netlify Function (deve vir antes do catch-all)
 [[redirects]]
   from = "/api/webflow/*"
   to = "/.netlify/functions/webflow-proxy/:splat"
   status = 200
   force = true
 
+# Servir arquivos HTML estáticos diretamente (deve vir antes do catch-all)
+# O Netlify serve arquivos estáticos automaticamente, mas garantimos com este redirect
+[[redirects]]
+  from = "/blog.html"
+  to = "/blog.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/blogpost.html"
+  to = "/blogpost.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/imovel.html"
+  to = "/imovel.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/imoveis-rj.html"
+  to = "/imoveis-rj.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/imoveis-sp.html"
+  to = "/imoveis-sp.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/assessoria.html"
+  to = "/assessoria.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/casos-reais.html"
+  to = "/casos-reais.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/contato.html"
+  to = "/contato.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/direito-imobiliario.html"
+  to = "/direito-imobiliario.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/distrato-imobiliario.html"
+  to = "/distrato-imobiliario.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/escritorio-imobiliario.html"
+  to = "/escritorio-imobiliario.html"
+  status = 200
+  force = true
+
 # Redirecionar todas as outras rotas para index.html (SPA routing)
+# IMPORTANTE: Este deve ser o ÚLTIMO redirect (catch-all)
 [[redirects]]
   from = "/*"
   to = "/index.html"
