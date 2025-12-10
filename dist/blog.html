@@ -192,57 +192,31 @@
         });
     </script>
 
-    <!-- Breadcrumb & Article Header -->
-    <div class="relative pt-12 pb-12 lg:pt-20 lg:pb-16 bg-zinc-950 border-b border-zinc-900">
-        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
-        <div class="container mx-auto px-6 max-w-7xl relative z-10">
-            
-            <div class="max-w-4xl mx-auto">
-                <!-- Breadcrumbs -->
-                <nav class="flex items-center gap-2 text-[10px] uppercase tracking-widest text-zinc-500 mb-8 font-medium">
-                    <a href="#" class="hover:text-amber-500 transition-colors">Home</a>
-                    <i data-lucide="chevron-right" class="w-3 h-3 text-zinc-700"></i>
-                    <a href="#" class="hover:text-amber-500 transition-colors">Blog</a>
-                    <i data-lucide="chevron-right" class="w-3 h-3 text-zinc-700"></i>
-                    <span class="text-amber-600">Leilões de Imóveis</span>
-                </nav>
+    <!-- Hero Section -->
+    <section class="relative z-10 py-32 md:py-48 flex items-center justify-center bg-zinc-950">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&amp;fit=crop&amp;q=80&amp;w=1920" alt="Background" class="w-full h-full object-cover opacity-20">
+            <div class="absolute inset-0 bg-gradient-to-b from-zinc-950 via-zinc-950/80 to-zinc-950"></div>
+        </div>
 
-                <h1 class="text-3xl md:text-5xl lg:text-6xl font-serif text-white tracking-tight leading-tight mb-8">
-                    Imóveis em leilão costumam estar em péssimo estado de conservação?
-                </h1>
+        <div class="container mx-auto px-6 max-w-4xl relative z-10 text-center">
+            <h1 class="text-5xl md:text-7xl font-serif text-white tracking-tight mb-6">
+                Blog
+            </h1>
+            <p class="text-zinc-400 text-lg md:text-xl font-light mb-10 max-w-2xl mx-auto">
+                Artigos, notícias e dicas sobre leilões de imóveis e direito imobiliário
+            </p>
+        </div>
+    </section>
 
-                <!-- Meta Data -->
-                <div class="flex flex-wrap items-center gap-6 border-t border-zinc-800 pt-6">
-                    <div class="flex items-center gap-3">
-                        <img src="https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&q=80&w=100" alt="Raphael Siston" class="w-10 h-10 rounded-full object-cover border border-zinc-700">
-                        <div class="flex flex-col">
-                            <span class="text-zinc-200 text-xs font-medium">Raphael Siston</span>
-                            <span class="text-zinc-600 text-[10px] uppercase tracking-wider">Advogado Especialista</span>
-                        </div>
-                    </div>
-                    <div class="hidden md:block w-px h-8 bg-zinc-800"></div>
-                    <div class="flex items-center gap-2 text-zinc-500 text-xs">
-                        <i data-lucide="calendar" class="w-4 h-4"></i>
-                        <span>21 Fev 2025</span>
-                            </div>
-                    <div class="flex items-center gap-2 text-zinc-500 text-xs">
-                        <i data-lucide="clock" class="w-4 h-4"></i>
-                        <span>6 min de leitura</span>
-                            </div>
-                    <div class="ml-auto flex gap-2">
-                        <button class="w-8 h-8 rounded-full border border-zinc-800 bg-zinc-900/50 flex items-center justify-center text-zinc-400 hover:text-white hover:border-amber-600 transition-colors">
-                            <i data-lucide="linkedin" class="w-3.5 h-3.5"></i>
-                        </button>
-                        <button class="w-8 h-8 rounded-full border border-zinc-800 bg-zinc-900/50 flex items-center justify-center text-zinc-400 hover:text-white hover:border-amber-600 transition-colors">
-                            <i data-lucide="twitter" class="w-3.5 h-3.5"></i>
-                        </button>
-                        <button class="w-8 h-8 rounded-full border border-zinc-800 bg-zinc-900/50 flex items-center justify-center text-zinc-400 hover:text-white hover:border-amber-600 transition-colors">
-                            <i data-lucide="facebook" class="w-3.5 h-3.5"></i>
-                        </button>
-                        </div>
-                            </div>
-                        </div>
-                    </div>
+    <!-- Blog Posts Container -->
+    <main class="py-24 bg-white">
+        <div class="container mx-auto px-6 max-w-7xl">
+            <div id="blog-posts-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Posts serão inseridos aqui via JavaScript -->
+            </div>
+        </div>
+    </main>
                 </div>
 
     <!-- Main Content Area -->
@@ -673,17 +647,15 @@
                     return dateB - dateA;
                 });
 
-                // Substituir o conteúdo estático do artigo principal por uma lista de posts
-                const articleEl = document.querySelector('article.col-span-12.lg\\:col-span-8');
-                if (!articleEl) {
+                // Encontrar o container de posts
+                const postsContainer = document.getElementById('blog-posts-container');
+                if (!postsContainer) {
                     console.warn('⚠️ Container de posts não encontrado');
                     return;
                 }
 
-                // Criar container de posts
-                const postsContainer = document.createElement('div');
-                postsContainer.className = 'space-y-8';
-                postsContainer.id = 'blog-posts-container';
+                // Limpar container
+                postsContainer.innerHTML = '';
 
                 posts.forEach(post => {
                     const fieldData = post.fieldData;
@@ -708,34 +680,27 @@
                     }
 
                     const postCard = document.createElement('article');
-                    postCard.className = 'group cursor-pointer border-b border-zinc-800 pb-8';
+                    postCard.className = 'group cursor-pointer flex flex-col h-full border border-zinc-100 rounded hover:border-amber-100 hover:shadow-lg transition-all';
                     postCard.innerHTML = `
-                        <a href="blogpost.html?slug=${slug}" class="block">
-                            <div class="grid md:grid-cols-3 gap-6">
-                                <div class="overflow-hidden rounded border border-zinc-800 aspect-[16/9]">
-                                    <img src="${imageUrl}" alt="${title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80 group-hover:opacity-100">
+                        <a href="blogpost.html?slug=${slug}" class="flex flex-col h-full">
+                            <div class="relative h-60 overflow-hidden rounded-t">
+                                <img src="${imageUrl}" alt="${title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <div class="absolute inset-0 bg-zinc-900/30 group-hover:bg-zinc-900/10 transition-colors"></div>
+                            </div>
+                            <div class="p-8 flex-1 flex flex-col">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <span class="text-amber-600 text-[10px] uppercase tracking-widest font-bold">Blog</span>
+                                    <span class="text-zinc-500 text-[10px]">${date}</span>
+                                    ${readingTime > 0 ? `<span class="text-zinc-500 text-[10px]">${readingTime} min</span>` : ''}
                                 </div>
-                                <div class="md:col-span-2">
-                                    <div class="flex items-center gap-3 mb-3">
-                                        <span class="text-amber-600 text-[10px] uppercase tracking-widest font-bold">Blog</span>
-                                        <span class="text-zinc-600 text-[10px]">${date}</span>
-                                        ${readingTime > 0 ? `<span class="text-zinc-600 text-[10px]">${readingTime} min de leitura</span>` : ''}
-                                    </div>
-                                    <h3 class="text-2xl font-serif text-white mb-3 group-hover:text-amber-500 transition-colors">${title}</h3>
-                                    ${excerpt ? `<p class="text-zinc-400 text-sm leading-relaxed mb-4">${excerpt}</p>` : ''}
-                                    <div class="flex items-center gap-3">
-                                        <span class="text-zinc-500 text-xs">Por ${authorName}</span>
-                                    </div>
-                                </div>
+                                <h3 class="text-xl font-serif text-zinc-900 mb-4 group-hover:text-amber-700 transition-colors">${title}</h3>
+                                ${excerpt ? `<p class="text-zinc-500 text-sm font-light leading-relaxed mb-6 flex-1 line-clamp-3">${excerpt}</p>` : ''}
+                                <span class="text-amber-600 text-xs font-bold uppercase flex items-center gap-2 group-hover:gap-3 transition-all mt-auto">Ler Mais <i data-lucide="arrow-right" class="w-3 h-3"></i></span>
                             </div>
                         </a>
                     `;
                     postsContainer.appendChild(postCard);
                 });
-
-                // Substituir conteúdo estático
-                articleEl.innerHTML = '';
-                articleEl.appendChild(postsContainer);
 
                 // Reinicializar ícones
                 if (typeof lucide !== 'undefined') {
