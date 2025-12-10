@@ -142,7 +142,6 @@ export default function WebflowHome() {
             <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-serif text-white mb-6 sm:mb-8 tracking-tight leading-tight drop-shadow-lg">
               Leilão de imóveis e<br />Advocacia imobiliária
             </h1>
-            </h3>
             <p className="text-zinc-200 text-base md:text-lg max-w-2xl mb-8 font-light leading-relaxed">
               Receba oportunidades de leilões personalizadas, de acordo com o seu perfil.
             </p>
