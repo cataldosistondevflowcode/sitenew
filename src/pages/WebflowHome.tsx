@@ -127,8 +127,8 @@ export default function WebflowHome() {
           {/* Hero Background */}
           <div className="absolute inset-0 z-0">
             <img 
-              src="/visao-panoramica-rio-janeiro.jpg" 
-              alt="Vista panorâmica do Rio de Janeiro" 
+              src="https://cdn.prod.website-files.com/69023853a6b8fa97b90fd72d/69122a90a660f6e2466a9cb5_banner-site-equipe.webp" 
+              alt="Advogados Cataldo Siston" 
               className="w-full h-full object-cover object-center opacity-40 mix-blend-overlay" 
               onError={(e) => {
                 (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=1932&auto=format&fit=crop';
@@ -138,15 +138,10 @@ export default function WebflowHome() {
           </div>
 
           {/* Hero Content */}
-          <div className="relative z-10 container mx-auto px-4 lg:px-12 flex-grow flex flex-col justify-center items-center text-center max-w-4xl mt-20">
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-serif text-white mb-4 tracking-tight leading-tight drop-shadow-lg">
-              Imóveis em Leilão no Rio de Janeiro
+          <div className="relative z-10 container mx-auto px-6 sm:px-8 lg:px-12 flex-grow flex flex-col justify-center items-center text-center max-w-4xl mt-16 sm:mt-20">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-serif text-white mb-6 sm:mb-8 tracking-tight leading-tight drop-shadow-lg">
+              Leilão de imóveis e<br />Advocacia imobiliária
             </h1>
-            <h2 className="text-2xl md:text-3xl font-serif text-amber-50 mb-2 tracking-tight">
-              OPORTUNIDADES DE IMÓVEIS EM LEILÃO
-            </h2>
-            <h3 className="text-xl md:text-2xl font-serif text-zinc-200 mb-8 tracking-tight italic">
-              Imóveis até 50% abaixo da sua avaliação
             </h3>
             <p className="text-zinc-200 text-base md:text-lg max-w-2xl mb-8 font-light leading-relaxed">
               Receba oportunidades de leilões personalizadas, de acordo com o seu perfil.
