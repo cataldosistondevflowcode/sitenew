@@ -12,7 +12,8 @@ import {
   Mail, Phone, MessageCircle, Facebook, Instagram, Youtube, 
   Gavel, ShieldCheck, Scale, Landmark, FileKey2, RefreshCcw,
   CheckCircle2, ArrowUpRight, Calendar, Maximize, Car, Share2,
-  ArrowRight, ChevronLeft, ChevronRight, Quote, Play, MapPin
+  ArrowRight, ChevronLeft, ChevronRight, Quote, Play, MapPin,
+  ChevronDown, Menu
 } from 'lucide-react';
 import type { WebflowItem } from '@/lib/webflow/types';
 
@@ -97,32 +98,59 @@ export default function WebflowHome() {
           </div>
         </div>
 
-        {/* Header / Hero */}
-        <header className="relative w-full h-[850px] bg-zinc-900 flex flex-col">
-          {/* Navbar */}
-          <nav className="absolute top-0 left-0 right-0 z-40 py-6 border-b border-white/10 bg-gradient-to-b from-black/50 to-transparent">
-            <div className="container mx-auto px-4 lg:px-12 flex justify-between items-center max-w-[1400px]">
+        {/* Navbar - Igual às páginas HTML estáticas */}
+        <nav className="sticky top-0 z-40 mx-4 lg:mx-8">
+          <div className="bg-white rounded-xl border border-zinc-200/50 backdrop-blur-md bg-white/90 shadow-lg shadow-zinc-900/5 mt-4">
+            <div className="container mx-auto px-4 lg:px-12 flex justify-between items-center max-w-[1400px] py-6">
               <Link to="/" className="flex flex-col items-start group">
-                <div className="flex items-center gap-2">
-                  <span className="font-serif text-xl tracking-tight text-white font-medium">CATALDO SISTON</span>
+                <div className="flex items-center gap-2 px-3 py-2 rounded-lg">
+                  <img src="https://cdn.prod.website-files.com/69023853a6b8fa97b90fd72d/6911dd6a49f6f0dabff0a498_logotipo_cataldo_siston.png" alt="Cataldo Siston Advogados" className="h-8 w-auto" />
                 </div>
-                <div className="w-full h-px bg-amber-500 mt-1 mb-0.5 scale-x-100 origin-left transition-transform"></div>
-                <span className="text-[10px] uppercase tracking-[0.2em] text-zinc-300">Advogados</span>
               </Link>
-              
+
               <div className="hidden lg:flex items-center gap-8">
-                <a href="#" className="text-xs font-medium text-zinc-300 hover:text-white transition-colors uppercase tracking-wider">Quem somos</a>
-                <Link to="/webflow" className="text-xs font-medium text-white border-b border-amber-500 pb-1 transition-colors uppercase tracking-wider">Imóveis em Leilão</Link>
-                <Link to="/assessoria" className="text-xs font-medium text-zinc-300 hover:text-white transition-colors uppercase tracking-wider">Assessoria</Link>
-                <a href="#" className="text-xs font-medium text-zinc-300 hover:text-white transition-colors uppercase tracking-wider">Direito Imobiliário</a>
-                <a href="#" className="text-xs font-medium text-zinc-300 hover:text-white transition-colors uppercase tracking-wider">Casos Reais</a>
-                <a href="#" className="text-xs font-medium text-zinc-300 hover:text-white transition-colors uppercase tracking-wider">Blog</a>
-                <a href="#" className="text-xs font-medium text-zinc-300 hover:text-white transition-colors uppercase tracking-wider">Contato</a>
+                <a href="escritorio-imobiliario.html" className="text-xs font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider">Quem somos</a>
+
+                {/* Dropdown Imóveis em Leilão */}
+                <div className="relative group">
+                  <button className="text-xs font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider flex items-center gap-1">
+                    Imóveis em Leilão
+                    <ChevronDown className="w-3 h-3 group-hover:rotate-180 transition-transform" />
+                  </button>
+                  <div className="absolute top-full left-0 mt-2 bg-white border border-zinc-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 min-w-[150px] z-50">
+                    <a href="imoveis-rj.html" className="block px-4 py-3 text-xs font-medium text-zinc-700 hover:text-amber-600 hover:bg-amber-50 transition-colors uppercase tracking-wider">Imóveis RJ</a>
+                    <a href="imoveis-sp.html" className="block px-4 py-3 text-xs font-medium text-zinc-700 hover:text-amber-600 hover:bg-amber-50 transition-colors uppercase tracking-wider">Imóveis SP</a>
+                  </div>
+                </div>
+
+                <Link to="/assessoria" className="text-xs font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider">Assessoria</Link>
+                
+                {/* Dropdown Direito Imobiliário */}
+                <div className="relative group">
+                  <button className="text-xs font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider flex items-center gap-1">
+                    Direito Imobiliário
+                    <ChevronDown className="w-3 h-3 group-hover:rotate-180 transition-transform" />
+                  </button>
+                  <div className="absolute top-full left-0 mt-2 bg-white border border-zinc-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 min-w-[180px] z-50">
+                    <a href="direito-imobiliario.html" className="block px-4 py-3 text-xs font-medium text-zinc-700 hover:text-amber-600 hover:bg-amber-50 transition-colors uppercase tracking-wider">Direito Imobiliário</a>
+                    <a href="distrato-imobiliario.html" className="block px-4 py-3 text-xs font-medium text-zinc-700 hover:text-amber-600 hover:bg-amber-50 transition-colors uppercase tracking-wider">Distrato Imobiliário</a>
+                  </div>
+                </div>
+
+                <a href="casos-reais.html" className="text-xs font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider">Casos Reais</a>
+                <a href="blog.html" className="text-xs font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider">Blog</a>
+                <a href="contato.html" className="text-xs font-medium text-zinc-700 hover:text-amber-600 transition-colors uppercase tracking-wider">Contato</a>
               </div>
-              
-              <button className="lg:hidden text-white"><span className="text-2xl">☰</span></button>
+
+              <button className="lg:hidden text-zinc-900 relative z-50">
+                <Menu className="w-6 h-6" />
+              </button>
             </div>
-          </nav>
+          </div>
+        </nav>
+
+        {/* Header / Hero */}
+        <header className="relative w-full h-[650px] sm:h-[750px] lg:h-[850px] bg-zinc-900 flex flex-col -mt-[120px] z-0 overflow-visible">
 
           {/* Hero Background */}
           <div className="absolute inset-0 z-0">
