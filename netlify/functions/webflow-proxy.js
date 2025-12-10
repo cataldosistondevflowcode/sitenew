@@ -34,15 +34,17 @@ exports.handler = async (event, context) => {
   // Extrair o path da requisição
   // O redirect do netlify.toml passa o path como :splat
   // event.path será /.netlify/functions/webflow-proxy/:splat
-  // Precisamos extrair o :splat
+  // Precisamos extrair o :splat que contém o path original
   let path = event.path.replace('/.netlify/functions/webflow-proxy', '');
   
-  // Se o path estiver vazio, tentar pegar do query string ou usar raiz
-  if (!path || path === '/') {
-    path = '';
+  // Garantir que o path comece com /
+  if (!path.startsWith('/')) {
+    path = '/' + path;
   }
   
   const url = `https://api.webflow.com/v2${path}${event.queryStringParameters ? '?' + new URLSearchParams(event.queryStringParameters).toString() : ''}`;
+  
+  console.log('Webflow Proxy:', { originalPath: event.path, extractedPath: path, url });
 
   try {
     // Fazer a requisição para a API do Webflow
