@@ -1,0 +1,74 @@
+[build]
+  # Comando de build
+  command = "npm run build"
+  
+  # Diretório de saída do build
+  publish = "dist"
+  
+  # Framework
+  framework = "vite"
+
+[build.environment]
+  # Versão do Node.js
+  NODE_VERSION = "20"
+
+# Configurações de redirecionamento para SPA
+# IMPORTANTE: Assets devem ser servidos antes do redirect para index.html
+[[redirects]]
+  # Servir assets estáticos corretamente
+  from = "/assets/*"
+  to = "/assets/:splat"
+  status = 200
+  force = true
+
+# Redirecionar todas as rotas não encontradas para index.html (SPA routing)
+# Isso permite que rotas React funcionem corretamente
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = false
+
+# Headers de segurança
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+
+# Headers específicos para assets (cache longo)
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Headers para HTML (sem cache)
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Headers para imagens (cache longo)
+[[headers]]
+  for = "/*.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.svg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.webp"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+

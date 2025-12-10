@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { execSync } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,7 +14,7 @@ if (!fs.existsSync(distDir)) {
 }
 
 // IMPORTANTE: O Vite limpa o dist/ antes do build, então os arquivos HTML estáticos
-// precisam ser restaurados do git após o build.
+// precisam ser copiados do git após o build.
 
 // Criar arquivo .nojekyll para o GitHub Pages não processar com Jekyll
 const nojekyllPath = path.join(distDir, '.nojekyll');
@@ -36,20 +37,22 @@ const htmlFiles = [
   'index.html'
 ];
 
-// Verificar quais arquivos estão faltando
-let missingFiles = [];
+// Copiar arquivos HTML do git para o dist/ se não existirem
 htmlFiles.forEach(file => {
   const filePath = path.join(distDir, file);
   if (!fs.existsSync(filePath)) {
-    missingFiles.push(file);
+    try {
+      // Copiar do git se existir
+      const gitPath = `dist/${file}`;
+      execSync(`git show HEAD:${gitPath} > "${filePath}"`, { cwd: rootDir, stdio: 'pipe' });
+      console.log(`✅ ${file} copiado do git`);
+    } catch (error) {
+      console.warn(`⚠️ ${file} não encontrado no git`);
+    }
+  } else {
+    console.log(`✅ ${file} já existe`);
   }
 });
 
-if (missingFiles.length > 0) {
-  console.warn(`⚠️ Arquivos HTML não encontrados no dist/: ${missingFiles.join(', ')}`);
-  console.warn('⚠️ Estes arquivos devem estar versionados no git em dist/');
-  console.warn('⚠️ Em produção (GitHub Actions), eles serão restaurados do git automaticamente.');
-} else {
-  console.log('✅ Todos os arquivos HTML estão presentes no dist/');
-}
+console.log('✅ Processo concluído!');
 
