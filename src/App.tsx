@@ -19,21 +19,26 @@ const queryClient = new QueryClient({
   },
 });
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<WebflowHome />} />
-          <Route path="/webflow" element={<WebflowHome />} />
-          <Route path="/webflow/:collectionId/:slug" element={<WebflowPropertyDetail />} />
-          <Route path="/assessoria" element={<WebflowAssessoria />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  // Base path para produção (Netlify)
+  const basename = import.meta.env.PROD ? '/sitenew' : '/';
+  
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <BrowserRouter basename={basename}>
+          <Routes>
+            <Route path="/" element={<WebflowHome />} />
+            <Route path="/webflow" element={<WebflowHome />} />
+            <Route path="/webflow/:collectionId/:slug" element={<WebflowPropertyDetail />} />
+            <Route path="/assessoria" element={<WebflowAssessoria />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
