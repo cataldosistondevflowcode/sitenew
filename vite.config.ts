@@ -30,8 +30,17 @@ const serveDistHtml = () => {
 };
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
-  base: mode === 'production' ? '/sitenew/' : '/',
+export default defineConfig(({ mode }) => {
+  // Determina o base path baseado em variáveis de ambiente
+  // NETLIFY: usa raiz (/) por padrão
+  // GITHUB_PAGES: usa /sitenew/ (pode ser sobrescrito por VITE_BASE_PATH)
+  // Pode ser sobrescrito pela variável de ambiente VITE_BASE_PATH
+  const basePath = process.env.VITE_BASE_PATH || 
+                   (process.env.NETLIFY ? '/' : 
+                   (mode === 'production' ? '/sitenew/' : '/'));
+  
+  return {
+  base: basePath,
   server: {
     host: "::",
     port: 3000,
@@ -80,4 +89,5 @@ export default defineConfig(({ mode }) => ({
   },
   // Configuração para SPA - resolve problema dos links permanentes
   appType: 'spa',
-}));
+  };
+});

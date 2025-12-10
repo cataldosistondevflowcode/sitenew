@@ -22,6 +22,7 @@ fs.writeFileSync(nojekyllPath, '');
 console.log('✅ Arquivo .nojekyll criado!');
 
 // Lista de arquivos HTML estáticos que devem estar no dist/
+// IMPORTANTE: index.html é gerado pelo Vite, NÃO copiar do git
 const htmlFiles = [
   'blog.html',
   'blogpost.html',
@@ -33,8 +34,8 @@ const htmlFiles = [
   'contato.html',
   'direito-imobiliario.html',
   'distrato-imobiliario.html',
-  'escritorio-imobiliario.html',
-  'index.html'
+  'escritorio-imobiliario.html'
+  // index.html é gerado pelo Vite com os caminhos corretos baseados em VITE_BASE_PATH
 ];
 
 // Copiar arquivos HTML do git para o dist/ se não existirem

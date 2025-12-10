@@ -20,8 +20,11 @@ const queryClient = new QueryClient({
 });
 
 const App = () => {
-  // Base path para produção (Netlify)
-  const basename = import.meta.env.PROD ? '/sitenew' : '/';
+  // Base path: usa VITE_BASE_PATH se definido, senão usa /sitenew em produção (GitHub Pages) ou / (Netlify)
+  // Se VITE_BASE_PATH for "/", usa "" (string vazia) para React Router
+  const basePath = import.meta.env.VITE_BASE_PATH || 
+                   (import.meta.env.PROD ? '/sitenew' : '/');
+  const basename = basePath === '/' ? '' : basePath;
   
   return (
     <QueryClientProvider client={queryClient}>
