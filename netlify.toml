@@ -13,16 +13,45 @@
   NODE_VERSION = "20"
 
 # Configurações de redirecionamento para SPA
-# IMPORTANTE: Assets devem ser servidos antes do redirect para index.html
+# IMPORTANTE: O base path é /sitenew/, mas os arquivos físicos estão em /assets/
+# Precisamos mapear /sitenew/assets/ para /assets/ (onde os arquivos realmente estão)
+
+# PRIORIDADE 1: Servir assets estáticos - mapear /sitenew/assets/ para /assets/
 [[redirects]]
-  # Servir assets estáticos corretamente
+  from = "/sitenew/assets/*"
+  to = "/assets/:splat"
+  status = 200
+  force = true
+
+# PRIORIDADE 2: Servir arquivos HTML estáticos no path /sitenew/
+[[redirects]]
+  from = "/sitenew/*.html"
+  to = "/:splat.html"
+  status = 200
+  force = true
+
+# PRIORIDADE 3: Redirecionar /sitenew/ para /index.html
+[[redirects]]
+  from = "/sitenew"
+  to = "/index.html"
+  status = 200
+  force = false
+
+# PRIORIDADE 4: Redirecionar /sitenew/* (rotas React) para /index.html (SPA routing)
+[[redirects]]
+  from = "/sitenew/*"
+  to = "/index.html"
+  status = 200
+  force = false
+
+# PRIORIDADE 5: Servir assets diretamente (caso alguém acesse /assets/ diretamente)
+[[redirects]]
   from = "/assets/*"
   to = "/assets/:splat"
   status = 200
   force = true
 
-# Redirecionar todas as rotas não encontradas para index.html (SPA routing)
-# Isso permite que rotas React funcionem corretamente
+# PRIORIDADE 6: Redirecionar tudo mais para index.html
 [[redirects]]
   from = "/*"
   to = "/index.html"
