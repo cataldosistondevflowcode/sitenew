@@ -24,11 +24,11 @@ const getEnv = (key: string): string => {
   return '';
 };
 
-// Em desenvolvimento, usa o proxy do Vite. Em produção, usa a API diretamente
+// Em desenvolvimento, usa o proxy do Vite. Em produção, usa a Netlify Function
 const isDevelopment = import.meta.env.DEV;
 const apiBaseUrl = isDevelopment 
   ? '/api/webflow'  // Proxy do Vite em desenvolvimento
-  : 'https://api.webflow.com/v2';  // API direta em produção (requer backend)
+  : '/api/webflow';  // Em produção, também usa /api/webflow que será redirecionado para a Netlify Function
 
 export const WEBFLOW_CONFIG = {
   apiBaseUrl,

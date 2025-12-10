@@ -31,6 +31,13 @@
   status = 200
   force = true
 
+# Proxy para Webflow API via Netlify Function
+[[redirects]]
+  from = "/api/webflow/*"
+  to = "/.netlify/functions/webflow-proxy/:splat"
+  status = 200
+  force = true
+
 # Redirecionar todas as outras rotas para index.html (SPA routing)
 [[redirects]]
   from = "/*"

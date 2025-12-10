@@ -29,15 +29,13 @@ export async function webflowRequest<T>(
 
   const url = `${WEBFLOW_CONFIG.apiBaseUrl}${endpoint}`;
   
-  // Em desenvolvimento com proxy, não precisa do token (o proxy adiciona)
-  // Em produção, o token é necessário
+  // Em desenvolvimento com proxy do Vite, não precisa do token (o proxy adiciona)
+  // Em produção com Netlify Function, também não precisa (a function adiciona)
   const isDevelopment = import.meta.env.DEV;
   const headers = new Headers({
     'accept-version': '1.0.0',
     'Content-Type': 'application/json',
-    ...(isDevelopment ? {} : {
-      'Authorization': `Bearer ${WEBFLOW_CONFIG.token}`,
-    }),
+    // Token não é necessário aqui - o proxy/function adiciona
     ...options.headers,
   });
 
