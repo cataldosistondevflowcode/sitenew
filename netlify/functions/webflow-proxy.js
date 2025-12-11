@@ -34,17 +34,26 @@ exports.handler = async (event, context) => {
   // Extrair o path da requisição
   // O redirect do netlify.toml passa o path como :splat
   // event.path será /.netlify/functions/webflow-proxy/:splat
-  // Precisamos extrair o :splat que contém o path original
+  // O :splat contém o path original SEM /api/webflow (ex: /collections/...)
   let path = event.path.replace('/.netlify/functions/webflow-proxy', '');
+  
+  // Remover /api/webflow se estiver presente (não deveria estar, mas por segurança)
+  path = path.replace(/^\/api\/webflow/, '');
   
   // Garantir que o path comece com /
   if (!path.startsWith('/')) {
     path = '/' + path;
   }
   
+  // Construir URL da API Webflow (v2)
   const url = `https://api.webflow.com/v2${path}${event.queryStringParameters ? '?' + new URLSearchParams(event.queryStringParameters).toString() : ''}`;
   
-  console.log('Webflow Proxy:', { originalPath: event.path, extractedPath: path, url });
+  console.log('Webflow Proxy:', { 
+    originalPath: event.path, 
+    extractedPath: path, 
+    queryString: event.queryStringParameters,
+    finalUrl: url 
+  });
 
   try {
     // Fazer a requisição para a API do Webflow
