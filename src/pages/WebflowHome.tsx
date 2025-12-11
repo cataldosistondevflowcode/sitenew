@@ -180,7 +180,7 @@ export default function WebflowHome() {
           </div>
 
           {/* Floating Cards */}
-          <div className="relative z-30 container mx-auto px-4 lg:px-12 max-w-[1400px] -mb-24">
+          <div className="relative z-50 container mx-auto px-4 lg:px-12 max-w-[1400px] -mb-24">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="bg-white p-8 relative overflow-hidden shadow-xl rounded-sm border-t-4 border-amber-600 group hover:-translate-y-2 transition-transform duration-300">
                 <div className="absolute top-0 right-0 w-24 h-24 bg-amber-50 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
@@ -228,7 +228,7 @@ export default function WebflowHome() {
         </header>
 
         {/* Specialties Section */}
-        <section className="pt-40 pb-24 bg-zinc-50 relative">
+        <section className="pt-40 pb-24 bg-zinc-50 relative z-10">
           <div className="absolute inset-0 pattern-grid opacity-5 pointer-events-none"></div>
           <div className="container mx-auto px-4 lg:px-12 max-w-[1400px] relative z-10">
             <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
