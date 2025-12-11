@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR" class="scroll-smooth">
 <head>
+    <meta name="webflow-api-token" content="">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Imóveis em Leilão | Cataldo Siston Advogados</title>
@@ -202,11 +203,11 @@
         <div class="container mx-auto px-6 max-w-4xl relative z-10 text-center">
             <h1 class="text-5xl md:text-7xl font-serif text-white tracking-tight mb-6">
                 Blog
-            </h1>
+                </h1>
             <p class="text-zinc-400 text-lg md:text-xl font-light mb-10 max-w-2xl mx-auto">
                 Artigos, notícias e dicas sobre leilões de imóveis e direito imobiliário
             </p>
-        </div>
+                        </div>
     </section>
 
     <!-- Blog Posts Container -->
@@ -215,20 +216,20 @@
             <div id="blog-posts-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
                 <!-- Posts serão inseridos aqui via JavaScript -->
             </div>
-            
+
             <!-- Botão Ver Mais -->
             <div id="load-more-container" class="text-center hidden">
                 <button id="load-more-btn" class="inline-flex items-center gap-2 bg-amber-600 hover:bg-amber-500 text-white px-8 py-3.5 rounded-full transition-all transform hover:-translate-y-1 shadow-lg shadow-amber-900/30 uppercase tracking-widest text-sm font-medium">
                     Ver mais artigos
                     <i data-lucide="arrow-down" class="w-4 h-4"></i>
-                </button>
+                            </button>
             </div>
-            
+
             <!-- Loading State -->
             <div id="loading-state" class="text-center py-12 hidden">
                 <p class="text-zinc-500">Carregando artigos...</p>
             </div>
-        </div>
+                </div>
     </main>
                 </div>
                     <span class="text-amber-600 text-[10px] uppercase tracking-widest font-bold">Leilões</span>
@@ -372,12 +373,15 @@
         // ============================================
         const WEBFLOW_BLOG_COLLECTION_ID = '69258d404822f7b278633cb8';
         
-        // Configuração do Webflow (usando proxy do Vite em desenvolvimento)
+        // Configuração do Webflow (usando proxy do Vite em desenvolvimento, Netlify Function em produção)
         const WEBFLOW_CONFIG = {
             isFileProtocol: window.location.protocol === 'file:',
+            // Em desenvolvimento usa proxy do Vite, em produção usa Netlify Function
             proxyUrl: window.location.protocol === 'file:' 
                 ? 'https://api.webflow.com/v2' 
-                : (window.location.hostname === 'localhost' ? '/api/webflow' : null),
+                : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                    ? '/api/webflow' 
+                    : '/api/webflow'), // Em produção no Netlify, usa /api/webflow que redireciona para a Function
             apiToken: (() => {
                 const metaToken = document.querySelector('meta[name="webflow-api-token"]');
                 if (metaToken) return metaToken.getAttribute('content');
@@ -392,16 +396,20 @@
         async function fetchWebflowData(endpoint) {
             try {
                 if (!WEBFLOW_CONFIG.proxyUrl) {
-                    console.log('🚫 Webflow API desabilitada');
+                    console.log('🚫 Webflow API desabilitada - proxyUrl não configurado');
                     return { items: [] };
                 }
 
                 const url = `${WEBFLOW_CONFIG.proxyUrl}${endpoint}`;
+                console.log('🔍 Buscando dados do Webflow:', url);
+                
                 const headers = {
                     'accept-version': '1.0.0',
                     'Content-Type': 'application/json',
                 };
                 
+                // Token só é necessário em file protocol (desenvolvimento local)
+                // Em produção, a Netlify Function adiciona o token automaticamente
                 if (WEBFLOW_CONFIG.isFileProtocol && WEBFLOW_CONFIG.apiToken) {
                     headers['Authorization'] = `Bearer ${WEBFLOW_CONFIG.apiToken}`;
                 }
@@ -412,13 +420,17 @@
                 });
 
                 if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('❌ Erro na resposta:', response.status, errorText);
                     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
 
                 const data = await response.json();
+                console.log('✅ Dados recebidos do Webflow:', data.items?.length || 0, 'items');
                 return data;
             } catch (error) {
                 console.error('❌ Erro ao buscar dados do Webflow:', error);
+                console.error('   URL tentada:', `${WEBFLOW_CONFIG.proxyUrl}${endpoint}`);
                 return { items: [] };
             }
         }
@@ -469,47 +481,47 @@
 
         // Função para criar card de post
         function createPostCard(post) {
-            const fieldData = post.fieldData;
-            const slug = fieldData.slug || post.id;
-            const title = fieldData.name || 'Sem título';
-            const date = formatDate(fieldData['data-de-publicacao'] || fieldData.data || post.lastPublished);
-            const imageUrl = fieldData['imagem-link'] || 
-                           (fieldData['imagem-de-capa']?.url) ||
-                           (fieldData['imagem-de-capa-importada']) ||
-                           'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=1200';
-            const authorName = formatAuthorName(
-                fieldData['author-first-name'],
-                fieldData['author-last-name']
-            );
-            const readingTime = calculateReadingTime(fieldData.conteudo || '');
+                    const fieldData = post.fieldData;
+                    const slug = fieldData.slug || post.id;
+                    const title = fieldData.name || 'Sem título';
+                    const date = formatDate(fieldData['data-de-publicacao'] || fieldData.data || post.lastPublished);
+                    const imageUrl = fieldData['imagem-link'] || 
+                                   (fieldData['imagem-de-capa']?.url) ||
+                                   (fieldData['imagem-de-capa-importada']) ||
+                                   'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=1200';
+                    const authorName = formatAuthorName(
+                        fieldData['author-first-name'],
+                        fieldData['author-last-name']
+                    );
+                    const readingTime = calculateReadingTime(fieldData.conteudo || '');
 
-            // Extrair excerpt do conteúdo (primeiros 150 caracteres)
-            let excerpt = '';
-            if (fieldData.conteudo) {
-                const text = fieldData.conteudo.replace(/<[^>]*>/g, '').trim();
-                excerpt = text.length > 150 ? text.substring(0, 150) + '...' : text;
-            }
+                    // Extrair excerpt do conteúdo (primeiros 150 caracteres)
+                    let excerpt = '';
+                    if (fieldData.conteudo) {
+                        const text = fieldData.conteudo.replace(/<[^>]*>/g, '').trim();
+                        excerpt = text.length > 150 ? text.substring(0, 150) + '...' : text;
+                    }
 
-            const postCard = document.createElement('article');
+                    const postCard = document.createElement('article');
             postCard.className = 'group cursor-pointer flex flex-col h-full border border-zinc-100 rounded hover:border-amber-100 hover:shadow-lg transition-all';
-            postCard.innerHTML = `
+                    postCard.innerHTML = `
                 <a href="blogpost.html?slug=${slug}" class="flex flex-col h-full">
                     <div class="relative h-60 overflow-hidden rounded-t">
                         <img src="${imageUrl}" alt="${title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <div class="absolute inset-0 bg-zinc-900/30 group-hover:bg-zinc-900/10 transition-colors"></div>
-                    </div>
+                                </div>
                     <div class="p-8 flex-1 flex flex-col">
-                        <div class="flex items-center gap-3 mb-3">
-                            <span class="text-amber-600 text-[10px] uppercase tracking-widest font-bold">Blog</span>
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <span class="text-amber-600 text-[10px] uppercase tracking-widest font-bold">Blog</span>
                             <span class="text-zinc-500 text-[10px]">${date}</span>
                             ${readingTime > 0 ? `<span class="text-zinc-500 text-[10px]">${readingTime} min</span>` : ''}
-                        </div>
+                                    </div>
                         <h3 class="text-xl font-serif text-zinc-900 mb-4 group-hover:text-amber-700 transition-colors">${title}</h3>
                         ${excerpt ? `<p class="text-zinc-500 text-sm font-light leading-relaxed mb-6 flex-1 line-clamp-3">${excerpt}</p>` : ''}
                         <span class="text-amber-600 text-xs font-bold uppercase flex items-center gap-2 group-hover:gap-3 transition-all mt-auto">Ler Mais <i data-lucide="arrow-right" class="w-3 h-3"></i></span>
-                    </div>
-                </a>
-            `;
+                            </div>
+                        </a>
+                    `;
             return postCard;
         }
 
@@ -534,8 +546,8 @@
             // Adicionar posts ao container
             postsToShow.forEach(post => {
                 const postCard = createPostCard(post);
-                postsContainer.appendChild(postCard);
-            });
+                    postsContainer.appendChild(postCard);
+                });
 
             // Mostrar/ocultar botão "Ver mais"
             if (endIndex < allPosts.length) {
@@ -549,10 +561,10 @@
                 loadingState.classList.add('hidden');
             }
 
-            // Reinicializar ícones
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
+                // Reinicializar ícones
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
 
             console.log(`✅ ${postsToShow.length} de ${allPosts.length} posts exibidos`);
         }
