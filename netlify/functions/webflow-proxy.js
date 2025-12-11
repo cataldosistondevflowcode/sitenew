@@ -55,8 +55,9 @@ exports.handler = async (event, context) => {
   // A API Webflow v2 espera paths como: /v2/collections/..., não /v2/api/webflow/...
   const url = `https://api.webflow.com/v2${path}${event.queryStringParameters ? '?' + new URLSearchParams(event.queryStringParameters).toString() : ''}`;
   
-  console.log('Webflow Proxy:', { 
-    originalPath: event.path, 
+  console.log('Webflow Proxy Debug:', { 
+    eventPath: event.path,
+    eventRawPath: event.rawPath || 'N/A',
     extractedPath: path, 
     queryString: event.queryStringParameters,
     finalUrl: url 
