@@ -25,6 +25,7 @@
   force = true
 
 # Proxy para Webflow API via Netlify Function (deve vir antes do catch-all)
+# O :splat captura tudo depois de /api/webflow/ (ex: /collections/...)
 [[redirects]]
   from = "/api/webflow/*"
   to = "/.netlify/functions/webflow-proxy/:splat"
