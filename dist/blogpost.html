@@ -373,31 +373,8 @@
     <section class="border-t border-zinc-900 bg-zinc-950 py-16">
         <div class="container mx-auto px-6 max-w-7xl">
             <h3 class="text-2xl font-serif text-white mb-8">Continue Lendo</h3>
-            <div class="grid md:grid-cols-3 gap-8">
-                <!-- Related 1 -->
-                <article class="group cursor-pointer">
-                    <div class="overflow-hidden rounded border border-zinc-800 aspect-[3/2] mb-4">
-                        <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&amp;fit=crop&amp;q=80&amp;w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80 group-hover:opacity-100">
-                    </div>
-                    <span class="text-amber-600 text-[10px] uppercase tracking-widest font-bold">Direito Imobiliário</span>
-                    <h4 class="text-lg text-white font-serif mt-2 group-hover:text-amber-500 transition-colors">Herança de imóveis: como proceder?</h4>
-                </article>
-                <!-- Related 2 -->
-                <article class="group cursor-pointer">
-                    <div class="overflow-hidden rounded border border-zinc-800 aspect-[3/2] mb-4">
-                        <img src="https://images.unsplash.com/photo-1562564055-71e051d33c19?auto=format&amp;fit=crop&amp;q=80&amp;w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80 group-hover:opacity-100">
-                    </div>
-                    <span class="text-amber-600 text-[10px] uppercase tracking-widest font-bold">Leilões</span>
-                    <h4 class="text-lg text-white font-serif mt-2 group-hover:text-amber-500 transition-colors">ITBI e a base de cálculo em leilões</h4>
-                </article>
-                <!-- Related 3 -->
-                <article class="group cursor-pointer">
-                    <div class="overflow-hidden rounded border border-zinc-800 aspect-[3/2] mb-4">
-                        <img src="https://images.unsplash.com/photo-1577415124269-fc1140a69e91?auto=format&amp;fit=crop&amp;q=80&amp;w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80 group-hover:opacity-100">
-                    </div>
-                    <span class="text-amber-600 text-[10px] uppercase tracking-widest font-bold">Entrevistas</span>
-                    <h4 class="text-lg text-white font-serif mt-2 group-hover:text-amber-500 transition-colors">Entrevista Casa &amp; Jardim: Dicas para arrematar</h4>
-                </article>
+            <div id="continue-lendo-container" class="grid md:grid-cols-3 gap-8">
+                <!-- Posts serão inseridos aqui via JavaScript -->
             </div>
         </div>
     </section>
@@ -521,6 +498,175 @@
     </footer>
 
     <script>
+        // ============================================
+        // CONFIGURAÇÃO WEBFLOW CMS
+        // ============================================
+        const WEBFLOW_BLOG_COLLECTION_ID = '69258d404822f7b278633cb8';
+        
+        // Configuração do Webflow (usando proxy do Vite em desenvolvimento, Netlify Function em produção)
+        const WEBFLOW_CONFIG = {
+            isFileProtocol: window.location.protocol === 'file:',
+            // Em desenvolvimento usa proxy do Vite, em produção usa Netlify Function
+            proxyUrl: window.location.protocol === 'file:' 
+                ? 'https://api.webflow.com/v2' 
+                : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                    ? '/api/webflow' 
+                    : '/api/webflow'), // Em produção no Netlify, usa /api/webflow que redireciona para a Function
+            apiToken: (() => {
+                const metaToken = document.querySelector('meta[name="webflow-api-token"]');
+                if (metaToken) return metaToken.getAttribute('content');
+                if (typeof window !== 'undefined' && window.WEBFLOW_API_TOKEN) {
+                    return window.WEBFLOW_API_TOKEN;
+                }
+                return null;
+            })(),
+        };
+
+        // Função para buscar dados do Webflow
+        async function fetchWebflowData(endpoint) {
+            try {
+                if (!WEBFLOW_CONFIG.proxyUrl) {
+                    console.log('🚫 Webflow API desabilitada - proxyUrl não configurado');
+                    return { items: [] };
+                }
+
+                const url = `${WEBFLOW_CONFIG.proxyUrl}${endpoint}`;
+                console.log('🔍 Buscando dados do Webflow:', url);
+                
+                const headers = {
+                    'accept-version': '1.0.0',
+                    'Content-Type': 'application/json',
+                };
+                
+                // Token só é necessário em file protocol (desenvolvimento local)
+                // Em produção, a Netlify Function adiciona o token automaticamente
+                if (WEBFLOW_CONFIG.isFileProtocol && WEBFLOW_CONFIG.apiToken) {
+                    headers['Authorization'] = `Bearer ${WEBFLOW_CONFIG.apiToken}`;
+                }
+                
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: headers,
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('❌ Erro na resposta:', response.status, errorText);
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                console.log('✅ Dados recebidos do Webflow:', data.items?.length || 0, 'items');
+                return data;
+            } catch (error) {
+                console.error('❌ Erro ao buscar dados do Webflow:', error);
+                console.error('   URL tentada:', `${WEBFLOW_CONFIG.proxyUrl}${endpoint}`);
+                return { items: [] };
+            }
+        }
+
+        // Função para buscar posts do blog
+        async function fetchBlogPosts() {
+            try {
+                const response = await fetchWebflowData(`/collections/${WEBFLOW_BLOG_COLLECTION_ID}/items?limit=100`);
+                return response.items || [];
+            } catch (error) {
+                console.error('❌ Erro ao buscar posts do blog:', error);
+                return [];
+            }
+        }
+
+        // Função para formatar data
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('pt-BR', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        // Função para obter slug atual da URL
+        function getCurrentSlug() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('slug') || '';
+        }
+
+        // Função para popular a seção "Continue Lendo"
+        async function populateContinueLendo() {
+            try {
+                const container = document.getElementById('continue-lendo-container');
+                if (!container) {
+                    console.warn('⚠️ Container "Continue Lendo" não encontrado');
+                    return;
+                }
+
+                const currentSlug = getCurrentSlug();
+                const posts = await fetchBlogPosts();
+                
+                if (posts.length === 0) {
+                    console.warn('⚠️ Nenhum post encontrado');
+                    return;
+                }
+
+                // Ordenar por data de publicação (mais recente primeiro)
+                const sortedPosts = posts.sort((a, b) => {
+                    const dateA = new Date(a.fieldData['data-de-publicacao'] || a.lastPublished);
+                    const dateB = new Date(b.fieldData['data-de-publicacao'] || b.lastPublished);
+                    return dateB - dateA;
+                });
+
+                // Filtrar o post atual (se houver slug na URL)
+                const relatedPosts = currentSlug 
+                    ? sortedPosts.filter(post => {
+                        const postSlug = post.fieldData.slug || post.id;
+                        return postSlug !== currentSlug;
+                    })
+                    : sortedPosts;
+
+                // Pegar os 3 primeiros posts relacionados
+                const postsToShow = relatedPosts.slice(0, 3);
+
+                // Limpar container
+                container.innerHTML = '';
+
+                // Criar cards dos posts
+                postsToShow.forEach(post => {
+                    const fieldData = post.fieldData;
+                    const slug = fieldData.slug || post.id;
+                    const title = fieldData.name || 'Sem título';
+                    const category = fieldData.categoria || fieldData.category || 'Blog';
+                    const imageUrl = fieldData['imagem-link'] || 
+                                   (fieldData['imagem-de-capa']?.url) ||
+                                   (fieldData['imagem-de-capa-importada']) ||
+                                   'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=600';
+
+                    const article = document.createElement('article');
+                    article.className = 'group cursor-pointer';
+                    article.innerHTML = `
+                        <a href="blogpost.html?slug=${slug}">
+                            <div class="overflow-hidden rounded border border-zinc-800 aspect-[3/2] mb-4">
+                                <img src="${imageUrl}" alt="${title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80 group-hover:opacity-100">
+                            </div>
+                            <span class="text-amber-600 text-[10px] uppercase tracking-widest font-bold">${category}</span>
+                            <h4 class="text-lg text-white font-serif mt-2 group-hover:text-amber-500 transition-colors">${title}</h4>
+                        </a>
+                    `;
+                    container.appendChild(article);
+                });
+
+                // Reinicializar ícones
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+
+                console.log(`✅ ${postsToShow.length} posts relacionados carregados na seção "Continue Lendo"`);
+            } catch (error) {
+                console.error('❌ Erro ao popular seção "Continue Lendo":', error);
+            }
+        }
+
         if (typeof lucide !== 'undefined') {
             lucide.createIcons();
         }
@@ -561,6 +707,9 @@
                     closeIcon.classList.add('hidden');
                 }
             });
+
+            // Carregar posts relacionados
+            populateContinueLendo();
         });
     </script>
 
