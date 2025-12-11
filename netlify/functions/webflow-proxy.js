@@ -40,9 +40,8 @@ exports.handler = async (event, context) => {
   
   // Remover /api/webflow se estiver presente (por segurança, caso o redirect não funcione corretamente)
   // O Netlify pode passar o path completo em alguns casos
-  if (path.includes('/api/webflow')) {
-    path = path.replace(/\/api\/webflow/, '');
-  }
+  // Remove /api/webflow de qualquer posição no path
+  path = path.replace(/\/api\/webflow/g, '');
   
   // Garantir que o path comece com /
   if (!path.startsWith('/')) {
