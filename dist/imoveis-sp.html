@@ -2226,6 +2226,81 @@
     });
 
     // ============================================
+    // CONSTANTES E CONFIGURAÇÕES PARA SP
+    // ============================================
+
+    const CURRENT_STATE = 'SP'; // São Paulo
+
+    // ============================================
+    // FUNÇÕES PARA POPULAR CIDADES E BAIRROS
+    // ============================================
+
+    // Buscar cidades por estado (adaptado do RJ)
+    async function fetchCitiesByState(state) {
+        try {
+            if (!window.supabase) {
+                console.error('❌ Supabase não está disponível');
+                return [];
+            }
+
+            const { data, error } = await window.supabase
+                .from('leiloes_imoveis_com_zona')
+                .select('cidade')
+                .eq('estado', state)
+                .not('cidade', 'is', null)
+                .not('cidade', 'eq', '')
+                .order('cidade');
+
+            if (error) {
+                console.error('❌ Erro na query de cidades:', error);
+                return [];
+            }
+
+            // Filtra cidades únicas
+            const uniqueCities = [...new Set(
+                data.map(item => item.cidade?.trim()).filter(city => city)
+            )].sort();
+
+            console.log(`📊 ${uniqueCities.length} cidades encontradas para ${state}`);
+            return uniqueCities;
+
+        } catch (error) {
+            console.error('❌ Erro ao buscar cidades:', error);
+            return [];
+        }
+    }
+
+    // Popular dropdown de cidades
+    async function populateCitiesQuick() {
+        const select = document.getElementById('filter-city-quick');
+        if (!select) return;
+
+        select.innerHTML = '<option value="">Carregando cidades...</option>';
+        select.disabled = true;
+
+        try {
+            const cities = await fetchCitiesByState(CURRENT_STATE);
+
+            select.innerHTML = '<option value="" selected disabled>Selecione a cidade</option>';
+
+            cities.forEach(city => {
+                const option = document.createElement('option');
+                option.value = city;
+                option.textContent = city;
+                select.appendChild(option);
+            });
+
+            select.disabled = false;
+            console.log(`✅ ${cities.length} cidades carregadas para SP`);
+
+        } catch (error) {
+            console.error('❌ Erro ao popular cidades:', error);
+            select.innerHTML = '<option value="">Erro ao carregar cidades</option>';
+            select.disabled = false;
+        }
+    }
+
+    // ============================================
     // FILTRO DINÂMICO DE BAIRROS (MESMO DO RJ)
     // ============================================
 
@@ -2295,6 +2370,30 @@
             neighborhoodSelect.innerHTML = '<option value="" disabled>Erro ao carregar bairros</option>';
         }
     }
+
+    // ============================================
+    // INICIALIZAÇÃO
+    // ============================================
+
+    // Carregar cidades quando página carregar
+    document.addEventListener('DOMContentLoaded', async function() {
+        console.log('🚀 Inicializando filtros de SP...');
+
+        // Aguardar Supabase estar disponível
+        let attempts = 0;
+        while (!window.supabase && attempts < 50) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            attempts++;
+        }
+
+        if (!window.supabase) {
+            console.error('❌ Supabase não carregou após 5 segundos');
+            return;
+        }
+
+        console.log('✅ Supabase disponível, carregando cidades...');
+        await populateCitiesQuick();
+    });
 
     // Event listener para mudança de cidade
     const cityQuickSelect = document.getElementById('filter-city-quick');
