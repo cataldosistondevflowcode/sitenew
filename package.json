@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "node scripts/backup-html.js",
     "build": "vite build && node scripts/copy-html.js && node scripts/inject-webflow-config.js",
     "preview": "vite preview",
     "serve": "node server.js",

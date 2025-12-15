@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta name="webflow-api-token" content="1a479f9b19f7b02182e1316007b62d4a4aeda6093de25677fb5207a75e226109">
+    <meta name="webflow-api-token" content="">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Imóveis em Leilão em São Paulo - Cataldo Siston Advogados</title>
@@ -227,7 +227,7 @@
     </div>
 
     <!-- The Filter Card -->
-    <div class="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-zinc-200/60 p-6 lg:p-8 relative group transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]" style="overflow: visible;">
+    <div class="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-zinc-200/60 p-6 lg:p-8 relative overflow-hidden group transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
 
         <form class="space-y-6 relative z-10">
             <!-- Top Row: Main Selects -->
@@ -273,6 +273,26 @@
                         </select>
                         <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                             <i data-lucide="chevron-down" class="h-4 w-4 text-zinc-400"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Zone -->
+                <div class="relative">
+                    <label class="block text-[10px] uppercase font-bold tracking-widest text-zinc-400 mb-1.5">Zona</label>
+                    <div class="relative">
+                        <div class="relative group">
+                            <button type="button" id="zone-dropdown-trigger" class="w-full h-11 px-4 bg-white border border-zinc-200 rounded-lg text-sm font-medium text-zinc-700 focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600/20 cursor-pointer transition-all hover:border-zinc-300 shadow-sm text-left flex items-center justify-between">
+                                <span id="zone-dropdown-label">Todas as zonas</span>
+                                <i data-lucide="chevron-down" class="h-4 w-4 text-zinc-400 transition-transform" id="zone-dropdown-icon"></i>
+                            </button>
+                            <div id="zone-dropdown-content" class="absolute top-full left-0 mt-2 w-full bg-white border border-zinc-200 rounded-lg shadow-lg z-50 hidden">
+                                <div class="p-2 max-h-60 overflow-y-auto">
+                                        <div class="space-y-2" id="zone-checkboxes">
+                                            <!-- Zone checkboxes will be populated here -->
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1048,27 +1068,6 @@
         const params = new URLSearchParams(window.location.search);
         const filters = {};
         
-        // Verificar se há um slug de região no pathname
-        const pathname = window.location.pathname;
-        const regionSlugMatch = pathname.match(/\/([^\/]+-sp)/);
-        if (regionSlugMatch) {
-            const regionSlug = regionSlugMatch[1];
-            filters.regionSlug = regionSlug;
-            
-            // Mapear slug para nome da região (se necessário)
-            const regionName = regionSlug.replace('-sp', '').replace(/-/g, ' ');
-            if (window.citiesByRegionCache) {
-                // Tentar encontrar a região no cache
-                const regionKey = Object.keys(window.citiesByRegionCache).find(r => 
-                    r.toLowerCase().replace(/\s+/g, '-') === regionSlug.replace('-sp', '')
-                );
-                if (regionKey && window.citiesByRegionCache[regionKey]) {
-                    // Obter todas as cidades da região
-                    filters.cities = window.citiesByRegionCache[regionKey].map(item => item.city);
-                }
-            }
-        }
-        
         const cidade = params.get('cidade');
         if (cidade) filters.city = cidade;
         
@@ -1133,13 +1132,6 @@
 
     // Atualiza URL com filtros
     function updateURL(filters) {
-        // Se houver um slug de região, usar ele na URL ao invés de query params
-        if (filters.regionSlug) {
-            const newUrl = `/${filters.regionSlug}`;
-            window.history.replaceState({}, '', newUrl);
-            return;
-        }
-        
         const params = new URLSearchParams();
         
         if (filters.city) params.set('cidade', filters.city);
@@ -1178,8 +1170,8 @@
         return new Intl.NumberFormat('pt-BR', {
             style: 'currency',
             currency: 'BRL',
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
         }).format(num);
     }
 
@@ -1410,8 +1402,19 @@
                         </a>
                     </div>
                     <div class="absolute top-3 right-3 flex gap-2">
-                        <button onclick="abrirWidgetWhatsAppRD('${title}', '${detailUrl}')" class="bg-white/95 backdrop-blur-sm hover:bg-white text-[#128C7E] text-[10px] font-bold px-3 py-1.5 rounded shadow-sm border border-zinc-200/50 flex items-center gap-1.5">
-                            <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Fale conosco
+                        <button onclick="toggleShareMenu(this)" class="w-8 h-8 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center text-zinc-500 hover:text-amber-600 transition-colors shadow-sm relative">
+                            <i data-lucide="share-2" class="w-4 h-4"></i>
+                            <div class="hidden absolute top-auto bottom-full mb-2 right-0 bg-white rounded-lg shadow-lg border border-zinc-200 py-1 min-w-[160px] z-50">
+                                <button onclick="copyPropertyLink('${detailUrl}', this)" class="w-full text-left px-4 py-2 text-xs text-zinc-700 hover:bg-zinc-50 flex items-center gap-2">
+                                    <i data-lucide="link" class="w-3.5 h-3.5"></i> Copiar link
+                                </button>
+                                <button onclick="shareViaEmail('${title}', '${detailUrl}')" class="w-full text-left px-4 py-2 text-xs text-zinc-700 hover:bg-zinc-50 flex items-center gap-2">
+                                    <i data-lucide="mail" class="w-3.5 h-3.5"></i> Enviar por email
+                                </button>
+                                <button onclick="shareViaWhatsApp('${title}', '${detailUrl}')" class="w-full text-left px-4 py-2 text-xs text-zinc-700 hover:bg-zinc-50 flex items-center gap-2">
+                                    <i data-lucide="message-circle" class="w-3.5 h-3.5 text-[#25D366]"></i> Compartilhar no WhatsApp
+                                </button>
+                            </div>
                         </button>
                     </div>
                 </div>
@@ -1451,23 +1454,13 @@
                         </div>
                         `}
                     </div>
-                    <div class="mt-auto pt-3 border-t border-zinc-100 flex items-center justify-end">
-                        <div class="relative">
-                            <button onclick="toggleShareMenu(this)" class="w-9 h-9 rounded-full bg-zinc-50 hover:bg-zinc-100 flex items-center justify-center text-zinc-500 hover:text-amber-600 transition-colors shadow-sm border border-zinc-200 cursor-pointer" type="button">
-                                <i data-lucide="share-2" class="w-4 h-4"></i>
-                            </button>
-                            <div class="share-menu hidden absolute bottom-full mb-2 right-0 bg-white rounded-lg shadow-lg border border-zinc-200 py-1 min-w-[180px] z-50">
-                                <button onclick="copyPropertyLink('${detailUrl}', this)" class="w-full text-left px-4 py-2 text-xs text-zinc-700 hover:bg-zinc-50 flex items-center gap-2">
-                                    <i data-lucide="link" class="w-3.5 h-3.5"></i> Copiar link
-                                </button>
-                                <button onclick="shareViaEmail('${title}', '${detailUrl}')" class="w-full text-left px-4 py-2 text-xs text-zinc-700 hover:bg-zinc-50 flex items-center gap-2">
-                                    <i data-lucide="mail" class="w-3.5 h-3.5"></i> Enviar por email
-                                </button>
-                                <button onclick="shareViaWhatsApp('${title}', '${detailUrl}')" class="w-full text-left px-4 py-2 text-xs text-zinc-700 hover:bg-zinc-50 flex items-center gap-2">
-                                    <i data-lucide="message-circle" class="w-3.5 h-3.5 text-[#25D366]"></i> Compartilhar no WhatsApp
-                                </button>
-                            </div>
-                        </div>
+                    <div class="mt-auto pt-3 border-t border-zinc-100 flex items-center justify-between gap-3">
+                        <button onclick="abrirWidgetWhatsAppRD('${title}', '${detailUrl}')" class="flex items-center gap-2 text-[10px] font-bold text-[#25D366] hover:text-[#20bd5a] transition-colors uppercase tracking-wide">
+                            <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Fale conosco
+                        </button>
+                        <a href="${detailUrl}" class="text-amber-600 text-[10px] font-bold uppercase tracking-wide flex items-center gap-1 group/btn">
+                            Ver detalhes <i data-lucide="arrow-right" class="w-3 h-3 group-hover/btn:translate-x-1 transition-transform"></i>
+                        </a>
                     </div>
                 </div>
             </article>
@@ -1599,263 +1592,6 @@
     }
 
     // ============================================
-    // DROPDOWNS CUSTOMIZADOS COM BUSCA INTERNA
-    // ============================================
-    
-    function createSearchableSelect(selectId) {
-        const originalSelect = document.getElementById(selectId);
-        if (!originalSelect) return;
-        
-        // Verificar se já foi criado
-        if (originalSelect.dataset.customized === 'true') return;
-        originalSelect.dataset.customized = 'true';
-        
-        // Criar wrapper
-        const wrapper = document.createElement('div');
-        wrapper.className = 'relative';
-        wrapper.style.position = 'relative';
-        wrapper.style.zIndex = '10000';
-        wrapper.style.overflow = 'visible';
-        
-        // Criar botão customizado
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = originalSelect.className + ' text-left';
-        button.style.cursor = 'pointer';
-        button.style.display = 'flex';
-        button.style.alignItems = 'center';
-        button.style.justifyContent = 'space-between';
-        
-        // Criar container de opções
-        const optionsContainer = document.createElement('div');
-        optionsContainer.className = 'hidden absolute top-full left-0 right-0 mt-1 bg-white border border-zinc-200 rounded-lg shadow-lg max-h-96 overflow-hidden z-50';
-        optionsContainer.style.zIndex = '10001';
-        optionsContainer.style.position = 'absolute';
-        optionsContainer.style.overflow = 'visible';
-        
-        // Criar input de busca
-        const searchInput = document.createElement('input');
-        searchInput.type = 'text';
-        searchInput.placeholder = 'Buscar...';
-        searchInput.className = 'w-full px-3 py-2 border-b border-zinc-200 text-sm focus:outline-none focus:ring-1 focus:ring-amber-600';
-        
-        // Container de opções (scrollable)
-        const optionsList = document.createElement('div');
-        optionsList.className = 'max-h-80 overflow-y-auto';
-        
-        optionsContainer.appendChild(searchInput);
-        optionsContainer.appendChild(optionsList);
-        
-        // Função para atualizar opções
-        function updateOptions() {
-            optionsList.innerHTML = '';
-            const searchTerm = searchInput.value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-            
-            // Processar optgroups
-            const optgroups = originalSelect.querySelectorAll('optgroup');
-            optgroups.forEach(optgroup => {
-                const groupLabel = optgroup.label;
-                const groupOptions = Array.from(optgroup.querySelectorAll('option'));
-                const visibleOptions = groupOptions.filter(opt => {
-                    const text = opt.textContent.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-                    return !searchTerm || text.includes(searchTerm);
-                });
-                
-                if (visibleOptions.length > 0) {
-                    // Verificar se há uma opção de região correspondente a este optgroup
-                    const regionOption = Array.from(originalSelect.querySelectorAll('option')).find(opt => 
-                        opt.dataset.region === groupLabel && opt.value.startsWith('region:')
-                    );
-                    
-                    // Verificar se é um optgroup de zona (formato: "Bairros de Zona X")
-                    let zoneOption = null;
-                    if (groupLabel.startsWith('Bairros de ')) {
-                        const zoneName = groupLabel.replace('Bairros de ', '');
-                        zoneOption = Array.from(originalSelect.querySelectorAll('option')).find(opt => 
-                            opt.value === `zone:${zoneName}` || opt.value.startsWith('zone:') && opt.textContent.includes(zoneName)
-                        );
-                    }
-                    
-                    const groupDiv = document.createElement('div');
-                    if (regionOption) {
-                        // Se houver opção de região, tornar o label clicável
-                        groupDiv.className = 'px-3 py-2 text-xs font-bold text-amber-600 uppercase bg-amber-50 sticky top-0 cursor-pointer hover:bg-amber-100';
-                        groupDiv.textContent = `📍 ${groupLabel}`;
-                        groupDiv.onclick = (e) => {
-                            e.stopPropagation();
-                            console.log('🖱️ Região clicada no label:', groupLabel);
-                            originalSelect.value = regionOption.value;
-                            const changeEvent = new Event('change', { bubbles: true, cancelable: true });
-                            originalSelect.dispatchEvent(changeEvent);
-                            syncButtonText();
-                            optionsContainer.classList.add('hidden');
-                            searchInput.value = '';
-                        };
-                    } else if (zoneOption) {
-                        // Se houver opção de zona, tornar o label clicável
-                        groupDiv.className = 'px-3 py-2 text-xs font-bold text-amber-600 uppercase bg-amber-50 sticky top-0 cursor-pointer hover:bg-amber-100';
-                        groupDiv.textContent = `📍 ${groupLabel}`;
-                        groupDiv.onclick = (e) => {
-                            e.stopPropagation();
-                            console.log('🖱️ Zona clicada no label:', groupLabel);
-                            originalSelect.value = zoneOption.value;
-                            const changeEvent = new Event('change', { bubbles: true, cancelable: true });
-                            originalSelect.dispatchEvent(changeEvent);
-                            syncButtonText();
-                            optionsContainer.classList.add('hidden');
-                            searchInput.value = '';
-                        };
-                    } else {
-                        // Label normal (não clicável)
-                        groupDiv.className = 'px-3 py-2 text-xs font-bold text-zinc-500 uppercase bg-zinc-50 sticky top-0';
-                        groupDiv.textContent = groupLabel;
-                    }
-                    optionsList.appendChild(groupDiv);
-                    
-                    visibleOptions.forEach(option => {
-                        const optionDiv = createOptionDiv(option);
-                        optionsList.appendChild(optionDiv);
-                    });
-                }
-            });
-            
-            // Processar opções diretas (sem optgroup)
-            const allOptions = Array.from(originalSelect.querySelectorAll('option'));
-            const directOptions = allOptions.filter(option => !option.closest('optgroup'));
-            directOptions.forEach(option => {
-                const text = option.textContent.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-                if (!searchTerm || text.includes(searchTerm)) {
-                    const optionDiv = createOptionDiv(option);
-                    optionsList.appendChild(optionDiv);
-                }
-            });
-        }
-        
-        // Criar div de opção
-        function createOptionDiv(option) {
-            const div = document.createElement('div');
-            div.className = 'px-3 py-2 text-sm text-zinc-700 hover:bg-amber-50 cursor-pointer flex items-center gap-2';
-            if (option.value === originalSelect.value) {
-                div.className += ' bg-amber-50 text-amber-700';
-            }
-            
-            // Verificar se é zona ou região (estilo especial)
-            const isZone = option.value.startsWith('zone:');
-            const isRegion = option.value.startsWith('region:');
-            if (option.textContent.includes('📍') || isZone || isRegion) {
-                div.className += ' font-bold';
-                if (isZone || isRegion) {
-                    div.className += ' text-amber-600';
-                }
-            }
-            
-            div.textContent = option.textContent;
-            div.onclick = (e) => {
-                e.stopPropagation();
-                console.log('🖱️ Opção clicada:', option.value, option.textContent);
-                originalSelect.value = option.value;
-                
-                // Disparar evento change no select original
-                const changeEvent = new Event('change', { bubbles: true, cancelable: true });
-                originalSelect.dispatchEvent(changeEvent);
-                
-                syncButtonText();
-                optionsContainer.classList.add('hidden');
-                searchInput.value = '';
-                
-                console.log('✅ Select atualizado para:', originalSelect.value);
-            };
-            
-            return div;
-        }
-        
-        // Sincronizar texto do botão
-        function syncButtonText() {
-            const selectedOption = originalSelect.options[originalSelect.selectedIndex];
-            if (selectedOption) {
-                button.innerHTML = `
-                    <span>${selectedOption.textContent}</span>
-                    <i data-lucide="chevron-down" class="h-4 w-4 text-zinc-400"></i>
-                `;
-            } else {
-                const placeholder = originalSelect.querySelector('option[value=""][disabled]');
-                button.innerHTML = `
-                    <span>${placeholder ? placeholder.textContent : 'Selecione...'}</span>
-                    <i data-lucide="chevron-down" class="h-4 w-4 text-zinc-400"></i>
-                `;
-            }
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
-        }
-        
-        // Event listeners
-        button.onclick = (e) => {
-            e.stopPropagation();
-            const isOpen = !optionsContainer.classList.contains('hidden');
-            
-            // Fechar outros dropdowns
-            document.querySelectorAll('.searchable-select-options').forEach(container => {
-                if (container !== optionsContainer) {
-                    container.classList.add('hidden');
-                }
-            });
-            
-            if (isOpen) {
-                optionsContainer.classList.add('hidden');
-            } else {
-                optionsContainer.classList.remove('hidden');
-                updateOptions();
-                searchInput.focus();
-            }
-        };
-        
-        searchInput.oninput = () => {
-            updateOptions();
-        };
-        
-        originalSelect.addEventListener('change', () => {
-            syncButtonText();
-        });
-        
-        // Observer para mudanças no select original
-        const observer = new MutationObserver(() => {
-            syncButtonText();
-            updateOptions();
-        });
-        observer.observe(originalSelect, { childList: true, subtree: true, attributes: true });
-        
-        // Fechar ao clicar fora
-        document.addEventListener('click', (e) => {
-            if (!wrapper.contains(e.target)) {
-                optionsContainer.classList.add('hidden');
-            }
-        });
-        
-        // Inserir no DOM
-        originalSelect.style.display = 'none';
-        originalSelect.parentNode.insertBefore(wrapper, originalSelect);
-        wrapper.appendChild(button);
-        wrapper.appendChild(optionsContainer);
-        optionsContainer.classList.add('searchable-select-options');
-        
-        // Sincronizar texto inicial
-        syncButtonText();
-        
-        // Adicionar ícone se for cidade
-        if (selectId === 'filter-city-quick') {
-            const icon = document.createElement('i');
-            icon.setAttribute('data-lucide', 'map-pin');
-            icon.className = 'h-4 w-4 text-zinc-400 absolute left-3';
-            button.style.paddingLeft = '2.5rem';
-            button.insertBefore(icon, button.firstChild);
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
-        }
-    }
-
-    // ============================================
     // EVENT LISTENERS E INICIALIZAÇÃO
     // ============================================
     
@@ -1866,43 +1602,7 @@
     function initFilters() {
         const filters = parseFiltersFromURL();
         
-        // Se não houver filtros na URL, aplicar filtro padrão de "São Paulo"
-        const hasFilters = (Object.keys(filters).length > 0 && filters.city) || 
-                          window.location.search.includes('cidade=') || 
-                          window.location.pathname.match(/\/[^\/]+-sp/);
-        if (!hasFilters) {
-            // Aplicar filtro padrão: São Paulo
-            filters.city = 'São Paulo';
-            // Atualizar URL com o filtro padrão
-            const params = new URLSearchParams();
-            params.set('cidade', 'São Paulo');
-            const newUrl = window.location.pathname + '?' + params.toString();
-            window.history.replaceState({}, '', newUrl);
-            // Atualizar o objeto filters para refletir a mudança
-            filters.city = 'São Paulo';
-        }
-        
         // Preencher campos de filtro rápido
-        const cityQuickSelect = document.getElementById('filter-city-quick');
-        if (cityQuickSelect) {
-            // Se houver um slug de região, selecionar a opção da região
-            if (filters.regionSlug) {
-                const regionOption = cityQuickSelect.querySelector(`option[value="region:${filters.regionSlug}"]`);
-                if (regionOption) {
-                    cityQuickSelect.value = `region:${filters.regionSlug}`;
-                }
-            } else if (filters.city) {
-                cityQuickSelect.value = filters.city;
-                // Carregar bairros quando cidade for selecionada
-                populateNeighborhoodsQuick(filters.city).then(() => {
-                    const neighborhoodQuickSelect = document.getElementById('filter-neighborhood-quick');
-                    if (neighborhoodQuickSelect && filters.neighborhood) {
-                        neighborhoodQuickSelect.value = filters.neighborhood;
-                    }
-                });
-            }
-        }
-        
         const locationInput = document.getElementById('filter-location');
         if (locationInput && filters.location) {
             locationInput.value = filters.location;
@@ -2189,31 +1889,6 @@
     function handleQuickSearch() {
         const filters = {};
         
-        // Tipo de imóvel (quick)
-        const typeQuickSelect = document.getElementById('filter-type-quick');
-        if (typeQuickSelect && typeQuickSelect.value) {
-            filters.type = typeQuickSelect.value;
-        }
-        
-        // Cidade (quick)
-        const cityQuickSelect = document.getElementById('filter-city-quick');
-        if (cityQuickSelect && cityQuickSelect.value) {
-            filters.city = cityQuickSelect.value;
-        }
-        
-        // Bairro ou Zona (quick)
-        const neighborhoodQuickSelect = document.getElementById('filter-neighborhood-quick');
-        if (neighborhoodQuickSelect && neighborhoodQuickSelect.value) {
-            const value = neighborhoodQuickSelect.value;
-            // Verificar se é uma zona (começa com "zone:")
-            if (value.startsWith('zone:')) {
-                const zoneName = value.replace('zone:', '');
-                filters.zone = zoneName;
-            } else {
-                filters.neighborhood = value;
-            }
-        }
-        
         const locationInput = document.getElementById('filter-location');
         if (locationInput && locationInput.value.trim()) {
             filters.location = locationInput.value.trim();
@@ -2234,6 +1909,13 @@
             filters.dataFimSegundoLeilao = dateInput.value;
         }
 
+        // Zone filter from checkboxes
+        const selectedZones = getSelectedZones();
+        if (selectedZones.length > 1) {
+            filters.zones = selectedZones;
+        } else if (selectedZones.length === 1) {
+            filters.zone = selectedZones[0];
+        }
 
         updateURL(filters);
         populatePropertiesGrid(1);
@@ -2583,104 +2265,35 @@
     // Buscar cidades por estado (adaptado do RJ)
     async function fetchCitiesByState(state) {
         try {
-            if (!supabase) {
+            if (!window.supabase) {
                 console.error('❌ Supabase não está disponível');
-                return { grouped: {}, flat: [] };
+                return [];
             }
-            
-            const cityCount = {};
-            const citiesByRegion = {};
-            let page = 0;
-            const pageSize = 1000;
-            let hasMore = true;
-            
-            while (hasMore) {
-                const from = page * pageSize;
-                const to = from + pageSize - 1;
 
-            const { data, error } = await supabase
-                .from(TABLE_NAME)
-                    .select('cidade, zone')
+            const { data, error } = await window.supabase
+                .from('leiloes_imoveis_com_zona')
+                .select('cidade')
                 .eq('estado', state)
-                .gte('leilao_1', 75000)
-                    .order('cidade')
                 .not('cidade', 'is', null)
-                    .range(from, to);
+                .not('cidade', 'eq', '')
+                .order('cidade');
 
             if (error) {
                 console.error('❌ Erro na query de cidades:', error);
-                    throw error;
-                }
-                
-                if (!data || data.length === 0) {
-                    hasMore = false;
-                    break;
-                }
-                
-                console.log(`📊 Página ${page + 1}: ${data.length} registros de cidades`);
-                
-                data.forEach(item => {
-                    if (item.cidade && item.cidade.trim() !== '') {
-                        cityCount[item.cidade] = (cityCount[item.cidade] || 0) + 1;
-                        
-                        // Para SP, usar "Todas as Cidades" como região padrão
-                        let region = 'Todas as Cidades';
-                        
-                        if (!citiesByRegion[region]) {
-                            citiesByRegion[region] = {};
-                        }
-                        if (!citiesByRegion[region][item.cidade]) {
-                            citiesByRegion[region][item.cidade] = 0;
-                        }
-                        citiesByRegion[region][item.cidade] += 1;
-                    }
-                });
-                
-                hasMore = data.length === pageSize;
-                page++;
-                
-                if (page > 50) break; // Limite de segurança
+                return [];
             }
-            
-            console.log(`📊 Total de cidades únicas encontradas: ${Object.keys(cityCount).length}`);
-            
-            // Estruturar dados agrupados por região
-            const citiesByRegionArray = {};
-            Object.keys(citiesByRegion).forEach(region => {
-                citiesByRegionArray[region] = Object.keys(citiesByRegion[region])
-                    .map(city => ({
-                        city,
-                        count: citiesByRegion[region][city]
-                    }))
-                    .sort((a, b) => {
-                        if (b.count !== a.count) {
-                            return b.count - a.count;
-                        }
-                        return a.city.localeCompare(b.city, 'pt-BR');
-                    });
-            });
-            
-            // Também retornar array simples para compatibilidade
-            const citiesArray = Object.keys(cityCount)
-                .map(city => ({
-                    city,
-                    count: cityCount[city]
-                }))
-                .sort((a, b) => {
-                    if (b.count !== a.count) {
-                        return b.count - a.count;
-                    }
-                    return a.city.localeCompare(b.city, 'pt-BR');
-                });
-            
-            return {
-                grouped: citiesByRegionArray,
-                flat: citiesArray
-            };
+
+            // Filtra cidades únicas
+            const uniqueCities = [...new Set(
+                data.map(item => item.cidade?.trim()).filter(city => city)
+            )].sort();
+
+            console.log(`📊 ${uniqueCities.length} cidades encontradas para ${state}`);
+            return uniqueCities;
 
         } catch (error) {
             console.error('❌ Erro ao buscar cidades:', error);
-            return { grouped: {}, flat: [] };
+            return [];
         }
     }
 
@@ -2693,96 +2306,19 @@
         select.disabled = true;
 
         try {
-            const citiesData = await fetchCitiesByState(CURRENT_STATE);
-            
-            if (!citiesData) {
-                console.error('❌ Nenhum dado retornado de fetchCitiesByState');
-            select.innerHTML = '<option value="">Erro ao carregar cidades</option>';
-            select.disabled = false;
-                return;
-            }
+            const cities = await fetchCitiesByState(CURRENT_STATE);
 
             select.innerHTML = '<option value="" selected disabled>Selecione a cidade</option>';
-            select.disabled = false;
-            
-            // Verificar se temos dados agrupados
-            const hasGrouped = citiesData.grouped && Object.keys(citiesData.grouped).length > 0;
-            const hasFlat = citiesData.flat && citiesData.flat.length > 0;
-            
-            if (!hasGrouped && !hasFlat) {
-                console.warn('⚠️ Nenhuma cidade encontrada');
-                select.innerHTML = '<option value="">Nenhuma cidade encontrada</option>';
-                return;
-            }
-            
-            // Se tiver dados agrupados, usar estrutura com optgroup e opções de região
-            if (hasGrouped) {
-                // Armazenar cache de cidades por região
-                if (!window.citiesByRegionCache) {
-                    window.citiesByRegionCache = {};
-                }
-                window.citiesByRegionCache = citiesData.grouped;
-                
-                Object.keys(citiesData.grouped).forEach(region => {
-                    if (citiesData.grouped[region] && citiesData.grouped[region].length > 0) {
-                        // Adicionar opção para selecionar toda a região
-                        const regionOption = document.createElement('option');
-                        const regionSlug = region.toLowerCase().replace(/\s+/g, '-') + '-sp';
-                        regionOption.value = `region:${regionSlug}`;
-                        regionOption.textContent = `📍 ${region}`;
-                        regionOption.style.fontWeight = 'bold';
-                        regionOption.style.color = '#d97706'; // amber-600
-                        regionOption.dataset.region = region;
-                        regionOption.dataset.regionSlug = regionSlug;
-                        select.appendChild(regionOption);
-                        
-                        // Adicionar optgroup com as cidades da região
-                        const optgroup = document.createElement('optgroup');
-                        optgroup.label = region;
-                        
-                        citiesData.grouped[region].forEach(item => {
-                            const option = document.createElement('option');
-                            option.value = item.city;
-                            option.textContent = `${item.city} (${item.count})`;
-                            optgroup.appendChild(option);
-                        });
-                        
-                        select.appendChild(optgroup);
-                    }
-                });
-                
-                const totalCities = citiesData.flat ? citiesData.flat.length : 0;
-                console.log(`✅ ${totalCities} cidades carregadas em ${Object.keys(citiesData.grouped).length} regiões`);
-            } else if (hasFlat) {
-                // Fallback: usar lista simples
-                citiesData.flat.forEach(item => {
+
+            cities.forEach(city => {
                 const option = document.createElement('option');
-                    option.value = item.city;
-                    option.textContent = `${item.city} (${item.count})`;
+                option.value = city;
+                option.textContent = city;
                 select.appendChild(option);
             });
-                console.log(`✅ ${citiesData.flat.length} cidades carregadas no quick`);
-            }
-            
-            // Selecionar "São Paulo" como padrão para SP
-            if (CURRENT_STATE === 'SP') {
-                const spOption = Array.from(select.options).find(opt => {
-                    const cityName = (opt.value || opt.textContent).toLowerCase();
-                    return cityName.includes('são paulo') || cityName === 'sao paulo' || cityName.includes('são paulo');
-                });
-                
-                if (spOption) {
-                    select.value = spOption.value;
-                    console.log('✅ São Paulo selecionado como cidade padrão');
-                    // Carregar bairros de São Paulo
-                    setTimeout(async () => {
-                        await populateNeighborhoodsDropdown(spOption.value);
-                        setTimeout(() => {
-                            createSearchableSelect('filter-neighborhood-quick');
-                        }, 300);
-                    }, 500);
-                }
-            }
+
+            select.disabled = false;
+            console.log(`✅ ${cities.length} cidades carregadas para SP`);
 
         } catch (error) {
             console.error('❌ Erro ao popular cidades:', error);
@@ -2827,207 +2363,7 @@
         }
     }
 
-    // Buscar zonas por cidade
-    async function fetchZonesByCity(cityName) {
-        if (!supabase || !cityName) return [];
-
-        try {
-            const { data, error } = await supabase
-                .from(TABLE_NAME)
-                .select('zone')
-                .eq('estado', CURRENT_STATE)
-                .eq('cidade', cityName.trim())
-                .gte('leilao_1', 75000)
-                .not('zone', 'is', null)
-                .not('zone', 'eq', '');
-            
-            if (error) throw error;
-            
-            // Obter zonas únicas
-            const uniqueZones = [...new Set(data.map(item => item.zone).filter(Boolean))];
-            return uniqueZones.sort();
-        } catch (error) {
-            console.error('❌ Erro ao buscar zonas por cidade:', error);
-                return [];
-        }
-    }
-    
-    // Buscar bairros por zona
-    async function fetchNeighborhoodsByZone(cityName, zoneName) {
-        if (!supabase || !cityName || !zoneName) return [];
-
-        try {
-            const { data, error } = await supabase
-                .from(TABLE_NAME)
-                .select('bairro')
-                .eq('estado', CURRENT_STATE)
-                .eq('cidade', cityName.trim())
-                .eq('zone', zoneName.trim())
-                .gte('leilao_1', 75000)
-                .not('bairro', 'is', null)
-                .not('bairro', 'eq', '');
-
-            if (error) throw error;
-            
-            // Contar ocorrências de cada bairro
-            const counts = {};
-            data.forEach(item => {
-                if (item.bairro) {
-                    counts[item.bairro] = (counts[item.bairro] || 0) + 1;
-                }
-            });
-            
-            return Object.entries(counts).map(([neighborhood, count]) => ({
-                neighborhood,
-                count
-            })).sort((a, b) => a.neighborhood.localeCompare(b.neighborhood));
-        } catch (error) {
-            console.error('❌ Erro ao buscar bairros por zona:', error);
-                return [];
-        }
-    }
-
-    // Popular dropdown de bairros por região (múltiplas cidades)
-    async function populateNeighborhoodsByRegion(regionName) {
-        const select = document.getElementById('filter-neighborhood-quick');
-        if (!select) return;
-        
-        if (!regionName || !window.citiesByRegionCache || !window.citiesByRegionCache[regionName]) {
-            console.warn(`⚠️ Região "${regionName}" não encontrada no cache`);
-            select.innerHTML = '<option value="">Escolha um bairro ou uma zona</option>';
-            select.disabled = true;
-            return;
-        }
-        
-        const citiesInRegion = window.citiesByRegionCache[regionName].map(item => item.city);
-        
-        // Mostrar loading
-        select.innerHTML = '<option value="">Carregando bairros...</option>';
-        select.disabled = true;
-        
-        try {
-            console.log(`🔄 Carregando bairros para região: "${regionName}" (${citiesInRegion.length} cidades)`);
-            console.log(`📋 Cidades na região:`, citiesInRegion);
-            
-            // Buscar bairros de todas as cidades da região usando Supabase diretamente
-            if (!supabase) {
-                throw new Error('Supabase não disponível');
-            }
-            
-            // Buscar todos os bairros das cidades da região
-            console.log(`🔍 Executando query Supabase...`);
-            const { data, error } = await supabase
-                .from(TABLE_NAME)
-                .select('bairro, zone')
-                .eq('estado', CURRENT_STATE)
-                .in('cidade', citiesInRegion)
-                .gte('leilao_1', 75000)
-                .not('bairro', 'is', null)
-                .not('bairro', 'eq', '');
-            
-            console.log(`📦 Resultado da query:`, { dataLength: data?.length, error });
-            
-            if (error) {
-                console.error('❌ Erro na query:', error);
-                throw error;
-            }
-            
-            if (!data || data.length === 0) {
-                select.innerHTML = '<option value="">Nenhum bairro encontrado</option>';
-                select.disabled = false;
-                console.warn(`⚠️ Nenhum bairro encontrado para região "${regionName}"`);
-                return;
-            }
-            
-            // Agrupar bairros por zona
-            const neighborhoodsByZone = {};
-            const neighborhoodsWithoutZone = {};
-            
-            data.forEach(item => {
-                if (item.bairro && item.bairro.trim() !== '') {
-                    if (item.zone && item.zone.trim() !== '') {
-                        // Bairro com zona
-                        if (!neighborhoodsByZone[item.zone]) {
-                            neighborhoodsByZone[item.zone] = {};
-                        }
-                        neighborhoodsByZone[item.zone][item.bairro] = (neighborhoodsByZone[item.zone][item.bairro] || 0) + 1;
-                    } else {
-                        // Bairro sem zona
-                        neighborhoodsWithoutZone[item.bairro] = (neighborhoodsWithoutZone[item.bairro] || 0) + 1;
-                    }
-                }
-            });
-            
-            // Limpar select
-            select.innerHTML = '<option value="">Escolha um bairro ou uma zona</option>';
-            select.disabled = false;
-            
-            // Se houver zonas, criar estrutura hierárquica
-            const zones = Object.keys(neighborhoodsByZone);
-            if (zones.length > 0) {
-                // Adicionar opções de zonas (clicáveis)
-                zones.sort().forEach(zone => {
-                    const zoneOption = document.createElement('option');
-                    zoneOption.value = `zone:${zone}`;
-                    zoneOption.textContent = `📍 ${zone} (todos os bairros)`;
-                    zoneOption.style.fontWeight = 'bold';
-                    zoneOption.style.color = '#d97706';
-                    select.appendChild(zoneOption);
-                });
-                
-                // Criar optgroups para cada zona com seus bairros
-                zones.sort().forEach(zone => {
-                    const neighborhoods = Object.entries(neighborhoodsByZone[zone])
-                        .map(([neighborhood, count]) => ({ neighborhood, count }))
-                        .sort((a, b) => a.neighborhood.localeCompare(b.neighborhood));
-                    
-                    if (neighborhoods.length > 0) {
-                        const optgroup = document.createElement('optgroup');
-                        optgroup.label = `Bairros de ${zone}`;
-                        
-                        neighborhoods.forEach(item => {
-                            const option = document.createElement('option');
-                            option.value = item.neighborhood;
-                            option.textContent = `${item.neighborhood} (${item.count})`;
-                            optgroup.appendChild(option);
-                        });
-                        
-                        select.appendChild(optgroup);
-                    }
-                });
-                
-                console.log(`✅ ${zones.length} zonas e seus bairros carregados para região "${regionName}"`);
-            }
-            
-            // Adicionar bairros sem zona
-            if (Object.keys(neighborhoodsWithoutZone).length > 0) {
-                Object.entries(neighborhoodsWithoutZone)
-                    .sort((a, b) => a[0].localeCompare(b[0]))
-                    .forEach(([neighborhood, count]) => {
-                        const option = document.createElement('option');
-                        option.value = neighborhood;
-                        option.textContent = `${neighborhood} (${count})`;
-                        select.appendChild(option);
-                    });
-                
-                console.log(`✅ ${Object.keys(neighborhoodsWithoutZone).length} bairros sem zona adicionados`);
-            }
-            
-            if (zones.length === 0 && Object.keys(neighborhoodsWithoutZone).length === 0) {
-                select.innerHTML = '<option value="">Nenhum bairro encontrado</option>';
-                console.warn(`⚠️ Nenhum bairro encontrado para região "${regionName}"`);
-            }
-            
-            // Disparar evento para atualizar dropdown customizado
-            select.dispatchEvent(new Event('optionsUpdated', { bubbles: true }));
-        } catch (error) {
-            console.error('❌ Erro ao popular bairros por região:', error);
-            select.innerHTML = '<option value="">Erro ao carregar bairros</option>';
-            select.disabled = false;
-        }
-    }
-
-    // Função para popular dropdown de bairros com zonas
+    // Função para popular dropdown de bairros
     async function populateNeighborhoodsDropdown(city, selectId = 'filter-neighborhood-quick') {
         const neighborhoodSelect = document.getElementById(selectId);
         if (!neighborhoodSelect) return;
@@ -3037,79 +2373,28 @@
         neighborhoodSelect.disabled = true;
 
         if (!city) {
-            neighborhoodSelect.innerHTML = '<option value="">Escolha um bairro ou uma zona</option>';
-            neighborhoodSelect.disabled = true;
+            neighborhoodSelect.innerHTML = '<option value="" disabled>Selecione primeiro uma cidade</option>';
             return;
         }
 
         try {
-            console.log(`🔄 Carregando zonas e bairros para cidade: "${city}"`);
-            
-            // Buscar zonas da cidade
-            const zones = await fetchZonesByCity(city.trim());
-            console.log(`📦 ${zones.length} zonas encontradas para ${city}`);
-            
-            // Limpar select
-            neighborhoodSelect.innerHTML = '<option value="">Escolha um bairro ou uma zona</option>';
-            neighborhoodSelect.disabled = false;
+            const neighborhoods = await fetchNeighborhoodsByCity(city);
 
-            // Se houver zonas, criar estrutura hierárquica
-            if (zones.length > 0) {
-                // Adicionar opções de zonas (clicáveis)
-                zones.forEach(zone => {
-                    const zoneOption = document.createElement('option');
-                    zoneOption.value = `zone:${zone}`;
-                    zoneOption.textContent = `📍 ${zone} (todos os bairros)`;
-                    zoneOption.style.fontWeight = 'bold';
-                    zoneOption.style.color = '#d97706';
-                    neighborhoodSelect.appendChild(zoneOption);
-                });
-                
-                // Criar optgroups para cada zona com seus bairros
-                for (const zone of zones) {
-                    const neighborhoods = await fetchNeighborhoodsByZone(city.trim(), zone);
-                    
-                    if (neighborhoods.length > 0) {
-                        const optgroup = document.createElement('optgroup');
-                        optgroup.label = `Bairros de ${zone}`;
-                        
-                        neighborhoods.forEach(item => {
-                            const option = document.createElement('option');
-                            option.value = item.neighborhood;
-                            option.textContent = `${item.neighborhood} (${item.count})`;
-                            optgroup.appendChild(option);
-                        });
-                        
-                        neighborhoodSelect.appendChild(optgroup);
-                    }
-                }
-                
-                console.log(`✅ ${zones.length} zonas e seus bairros carregados para ${city}`);
-            } else {
-                // Se não houver zonas, buscar bairros diretamente
-                console.log(`🔄 Nenhuma zona encontrada, buscando bairros diretamente...`);
-                const neighborhoods = await fetchNeighborhoodsByCity(city);
-                
-                if (Array.isArray(neighborhoods) && neighborhoods.length > 0) {
+            // Limpa e popula com os novos bairros
+            neighborhoodSelect.innerHTML = '<option value="">Escolha um bairro ou uma zona</option>';
+
             neighborhoods.forEach(neighborhood => {
                 const option = document.createElement('option');
                 option.value = neighborhood;
                 option.textContent = neighborhood;
                 neighborhoodSelect.appendChild(option);
             });
-                    console.log(`✅ ${neighborhoods.length} bairros carregados para ${city}`);
-                } else {
-                    neighborhoodSelect.innerHTML = '<option value="">Nenhum bairro encontrado</option>';
-                    console.warn(`⚠️ Nenhum bairro encontrado para "${city}"`);
-                }
-            }
-            
-            // Disparar evento para atualizar dropdown customizado
-            neighborhoodSelect.dispatchEvent(new Event('optionsUpdated', { bubbles: true }));
-        } catch (error) {
-            console.error('❌ Erro ao popular dropdown de bairros:', error);
-            neighborhoodSelect.innerHTML = '<option value="" disabled>Erro ao carregar bairros</option>';
+
             neighborhoodSelect.disabled = false;
+
+        } catch (error) {
+            console.error('Erro ao popular dropdown de bairros:', error);
+            neighborhoodSelect.innerHTML = '<option value="" disabled>Erro ao carregar bairros</option>';
         }
     }
 
@@ -3118,6 +2403,86 @@
     // ============================================
 
     // Popular dropdown de zonas com checkboxes
+    async function populateZones() {
+        const container = document.getElementById('zone-checkboxes');
+        if (!container) return;
+
+        try {
+            const zones = await fetchZonesByState(CURRENT_STATE);
+            container.innerHTML = '';
+
+            zones.forEach(zone => {
+                const checkboxDiv = document.createElement('div');
+                checkboxDiv.className = 'flex items-center space-x-2 p-2 hover:bg-white rounded cursor-pointer';
+                checkboxDiv.innerHTML = `
+                    <input type="checkbox" id="zone-${zone}" value="${zone}" class="zone-checkbox w-4 h-4 border border-zinc-300 rounded bg-white checked:bg-amber-600 checked:border-amber-600 focus:outline-none focus:ring-1 focus:ring-amber-600">
+                    <label for="zone-${zone}" class="text-sm text-zinc-700 cursor-pointer flex-1">${zone}</label>
+                `;
+                container.appendChild(checkboxDiv);
+            });
+
+            setupZoneCheckboxListeners();
+            console.log(`✅ ${zones.length} zonas carregadas`);
+        } catch (error) {
+            console.error('❌ Erro ao popular zonas:', error);
+            container.innerHTML = '<div class="p-2 text-sm text-red-500">Erro ao carregar zonas</div>';
+        }
+    }
+
+    // Setup zone dropdown and checkbox functionality
+    function setupZoneDropdown() {
+        const trigger = document.getElementById('zone-dropdown-trigger');
+        const content = document.getElementById('zone-dropdown-content');
+        const icon = document.getElementById('zone-dropdown-icon');
+
+        if (!trigger || !content || !icon) return;
+
+        trigger.addEventListener('click', function(e) {
+            e.stopPropagation();
+            content.classList.toggle('hidden');
+            icon.classList.toggle('rotate-180');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!trigger.contains(e.target) && !content.contains(e.target)) {
+                content.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
+        });
+    }
+
+    function setupZoneCheckboxListeners() {
+        const checkboxes = document.querySelectorAll('.zone-checkbox');
+
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                updateZoneLabel();
+                handleQuickSearch();
+            });
+        });
+    }
+
+    function updateZoneLabel() {
+        const checkboxes = document.querySelectorAll('.zone-checkbox:checked');
+        const label = document.getElementById('zone-dropdown-label');
+
+        if (!label) return;
+
+        if (checkboxes.length === 0) {
+            label.textContent = 'Todas as zonas';
+        } else if (checkboxes.length === 1) {
+            label.textContent = checkboxes[0].value;
+        } else {
+            label.textContent = `${checkboxes.length} zonas selecionadas`;
+        }
+    }
+
+    // Get selected zones for filtering
+    function getSelectedZones() {
+        const checkboxes = document.querySelectorAll('.zone-checkbox:checked');
+        return Array.from(checkboxes).map(checkbox => checkbox.value);
+    }
 
     // ============================================
     // INICIALIZAÇÃO
@@ -3136,67 +2501,17 @@
 
         if (!window.supabase) {
             console.error('❌ Supabase não carregou após 5 segundos');
-                return;
-            }
+            return;
+        }
 
         console.log('✅ Supabase disponível, carregando dados...');
         await Promise.all([
-            populateCitiesQuick()
+            populateCitiesQuick(),
+            populateZones()
         ]);
 
-        // Criar dropdowns customizados após carregar dados
-        setTimeout(() => {
-            createSearchableSelect('filter-city-quick');
-            createSearchableSelect('filter-neighborhood-quick');
-            createSearchableSelect('filter-type-quick');
-        }, 800);
-
-        // Event listener para mudança de bairro/zona no quick select
-        const neighborhoodQuickSelect = document.getElementById('filter-neighborhood-quick');
-        if (neighborhoodQuickSelect) {
-            neighborhoodQuickSelect.addEventListener('change', async function(e) {
-                const selectedValue = e.target.value;
-                console.log('🔄 Bairro/Zona selecionado:', selectedValue);
-                
-                // Verificar se é uma zona (começa com "zone:")
-                if (selectedValue && selectedValue.startsWith('zone:')) {
-                    const zoneName = selectedValue.replace('zone:', '');
-                    console.log('📍 Zona selecionada:', zoneName);
-                    
-                    // Aplicar filtros com a zona
-                    const filters = parseFiltersFromURL();
-                    filters.zone = zoneName;
-                    filters.neighborhood = undefined; // Limpar bairro se houver
-                    filters.neighborhoods = undefined;
-                    
-                    // Atualizar URL e buscar propriedades
-                    updateURL(filters);
-                    await fetchProperties(filters);
-                } else if (selectedValue && selectedValue !== '') {
-                    // Bairro individual selecionado
-                    console.log('🏘️ Bairro selecionado:', selectedValue);
-                    
-                    const filters = parseFiltersFromURL();
-                    filters.neighborhood = selectedValue;
-                    filters.zone = undefined; // Limpar zona se houver
-                    filters.zones = undefined;
-                    
-                    // Atualizar URL e buscar propriedades
-                    updateURL(filters);
-                    await fetchProperties(filters);
-                } else {
-                    // Nada selecionado - limpar filtros de bairro/zona
-                    const filters = parseFiltersFromURL();
-                    filters.neighborhood = undefined;
-                    filters.neighborhoods = undefined;
-                    filters.zone = undefined;
-                    filters.zones = undefined;
-                    
-                    updateURL(filters);
-                    await fetchProperties(filters);
-                }
-            });
-        }
+        // Setup zone dropdown functionality
+        setupZoneDropdown();
     });
 
     // Event listener para mudança de cidade
@@ -3205,56 +2520,14 @@
         cityQuickSelect.addEventListener('change', async function(e) {
             const selectedValue = e.target.value;
 
-            // Verificar se é uma seleção de região (começa com "region:")
-            if (selectedValue && selectedValue.startsWith('region:')) {
-                console.log('🔍 Região detectada:', selectedValue);
-                const regionSlug = selectedValue.replace('region:', '');
-                const selectedOption = e.target.options[e.target.selectedIndex];
-                const regionName = selectedOption.dataset.region;
-                console.log('🔍 Nome da região:', regionName);
-
-                if (regionName && window.citiesByRegionCache && window.citiesByRegionCache[regionName]) {
-                    // Obter todas as cidades da região
-                    const citiesInRegion = window.citiesByRegionCache[regionName].map(item => item.city);
-                    console.log('✅ Chamando populateNeighborhoodsByRegion com:', regionName);
-
-                    // Carregar bairros da região
-                    await populateNeighborhoodsByRegion(regionName);
-                    
-                    // Recriar dropdown customizado após carregar bairros
-                    setTimeout(() => {
-                        createSearchableSelect('filter-neighborhood-quick');
-                    }, 500);
-
-                    // Atualizar filtros com todas as cidades da região
-                    const filters = parseFiltersFromURL();
-                    filters.cities = citiesInRegion;
-                    
-                    // Garantir que o slug da região termina com -sp
-                    const finalRegionSlug = regionSlug.endsWith('-sp') ? regionSlug : `${regionSlug}-sp`;
-                    filters.regionSlug = finalRegionSlug;
-                    console.log('🔗 Atualizando URL com slug:', finalRegionSlug);
-
-                    // Atualizar URL com o slug da região
-                    updateURL(filters);
-
-                    // Recarregar propriedades com o filtro de cidades
-                    await fetchProperties(filters);
-
-                    console.log(`✅ Região "${regionName}" selecionada: ${citiesInRegion.length} cidades`);
-                }
-            } else if (selectedValue && selectedValue !== '') {
+            if (selectedValue && selectedValue !== '') {
                 console.log(`🔄 Cidade selecionada: "${selectedValue}"`);
                 await populateNeighborhoodsDropdown(selectedValue, 'filter-neighborhood-quick');
-                // Recriar dropdown customizado após carregar bairros
-                setTimeout(() => {
-                    createSearchableSelect('filter-neighborhood-quick');
-                }, 300);
             } else {
                 // Cidade desmarcada - limpar bairros
                 const neighborhoodSelect = document.getElementById('filter-neighborhood-quick');
                 if (neighborhoodSelect) {
-                    neighborhoodSelect.innerHTML = '<option value="">Escolha um bairro ou uma zona</option>';
+                    neighborhoodSelect.innerHTML = '<option value="">Selecione o bairro</option>';
                     neighborhoodSelect.disabled = true;
                 }
             }
@@ -3268,35 +2541,13 @@
     // ============================================
 
     function toggleShareMenu(button) {
-        // Encontrar o menu dentro do container pai (div.relative)
-        const container = button.closest('.relative');
-        if (!container) return;
-        
-        const menu = container.querySelector('.share-menu');
-        if (!menu) return;
-        
-        // Fechar outros menus abertos
-        document.querySelectorAll('.share-menu').forEach(m => {
-            if (m !== menu) {
-                m.classList.add('hidden');
-            }
-        });
-        
-        // Toggle do menu atual
-        menu.classList.toggle('hidden');
-        
-        // Fechar ao clicar fora
-        if (!menu.classList.contains('hidden')) {
-            setTimeout(() => {
-                const closeOnClickOutside = (e) => {
-                    if (!container.contains(e.target)) {
-                        menu.classList.add('hidden');
-                        document.removeEventListener('click', closeOnClickOutside);
-                    }
-                };
-                document.addEventListener('click', closeOnClickOutside);
-            }, 10);
+        const menu = button.querySelector('div');
+        if (menu) {
+            menu.classList.toggle('hidden');
         }
+        document.querySelectorAll('.absolute.top-auto.bottom-full').forEach(m => {
+            if (m !== menu) m.classList.add('hidden');
+        });
     }
     
     function copyPropertyLink(url, button) {
@@ -3401,7 +2652,7 @@
                     const widgetVisible = findWidget() && window.getComputedStyle(findWidget()).display !== 'none';
                     if (!widgetVisible) {
                         console.log('✅ Widget parece ter aberto!');
-            } else {
+                    } else {
                         console.log('⚠️ Widget ainda visível, tentando novamente...');
                         if (attempts < maxAttempts) {
                             setTimeout(tryClick, 500);
@@ -3425,7 +2676,7 @@
         setTimeout(tryClick, 100);
     }
     
-        document.addEventListener('click', (e) => {
+    document.addEventListener('click', (e) => {
         if (!e.target.closest('.relative')) {
             document.querySelectorAll('.absolute.top-auto.bottom-full').forEach(menu => {
             menu.classList.add('hidden');
@@ -3442,7 +2693,7 @@
             <div class="popup-title">
                 <h2>Oportunidades <span class="highlight">de</span></h2>
                 <h2 class="highlight">Leilão de Imóveis</h2>
-                </div>
+            </div>
             <div class="popup-content-wrapper">
                 <div class="popup-image">
                     <img src="https://d335luupugsy2.cloudfront.net/cms/files/263150/1643135129/$pplwz50ssie" alt="Oportunidades de Leilão de Imóveis" />
@@ -3452,7 +2703,7 @@
                         <p>Imóveis com valor até</p>
                         <p class="bold">50% abaixo do mercado.</p>
                         <p>Confira as oportunidades!</p>
-            </div>
+                    </div>
                     <div id="popup-success" class="popup-success">✅ Obrigado! Sua inscrição foi realizada com sucesso!</div>
                     <form id="popup-form" class="popup-form" onsubmit="enviarFormulario(event)">
                         <input type="text" name="name" id="popup-name" placeholder="Nome *" class="popup-input" required />
@@ -3508,15 +2759,10 @@
     async function inicializarFormRD() {
         if (rdFormLoaded) return true;
         try {
-            const container = document.getElementById('rd-form-container');
-            if (!container) {
-                console.error('❌ Container rd-form-container não encontrado');
-                return false;
-            }
-            
             await carregarRDScript();
             formCounter++;
             rdFormContainerId = `shortcode3-container-${formCounter}`;
+            const container = document.getElementById('rd-form-container');
             container.innerHTML = `<div role="main" id="${rdFormContainerId}" style="display: none;"></div>`;
             await new Promise(resolve => setTimeout(resolve, 500));
             if (window.RDStationForms) {
@@ -3535,18 +2781,13 @@
     }
     
     async function abrirPopup() {
-        console.log('🔄 abrirPopup() chamado');
         const overlay = document.getElementById('popup-overlay');
-        console.log('📦 Overlay encontrado?', !!overlay);
         if (overlay) {
-            console.log('✅ Adicionando classe active ao overlay');
             overlay.classList.add('active');
             if (!rdFormLoaded) {
                 console.log('🔄 Inicializando formulário RD Station...');
                 await inicializarFormRD();
             }
-            } else {
-            console.error('❌ Overlay não encontrado!');
         }
     }
     
@@ -3631,58 +2872,14 @@
         if (e.key === 'Escape') fecharPopup();
     });
     
-    // Função para inicializar popup após DOM estar pronto
-    function initPopup() {
-        // Verificar se o overlay existe
-        const overlay = document.getElementById('popup-overlay');
-        if (!overlay) {
-            console.error('❌ Popup overlay não encontrado no DOM');
-            return;
-        }
-        
+    setTimeout(() => {
         const lastPopupDate = localStorage.getItem('popupLastShown');
         const today = new Date().toDateString();
-        console.log('📅 Última vez que popup foi mostrado:', lastPopupDate);
-        console.log('📅 Data de hoje:', today);
-        
-        // Verificar se já foi mostrado hoje
-        // Para debug: adicionar ?forcePopup=true na URL para forçar o popup
-        const urlParams = new URLSearchParams(window.location.search);
-        const forcePopup = urlParams.get('forcePopup') === 'true';
-        
-        if (lastPopupDate !== today || forcePopup) {
-            console.log('🔄 Iniciando popup após 3 segundos...');
-            setTimeout(() => {
-                console.log('🔄 Tentando abrir popup...');
-                abrirPopup();
-                if (!forcePopup) {
-                    localStorage.setItem('popupLastShown', today);
-                }
-            }, 3000);
-            } else {
-            console.log('ℹ️ Popup já foi mostrado hoje. Para testar, adicione ?forcePopup=true na URL ou limpe o localStorage: localStorage.removeItem("popupLastShown")');
+        if (lastPopupDate !== today) {
+            abrirPopup();
+            localStorage.setItem('popupLastShown', today);
         }
-    }
-    
-    // Aguardar DOM estar completamente pronto
-    // Usar window.onload para garantir que tudo está carregado
-    if (document.readyState === 'loading') {
-        window.addEventListener('load', () => {
-            console.log('✅ Window load completo, inicializando popup...');
-            setTimeout(initPopup, 500);
-        });
-    } else if (document.readyState === 'interactive') {
-        window.addEventListener('load', () => {
-            console.log('✅ Window load completo, inicializando popup...');
-            setTimeout(initPopup, 500);
-        });
-    } else {
-        console.log('✅ DOM já completo, inicializando popup...');
-        setTimeout(initPopup, 500);
-    }
+    }, 3000);
 </script>
-<!-- Floating Whatsapp -->
-<script type="text/javascript" async src="https://d335luupugsy2.cloudfront.net/js/loader-scripts/6c080696-d8cd-4a58-a778-f5d664a27c6e-loader.js"></script>
-
 </body>
 </html>
