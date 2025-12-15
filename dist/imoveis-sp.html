@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta name="webflow-api-token" content="">
+    <meta name="webflow-api-token" content="1a479f9b19f7b02182e1316007b62d4a4aeda6093de25677fb5207a75e226109">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Imóveis em Leilão em São Paulo - Cataldo Siston Advogados</title>
@@ -20,8 +20,11 @@
     h1, h2, h3, h4, h5, .font-serif { font-family: 'Playfair Display', serif; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     /* Form elements overrides */
-    select { -webkit-appearance: none; -moz-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); background-position: right 0.5rem center; background-repeat: no-repeat; background-size: 1.5em 1.5em; padding-right: 2.5rem; }
+    select { -webkit-appearance: none; -moz-appearance: none; appearance: none; background-color: #f4f4f5; background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); background-position: right 0.5rem center; background-repeat: no-repeat; background-size: 1.5em 1.5em; padding-right: 2.5rem; }
     select[multiple] { background-image: none; padding-right: 0.5rem; }
+    /* Override for white background filters */
+    .bg-white select, select.bg-white { background-color: white !important; }
+    input.bg-white { background-color: white !important; }
     /* Modal styles */
     #advanced-filters-modal { animation: fadeIn 0.2s ease-out; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
